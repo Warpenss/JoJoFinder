@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,17 +37,21 @@ public class FinderController {
             //
         }
 
-        List<JobSite> result = new ArrayList<>();
+        String result = "Result: \n";
 
         List<HtmlElement> vacancies = page.getByXPath("//li[@class='search-result-item']");
-        for(HtmlElement vacancy : vacancies) {
-            HtmlAnchor anchor = v
-            String url = vacancy.getAttribute();
-            System.out.println(url);
+        for (int i = 0; i < vacancies.size(); i++) {
+            HtmlAnchor anchor = vacancies.get(i).getFirstByXPath("/div/a");
+            String url = anchor.getAttribute("href");
+            try {
+                URL fullURL = page.getFullyQualifiedUrl(url);
+                result += fullURL;
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
         }
 
-
-        return "bad";
+        return result;
     }
 
 }
