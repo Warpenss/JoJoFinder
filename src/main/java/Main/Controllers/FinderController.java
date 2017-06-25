@@ -6,11 +6,6 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,25 +22,48 @@ public class FinderController {
 
     @RequestMapping("/")
     public String run() {
+        String urlEpam = "https://www.epam.com/careers/job-listings?" +
+                "sort=best_match&" +
+                "query=java&" +
+                "department=Software+Engineering&" +
+                "city=Kyiv&" +
+                "country=Ukraine";
+        String urlLuxoft = "https://career.luxoft.com/job-opportunities/?" +
+                "arrFilter_ff%5BNAME%5D=&" +
+                "countryID%5B%5D=780&" +
+                "arrFilter_pf%5Bcities%5D%5B%5D=11&" +
+                "arrFilter_pf%5Bcategories%5D=95&" +
+                "set_filter=Y#filter-form";
 
-        // EPAM stuff
+        String xPathEpam = "//li[@class='search-result-item']/div[contains(@class, 'position-name')]/a";
+        String xPathLuxoft = "//a[@class='js-tracking']";
 
-        HtmlPage page = null;
+        HtmlPage pageEpam = null;
         HtmlPage pageLuxoft = null;
-        try (final WebClient webClient = new WebClient(BrowserVersion.CHROME)){
-            String url = "https://www.epam.com/careers/job-listings?" +
-                    "sort=best_match&query=java&department=Software+Engineering&city=Kyiv&country=Ukraine";
-            page = webClient.getPage(url);
-            pageLuxoft = webClient.getPage("https://career.luxoft.com/job-opportunities/?arrFilter_ff%5BNAME%5D=&countryID%5B%5D=780&arrFilter_pf%5Bcities%5D%5B%5D=11&arrFilter_pf%5Bcategories%5D=95&set_filter=Y#filter-form");
+
+        try (final WebClient webClient = new WebClient(BrowserVersion.CHROME)) {
+            pageEpam = webClient.getPage(urlEpam);
+            pageLuxoft = webClient.getPage(urlLuxoft);
             Thread.sleep(3_000);
-        }
-        catch (IOException | InterruptedException e) {
-            //
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
         }
 
-        List<HtmlElement> vacanciesEpam = page.getByXPath("//li[@class='search-result-item']" +
-                "/div[contains(@class, 'position-name')]/a");
-        for(HtmlElement vacancy : vacanciesEpam) {
+        if (pageEpam != null) {
+            List<HtmlElement> vacanciesEpam = pageEpam.getByXPath(xPathEpam);
+            addVacancies(result, vacanciesEpam, pageEpam);
+        }
+
+        if (pageLuxoft != null) {
+            List<HtmlElement> vacanciesLuxoft = pageLuxoft.getByXPath(xPathLuxoft);
+            addVacancies(result, vacanciesLuxoft, pageLuxoft);
+        }
+
+        return result.toString();
+    }
+
+    private void addVacancies(List<JobSite> result, List<HtmlElement> vacancies, HtmlPage page) {
+        for (HtmlElement vacancy : vacancies) {
             try {
                 URL fullURL = page.getFullyQualifiedUrl(vacancy.getAttribute("href"));
                 String title = vacancy.getTextContent();
@@ -53,40 +71,7 @@ public class FinderController {
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
-
         }
-
-        List<HtmlElement> vacanciesLuxoft = pageLuxoft.getByXPath("//a[@class='js-tracking']");
-
-        for(HtmlElement vacancy : vacanciesLuxoft) {
-            try {
-                URL fullURL = pageLuxoft.getFullyQualifiedUrl(vacancy.getAttribute("href"));
-                String title = vacancy.getTextContent();
-                result.add(new JobSite(title, fullURL.toString()));
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-        }
-        // Luxoft test
-
-//        Document doc = null;
-//        try {
-//            doc = Jsoup.connect("https://career.luxoft.com/job-opportunities/?arrFilter_ff%5BNAME%5D=&countryID%5B%5D=780&arrFilter_pf%5Bcities%5D%5B%5D=11&arrFilter_pf%5Bcategories%5D=95&set_filter=Y#filter-form").get();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        Elements vacanciesLuxoft = doc.getElementsByAttributeValue("class", "js-tracking");
-//        for (Element vacancy : vacanciesLuxoft) {
-//            String fullURL = "https://career.luxoft.com" + vacancy.attr("href");
-//            String title = vacancy.text();
-//
-//            result.add(new JobSite(title, fullURL));
-//
-//        }
-
-
-        return result.toString();
     }
 
 }
