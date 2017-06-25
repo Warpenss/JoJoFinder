@@ -23,7 +23,7 @@ import java.util.List;
 
 @RestController
 public class FinderController {
-    List<JobSite> result = new ArrayList<>();
+    private List<JobSite> result = new ArrayList<>();
 
     @RequestMapping("/")
     public String run() {
@@ -31,10 +31,12 @@ public class FinderController {
         // EPAM stuff
 
         HtmlPage page = null;
+        HtmlPage pageLuxoft = null;
         try (final WebClient webClient = new WebClient(BrowserVersion.CHROME)){
             String url = "https://www.epam.com/careers/job-listings?" +
                     "sort=best_match&query=java&department=Software+Engineering&city=Kyiv&country=Ukraine";
             page = webClient.getPage(url);
+            pageLuxoft = webClient.getPage("https://career.luxoft.com/job-opportunities/?arrFilter_ff%5BNAME%5D=&countryID%5B%5D=780&arrFilter_pf%5Bcities%5D%5B%5D=11&arrFilter_pf%5Bcategories%5D=95&set_filter=Y#filter-form");
             Thread.sleep(3_000);
         }
         catch (IOException | InterruptedException e) {
@@ -54,23 +56,34 @@ public class FinderController {
 
         }
 
+        List<HtmlElement> vacanciesLuxoft = pageLuxoft.getByXPath("//a[@class='js-tracking']");
+
+        for(HtmlElement vacancy : vacanciesLuxoft) {
+            try {
+                URL fullURL = pageLuxoft.getFullyQualifiedUrl(vacancy.getAttribute("href"));
+                String title = vacancy.getTextContent();
+                result.add(new JobSite(title, fullURL.toString()));
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+        }
         // Luxoft test
 
-        Document doc = null;
-        try {
-            doc = Jsoup.connect("https://career.luxoft.com/job-opportunities/?arrFilter_ff%5BNAME%5D=&countryID%5B%5D=780&arrFilter_pf%5Bcities%5D%5B%5D=11&arrFilter_pf%5Bcategories%5D=95&set_filter=Y#filter-form").get();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        Elements vacanciesLuxoft = doc.getElementsByAttributeValue("class", "js-tracking");
-        for (Element vacancy : vacanciesLuxoft) {
-            String fullURL = "https://career.luxoft.com" + vacancy.attr("href");
-            String title = vacancy.text();
-
-            result.add(new JobSite(title, fullURL));
-
-        }
+//        Document doc = null;
+//        try {
+//            doc = Jsoup.connect("https://career.luxoft.com/job-opportunities/?arrFilter_ff%5BNAME%5D=&countryID%5B%5D=780&arrFilter_pf%5Bcities%5D%5B%5D=11&arrFilter_pf%5Bcategories%5D=95&set_filter=Y#filter-form").get();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        Elements vacanciesLuxoft = doc.getElementsByAttributeValue("class", "js-tracking");
+//        for (Element vacancy : vacanciesLuxoft) {
+//            String fullURL = "https://career.luxoft.com" + vacancy.attr("href");
+//            String title = vacancy.text();
+//
+//            result.add(new JobSite(title, fullURL));
+//
+//        }
 
 
         return result.toString();
