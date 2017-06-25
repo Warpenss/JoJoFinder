@@ -79,7 +79,7 @@ public class FinderController {
         for (HtmlElement vacancy : vacancies) {
             try {
                 URL fullURL = page.getFullyQualifiedUrl(vacancy.getAttribute("href"));
-                String title = "";
+                String title;
                 if (!company.equalsIgnoreCase("Softserve")) {
                     title = vacancy.getTextContent();
                 }
