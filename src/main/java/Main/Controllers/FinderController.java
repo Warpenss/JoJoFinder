@@ -19,16 +19,18 @@ import java.util.List;
 @RestController
 public class FinderController {
 
+    static public HtmlPage getPage(String url) throws IOException, InterruptedException {
+        final WebClient webClient = new WebClient(BrowserVersion.CHROME);
+        HtmlPage page = webClient.getPage(url);
+        Thread.sleep(3_000);
+        return page;
+    }
+
     @RequestMapping("/")
     public String run() throws IOException, InterruptedException {
-        List<JobSite> result = new ArrayList<>();
 
-        String urlEpam = "https://www.epam.com/careers/job-listings?" +
-                "sort=best_match&" +
-                "query=java&" +
-                "department=Software+Engineering&" +
-                "city=Kyiv&" +
-                "country=Ukraine";
+
+
         String urlLuxoft = "https://career.luxoft.com/job-opportunities/?" +
                 "arrFilter_ff%5BNAME%5D=&" +
                 "countryID%5B%5D=780&" +
@@ -41,28 +43,25 @@ public class FinderController {
                 "tax-country=117&" +
                 "tax-city=121";
 
-        String xPathEpam = "//li[@class='search-result-item']/div[contains(@class, 'position-name')]/a";
+
         String xPathLuxoft = "//a[@class='js-tracking']";
         String xPathSoftserve = "//a[@class='card-vacancy-link']";
 
-        final WebClient webClient = new WebClient(BrowserVersion.CHROME);
-        HtmlPage pageEpam = webClient.getPage(urlEpam);
         HtmlPage pageLuxoft = webClient.getPage(urlLuxoft);
         HtmlPage pageSoftServe = webClient.getPage(urlSoftserve);
-        Thread.sleep(3_000);
 
-        List<HtmlElement> vacanciesEpam = pageEpam.getByXPath(xPathEpam);
+
         List<HtmlElement> vacanciesLuxoft = pageLuxoft.getByXPath(xPathLuxoft);
         List<HtmlElement> vacanciesSoftserve = pageSoftServe.getByXPath(xPathSoftserve);
 
-        addVacancies("Epam", result, vacanciesEpam, pageEpam);
+
         addVacancies("Luxoft", result, vacanciesLuxoft, pageLuxoft);
         addVacancies("Softserve", result, vacanciesSoftserve, pageLuxoft);
 
-        return result.toString();
+
     }
 
-    private void addVacancies(String company, List<JobSite> result, List<HtmlElement> vacancies, HtmlPage page) {
+    public static void addVacancies(String company, List<JobSite> result, List<HtmlElement> vacancies, HtmlPage page) {
         for (HtmlElement vacancy : vacancies) {
             try {
                 URL fullURL = page.getFullyQualifiedUrl(vacancy.getAttribute("href"));
