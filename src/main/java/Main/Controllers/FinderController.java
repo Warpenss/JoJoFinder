@@ -21,7 +21,7 @@ public class FinderController {
     private List<JobSite> result = new ArrayList<>();
 
     @RequestMapping("/")
-    public String run() {
+    public String run() throws IOException, InterruptedException {
         String urlEpam = "https://www.epam.com/careers/job-listings?" +
                 "sort=best_match&" +
                 "query=java&" +
@@ -44,33 +44,19 @@ public class FinderController {
         String xPathLuxoft = "//a[@class='js-tracking']";
         String xPathSoftserve = "//a[@class='card-vacancy-link']";
 
-        HtmlPage pageEpam = null;
-        HtmlPage pageLuxoft = null;
-        HtmlPage pageSoftServe = null;
+        final WebClient webClient = new WebClient(BrowserVersion.CHROME);
+        HtmlPage pageEpam = webClient.getPage(urlEpam);
+        HtmlPage pageLuxoft = webClient.getPage(urlLuxoft);
+        HtmlPage pageSoftServe = webClient.getPage(urlSoftserve);
+        Thread.sleep(3_000);
 
-        try (final WebClient webClient = new WebClient(BrowserVersion.CHROME)) {
-            pageEpam = webClient.getPage(urlEpam);
-            pageLuxoft = webClient.getPage(urlLuxoft);
-            pageSoftServe = webClient.getPage(urlSoftserve);
-            Thread.sleep(3_000);
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
+        List<HtmlElement> vacanciesEpam = pageEpam.getByXPath(xPathEpam);
+        List<HtmlElement> vacanciesLuxoft = pageLuxoft.getByXPath(xPathLuxoft);
+        List<HtmlElement> vacanciesSoftserve = pageSoftServe.getByXPath(xPathSoftserve);
 
-        if (pageEpam != null) {
-            List<HtmlElement> vacanciesEpam = pageEpam.getByXPath(xPathEpam);
-            addVacancies("Epam", result, vacanciesEpam, pageEpam);
-        }
-
-        if (pageLuxoft != null) {
-            List<HtmlElement> vacanciesLuxoft = pageLuxoft.getByXPath(xPathLuxoft);
-            addVacancies("Luxoft", result, vacanciesLuxoft, pageLuxoft);
-        }
-
-        if (pageSoftServe != null) {
-            List<HtmlElement> vacanciesSoftserve = pageSoftServe.getByXPath(xPathSoftserve);
-            addVacancies("Softserve", result, vacanciesSoftserve, pageLuxoft);
-        }
+        addVacancies("Epam", result, vacanciesEpam, pageEpam);
+        addVacancies("Luxoft", result, vacanciesLuxoft, pageLuxoft);
+        addVacancies("Softserve", result, vacanciesSoftserve, pageLuxoft);
 
         return result.toString();
     }
@@ -82,8 +68,7 @@ public class FinderController {
                 String title;
                 if (!company.equalsIgnoreCase("Softserve")) {
                     title = vacancy.getTextContent();
-                }
-                else {
+                } else {
                     title = vacancy.getFirstElementChild().getFirstElementChild().getTextContent();
                 }
                 result.add(new JobSite(title, fullURL.toString()));

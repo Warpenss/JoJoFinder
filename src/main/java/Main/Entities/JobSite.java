@@ -27,6 +27,6 @@ public class JobSite {
 
     @Override
     public String toString() {
-        return title + url;
+        return "<br>" + title + "<br>" + "<a href=\""+ url + "\">" + url + "</a>" + "<br>";
     }
 }
