@@ -18,10 +18,11 @@ import java.util.List;
 
 @RestController
 public class FinderController {
-    private List<JobSite> result = new ArrayList<>();
 
     @RequestMapping("/")
     public String run() throws IOException, InterruptedException {
+        List<JobSite> result = new ArrayList<>();
+
         String urlEpam = "https://www.epam.com/careers/job-listings?" +
                 "sort=best_match&" +
                 "query=java&" +
