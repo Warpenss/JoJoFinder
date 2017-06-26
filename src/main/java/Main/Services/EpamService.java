@@ -9,10 +9,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EpamService extends JobPicker {
-
-    @Override
-    public List<JobSite> collect() throws IOException, InterruptedException{
+public class EpamService {
+    public static List<JobSite> collect() throws IOException, InterruptedException{
         List<JobSite> result = new ArrayList<>();
 
         String url = "https://www.epam.com/careers/job-listings?" +
