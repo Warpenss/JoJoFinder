@@ -1,16 +1,15 @@
 package Main.Services;
 
-import Main.Controllers.FinderController;
 import Main.Entities.JobSite;
+import Main.Tools.Tools;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SoftserveService {
-    public static List<JobSite> collect() throws IOException, InterruptedException{
+public class SoftserveService implements SiteService {
+    public List<JobSite> collect()  {
         List<JobSite> result = new ArrayList<>();
 
         String url = "https://softserve.ua/ru/vacancies/open-vacancies/?" +
@@ -21,11 +20,11 @@ public class SoftserveService {
 
         String xPath = "//a[@class='card-vacancy-link']";
 
-        HtmlPage page = FinderController.getPage(url);
+        HtmlPage page = Tools.getPage(url);
 
         List<HtmlElement> vacancies = page.getByXPath(xPath);
 
-        FinderController.addVacancies("Softserve", result, vacancies, page);
+        Tools.addVacancies("Softserve", result, vacancies, page);
 
         return result;
     }

@@ -1,16 +1,15 @@
 package Main.Services;
 
-import Main.Controllers.FinderController;
 import Main.Entities.JobSite;
+import Main.Tools.Tools;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EpamService {
-    public static List<JobSite> collect() throws IOException, InterruptedException{
+public class EpamService implements SiteService {
+    public List<JobSite> collect(){
         List<JobSite> result = new ArrayList<>();
 
         String url = "https://www.epam.com/careers/job-listings?" +
@@ -22,11 +21,11 @@ public class EpamService {
 
         String xPath = "//li[@class='search-result-item']/div[contains(@class, 'position-name')]/a";
 
-        HtmlPage page = FinderController.getPage(url);
+        HtmlPage page = Tools.getPage(url);
 
         List<HtmlElement> vacancies = page.getByXPath(xPath);
 
-        FinderController.addVacancies("Epam", result, vacancies, page);
+        Tools.addVacancies("Epam", result, vacancies, page);
 
         return result;
     }

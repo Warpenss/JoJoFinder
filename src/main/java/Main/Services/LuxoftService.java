@@ -1,17 +1,15 @@
 package Main.Services;
 
-
-import Main.Controllers.FinderController;
 import Main.Entities.JobSite;
+import Main.Tools.Tools;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LuxoftService{
-    public static List<JobSite> collect() throws IOException, InterruptedException{
+public class LuxoftService implements SiteService {
+    public List<JobSite> collect(){
         List<JobSite> result = new ArrayList<>();
 
         String url = "https://career.luxoft.com/job-opportunities/?" +
@@ -23,11 +21,11 @@ public class LuxoftService{
 
         String xPath = "//a[@class='js-tracking']";
 
-        HtmlPage page = FinderController.getPage(url);
+        HtmlPage page = Tools.getPage(url);
 
         List<HtmlElement> vacancies = page.getByXPath(xPath);
 
-        FinderController.addVacancies("Luxoft", result, vacancies, page);
+        Tools.addVacancies("Luxoft", result, vacancies, page);
 
         return result;
     }
