@@ -5,4 +5,4 @@ City
 Country  
 Language  
 Years of experience  
-Used: Java, Jsoup, HtmlUnit, Spring Boot, Javascript, Bootstrap, Html, CSS, Git  
+Used: Java, Jsoup, HtmlUnit, Spring Boot, Javascript, Bootstrap, Html, CSS, Git, Thymeleaf
