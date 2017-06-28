@@ -4,10 +4,11 @@ import Main.Entities.JobSite;
 import Main.Tools.Tools;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@Component
 public class SoftserveService implements SiteService {
     public List<JobSite> collect()  {
         List<JobSite> result = new ArrayList<>();
