@@ -114,5 +114,6 @@
     <orderEntry type="library" name="Maven: org.eclipse.jetty:jetty-io:9.3.14.v20161028" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse.jetty.websocket:websocket-common:9.3.14.v20161028" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse.jetty.websocket:websocket-api:9.3.14.v20161028" level="project" />
+    <orderEntry type="library" name="skype-uri" level="application" />
   </component>
 </module>

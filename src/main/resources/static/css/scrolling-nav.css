@@ -42,7 +42,8 @@ of those sections to manage the look and feel of the site. */
 }
 
 .services-section {
-    padding-top: 100px;
+    padding-top: 50px;
+    padding-bottom: 30px;
     text-align: center;
     background: #fff;
 }
