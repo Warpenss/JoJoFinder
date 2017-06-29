@@ -1,6 +1,5 @@
 package Main.Services;
 
-import Main.Entities.JobSite;
 import Main.Tools.PageTool;
 import Main.Tools.VacancyTool;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
@@ -8,7 +7,6 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 @Component
 public class LuxoftService implements SiteService {
@@ -16,8 +14,6 @@ public class LuxoftService implements SiteService {
     VacancyTool vacancyTool;
 
     public void collect(){
-        List<JobSite> result = new ArrayList<>();
-
         String url = "https://career.luxoft.com/job-opportunities/?" +
                 "arrFilter_ff%5BNAME%5D=&" +
                 "countryID%5B%5D=780&" +
@@ -31,6 +27,6 @@ public class LuxoftService implements SiteService {
 
         List<HtmlElement> vacancies = page.getByXPath(xPath);
 
-        vacancyTool.addVacancies("Luxoft", result, vacancies, page);
+        vacancyTool.addVacancies("Luxoft", vacancies, page);
     }
 }

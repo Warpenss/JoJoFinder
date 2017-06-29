@@ -1,6 +1,5 @@
 package Main.Services;
 
-import Main.Entities.JobSite;
 import Main.Tools.PageTool;
 import Main.Tools.VacancyTool;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
@@ -8,7 +7,6 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -17,8 +15,6 @@ public class EpamService implements SiteService {
     VacancyTool vacancyTool;
 
     public void collect(){
-        List<JobSite> result = new ArrayList<>();
-
         String url = "https://www.epam.com/careers/job-listings?" +
                 "sort=best_match&" +
                 "query=java&" +
@@ -32,6 +28,6 @@ public class EpamService implements SiteService {
 
         List<HtmlElement> vacancies = page.getByXPath(xPath);
 
-        vacancyTool.addVacancies("Epam", result, vacancies, page);
+        vacancyTool.addVacancies("Epam", vacancies, page);
     }
 }

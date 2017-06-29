@@ -2,14 +2,11 @@ package Main.Tools;
 
 import Main.Entities.JobSite;
 import Main.Repository.JobRepository;
-import com.gargoylesoftware.htmlunit.BrowserVersion;
-import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.List;
 
@@ -18,7 +15,7 @@ public class VacancyTool {
     @Autowired
     JobRepository jobRepository;
 
-    public void addVacancies(String company, List<JobSite> result, List<HtmlElement> vacancies, HtmlPage page) {
+    public void addVacancies(String company, List<HtmlElement> vacancies, HtmlPage page) {
         for (HtmlElement vacancy : vacancies) {
             try {
                 String fullURL = page.getFullyQualifiedUrl(vacancy.getAttribute("href")).toString();
