@@ -90,6 +90,11 @@
         <div class="row">
             <div class="col-lg-12">
                 <h1>Vacancies</h1>
+                <p>
+                    <span th:text="${#lists.size(jobs)}"></span>
+                    found
+                </p>
+
                 <table class="table">
                     <tbody id="tableBody">
                     <tr data-th-each="job : ${jobs}">
@@ -137,7 +142,9 @@
                 <p>Made by <a href="https://github.com/Warpenss" target="_blank">Warpenss</a></p>
                 <a href="https://github.com/Warpenss" target="_blank"><i class="fa fa-github fa-5x"></i></a>
                 <a href="https://www.facebook.com/warpenss" target="_blank"><i class="fa fa-facebook-square fa-5x"></i></a>
-                <a href="javascript://warpenss" onclick="Skype.tryAnalyzeSkypeUri('chat', '0'); Skype.trySkypeUri_Generic('skype:warpenss?chat', '_detectSkypeClient_1498640862562', '0'); return false;"><i class="fa fa-skype fa-5x" role="Button"></i></a>
+                <a href="javascript://warpenss"
+                   onclick="Skype.tryAnalyzeSkypeUri('chat', '0'); Skype.trySkypeUri_Generic('skype:warpenss?chat', '_detectSkypeClient_1498640862562', '0'); return false;"><i
+                        class="fa fa-skype fa-5x" role="Button"></i></a>
                 <a href="https://www.linkedin.com/in/warpen" target="_blank"><i class="fa fa-linkedin-square fa-5x"></i></a>
             </div>
         </div>

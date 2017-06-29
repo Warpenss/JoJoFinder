@@ -16,20 +16,12 @@ import java.util.List;
 @Controller
 public class FinderController {
     @Autowired
-    EpamService epamService;
-    @Autowired
-    LuxoftService luxoftService;
-    @Autowired
-    SoftserveService softserveService;
-    @Autowired
     JobRepository jobRepository;
 
     //Catches the "/" request, adds jobs attribute and redirect to index.html
     @RequestMapping("/")
     public String index(Model model) {
-        epamService.collect();
-        luxoftService.collect();
-        softserveService.collect();
+
 
         //Get all vacancies from database
         List<JobSite> allJobs = jobRepository.findAll();

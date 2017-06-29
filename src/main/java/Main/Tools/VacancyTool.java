@@ -26,7 +26,7 @@ public class VacancyTool {
                 if (!company.equalsIgnoreCase("Softserve")) {
                     title = vacancy.getTextContent();
                 } else {
-                    //Get inside the main vacancy element to get title
+                    //Get inside the main vacancy element to get title of Softserve vacancy
                     title = vacancy.getFirstElementChild().getFirstElementChild().getTextContent();
                 }
                 //If there is no vacancy in database with such URL - create new
