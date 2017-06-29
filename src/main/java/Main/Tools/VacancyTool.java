@@ -14,25 +14,9 @@ import java.net.MalformedURLException;
 import java.util.List;
 
 @Component
-public class Tools {
+public class VacancyTool {
     @Autowired
     JobRepository jobRepository;
-
-    static public HtmlPage getPage(String url) {
-        final WebClient webClient = new WebClient(BrowserVersion.CHROME);
-        HtmlPage page = null;
-        try {
-            page = webClient.getPage(url);
-            Thread.sleep(3_000);
-        } catch (IOException e) {
-            System.out.println("IOException while loading the page");
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            System.out.println("InterruptedException while thread sleep");
-            e.printStackTrace();
-        }
-        return page;
-    }
 
     public void addVacancies(String company, List<JobSite> result, List<HtmlElement> vacancies, HtmlPage page) {
         for (HtmlElement vacancy : vacancies) {

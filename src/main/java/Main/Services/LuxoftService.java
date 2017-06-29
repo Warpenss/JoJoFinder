@@ -1,7 +1,8 @@
 package Main.Services;
 
 import Main.Entities.JobSite;
-import Main.Tools.Tools;
+import Main.Tools.PageTool;
+import Main.Tools.VacancyTool;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,7 @@ import java.util.List;
 @Component
 public class LuxoftService implements SiteService {
     @Autowired
-    Tools tools;
+    VacancyTool vacancyTool;
 
     public void collect(){
         List<JobSite> result = new ArrayList<>();
@@ -26,10 +27,10 @@ public class LuxoftService implements SiteService {
 
         String xPath = "//a[@class='js-tracking']";
 
-        HtmlPage page = Tools.getPage(url);
+        HtmlPage page = PageTool.getPage(url);
 
         List<HtmlElement> vacancies = page.getByXPath(xPath);
 
-        tools.addVacancies("Luxoft", result, vacancies, page);
+        vacancyTool.addVacancies("Luxoft", result, vacancies, page);
     }
 }
