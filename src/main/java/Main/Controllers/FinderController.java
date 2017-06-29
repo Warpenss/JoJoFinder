@@ -2,9 +2,6 @@ package Main.Controllers;
 
 import Main.Entities.JobSite;
 import Main.Repository.JobRepository;
-import Main.Services.EpamService;
-import Main.Services.LuxoftService;
-import Main.Services.SoftserveService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
