@@ -1,6 +1,7 @@
 package Main.Controllers;
 
 import Main.Entities.JobSite;
+import Main.Repository.JobRepository;
 import Main.Services.EpamService;
 import Main.Services.LuxoftService;
 import Main.Services.SoftserveService;
@@ -23,12 +24,19 @@ public class FinderController {
     @Autowired
     SoftserveService softserveService;
 
+    @Autowired
+    JobRepository jobRepository;
+
+
     @RequestMapping("/")
     public String index(Model model) {
         List<JobSite> allJobs = new ArrayList<>();
-        allJobs.addAll(epamService.collect());
-        allJobs.addAll(luxoftService.collect());
-        allJobs.addAll(softserveService.collect());
+
+        epamService.collect();
+        luxoftService.collect();
+        softserveService.collect();
+
+        allJobs = jobRepository.findAll();
 
         model.addAttribute("jobs", allJobs);
         return "index";

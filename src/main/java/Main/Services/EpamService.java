@@ -4,14 +4,18 @@ import Main.Entities.JobSite;
 import Main.Tools.Tools;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @Component
 public class EpamService implements SiteService {
+    @Autowired
+    Tools tools;
 
-    public List<JobSite> collect(){
+    public void collect(){
         List<JobSite> result = new ArrayList<>();
 
         String url = "https://www.epam.com/careers/job-listings?" +
@@ -27,8 +31,6 @@ public class EpamService implements SiteService {
 
         List<HtmlElement> vacancies = page.getByXPath(xPath);
 
-        Tools.addVacancies("Epam", result, vacancies, page);
-
-        return result;
+        tools.addVacancies("Epam", result, vacancies, page);
     }
 }

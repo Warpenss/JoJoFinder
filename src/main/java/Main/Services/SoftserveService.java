@@ -4,13 +4,17 @@ import Main.Entities.JobSite;
 import Main.Tools.Tools;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 @Component
 public class SoftserveService implements SiteService {
-    public List<JobSite> collect()  {
+    @Autowired
+    Tools tools;
+
+    public void collect()  {
         List<JobSite> result = new ArrayList<>();
 
         String url = "https://softserve.ua/ru/vacancies/open-vacancies/?" +
@@ -25,8 +29,6 @@ public class SoftserveService implements SiteService {
 
         List<HtmlElement> vacancies = page.getByXPath(xPath);
 
-        Tools.addVacancies("Softserve", result, vacancies, page);
-
-        return result;
+        tools.addVacancies("Softserve", result, vacancies, page);
     }
 }
