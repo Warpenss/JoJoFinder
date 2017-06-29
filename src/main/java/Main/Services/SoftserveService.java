@@ -1,32 +1,31 @@
 package Main.Services;
 
-import Main.Entities.JobSite;
-import Main.Tools.Tools;
+import Main.Tools.PageTool;
+import Main.Tools.VacancyTool;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 @Component
 public class SoftserveService implements SiteService {
-    public List<JobSite> collect()  {
-        List<JobSite> result = new ArrayList<>();
+    @Autowired
+    VacancyTool vacancyTool;
 
-        String url = "https://softserve.ua/ru/vacancies/open-vacancies/?" +
-                "tax-direction=21&" +
-                "tax-lang=175&" +
-                "tax-country=117&" +
-                "tax-city=121";
+    private static final String URL = "https://softserve.ua/ru/vacancies/open-vacancies/?" +
+            "tax-direction=21&" +
+            "tax-lang=175&" +
+            "tax-country=117&" +
+            "tax-city=121";
 
-        String xPath = "//a[@class='card-vacancy-link']";
+    private static final String X_PATH = "//a[@class='card-vacancy-link']";
 
-        HtmlPage page = Tools.getPage(url);
+    public void collect()  {
+        HtmlPage page = PageTool.getPage(URL);
 
-        List<HtmlElement> vacancies = page.getByXPath(xPath);
+        List<HtmlElement> vacancies = page.getByXPath(X_PATH);
 
-        Tools.addVacancies("Softserve", result, vacancies, page);
-
-        return result;
+        vacancyTool.addVacancies("Softserve", vacancies, page);
     }
 }
