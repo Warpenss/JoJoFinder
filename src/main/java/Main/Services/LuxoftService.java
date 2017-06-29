@@ -13,19 +13,19 @@ public class LuxoftService implements SiteService {
     @Autowired
     VacancyTool vacancyTool;
 
+    private static final String URL = "https://career.luxoft.com/job-opportunities/?" +
+            "arrFilter_ff%5BNAME%5D=&" +
+            "countryID%5B%5D=780&" +
+            "arrFilter_pf%5Bcities%5D%5B%5D=11&" +
+            "arrFilter_pf%5Bcategories%5D=95&" +
+            "set_filter=Y#filter-form";
+
+    private static final String X_PATH = "//a[@class='js-tracking']";
+
     public void collect(){
-        String url = "https://career.luxoft.com/job-opportunities/?" +
-                "arrFilter_ff%5BNAME%5D=&" +
-                "countryID%5B%5D=780&" +
-                "arrFilter_pf%5Bcities%5D%5B%5D=11&" +
-                "arrFilter_pf%5Bcategories%5D=95&" +
-                "set_filter=Y#filter-form";
+        HtmlPage page = PageTool.getPage(URL);
 
-        String xPath = "//a[@class='js-tracking']";
-
-        HtmlPage page = PageTool.getPage(url);
-
-        List<HtmlElement> vacancies = page.getByXPath(xPath);
+        List<HtmlElement> vacancies = page.getByXPath(X_PATH);
 
         vacancyTool.addVacancies("Luxoft", vacancies, page);
     }

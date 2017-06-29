@@ -13,18 +13,18 @@ public class SoftserveService implements SiteService {
     @Autowired
     VacancyTool vacancyTool;
 
+    private static final String URL = "https://softserve.ua/ru/vacancies/open-vacancies/?" +
+            "tax-direction=21&" +
+            "tax-lang=175&" +
+            "tax-country=117&" +
+            "tax-city=121";
+
+    private static final String X_PATH = "//a[@class='card-vacancy-link']";
+
     public void collect()  {
-        String url = "https://softserve.ua/ru/vacancies/open-vacancies/?" +
-                "tax-direction=21&" +
-                "tax-lang=175&" +
-                "tax-country=117&" +
-                "tax-city=121";
+        HtmlPage page = PageTool.getPage(URL);
 
-        String xPath = "//a[@class='card-vacancy-link']";
-
-        HtmlPage page = PageTool.getPage(url);
-
-        List<HtmlElement> vacancies = page.getByXPath(xPath);
+        List<HtmlElement> vacancies = page.getByXPath(X_PATH);
 
         vacancyTool.addVacancies("Softserve", vacancies, page);
     }
