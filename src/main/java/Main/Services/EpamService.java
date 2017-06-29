@@ -24,10 +24,13 @@ public class EpamService implements SiteService {
 
         String xPath = "//li[@class='search-result-item']/div[contains(@class, 'position-name')]/a";
 
+        //Get page from HtmlUnit WebClient
         HtmlPage page = PageTool.getPage(url);
 
+        //Get vacancies with exact xpath
         List<HtmlElement> vacancies = page.getByXPath(xPath);
 
+        //Send vacancies to VacancyTool that adds them to the database
         vacancyTool.addVacancies("Epam", vacancies, page);
     }
 }

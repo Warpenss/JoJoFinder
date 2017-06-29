@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 import java.net.MalformedURLException;
 import java.util.List;
 
+
+//This tool can handle all kinds of site structures to get vacancy title and url. Also add it to the database
 @Component
 public class VacancyTool {
     @Autowired
@@ -20,11 +22,14 @@ public class VacancyTool {
             try {
                 String fullURL = page.getFullyQualifiedUrl(vacancy.getAttribute("href")).toString();
                 String title;
+                //Softserve have different site structure
                 if (!company.equalsIgnoreCase("Softserve")) {
                     title = vacancy.getTextContent();
                 } else {
+                    //Get inside the main vacancy element to get title
                     title = vacancy.getFirstElementChild().getFirstElementChild().getTextContent();
                 }
+                //If there is no vacancy in database with such URL - create new
                 if (jobRepository.findOne(fullURL) == null) {
                     jobRepository.save(new JobSite(title, fullURL));
                 }

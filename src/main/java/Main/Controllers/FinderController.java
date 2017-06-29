@@ -11,9 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.ArrayList;
 import java.util.List;
-
 
 @Controller
 public class FinderController {
@@ -23,22 +21,22 @@ public class FinderController {
     LuxoftService luxoftService;
     @Autowired
     SoftserveService softserveService;
-
     @Autowired
     JobRepository jobRepository;
 
-
+    //Catches the "/" request, adds jobs attribute and redirect to index.html
     @RequestMapping("/")
     public String index(Model model) {
-        List<JobSite> allJobs = new ArrayList<>();
-
         epamService.collect();
         luxoftService.collect();
         softserveService.collect();
 
-        allJobs = jobRepository.findAll();
+        //Get all vacancies from database
+        List<JobSite> allJobs = jobRepository.findAll();
 
+        //Access list of jobs in html with this attribute
         model.addAttribute("jobs", allJobs);
+
         return "index";
     }
 }
