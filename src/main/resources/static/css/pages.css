@@ -1,0 +1,31 @@
+.pages li > a, .pages li > span {
+    display: inline-block;
+    padding: 5px 14px;
+    background-color: #fff;
+    border: 0px solid #ddd;
+}
+
+.pages > li > a, .pages > li > span {
+    font-size: 16px;
+}
+
+.pages > li > a, .pages > li > span {
+    position: relative;
+    float: left;
+    padding: 6px 12px;
+    margin-left: -1px;
+    line-height: 1.42857143;
+    color: #333333;
+    text-decoration: none;
+    background-color: #fff;
+    border: 0px solid #ddd;
+    border-radius: 0px;
+}
+
+.pages > .active > a, .pages > .active > a:focus, .pages > .active > a:hover, .pages > .active > span, .pages > .active > span:focus, .pages > .active > span:hover {
+    z-index: 3;
+    color: #333;
+    cursor: default;
+    background-color: #eeeeee;
+    border-color: #337ab7
+}
