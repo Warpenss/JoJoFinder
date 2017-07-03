@@ -11,13 +11,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class Scheduler {
     @Autowired
-    EpamService epamService;
+    private EpamService epamService;
     @Autowired
-    LuxoftService luxoftService;
+    private LuxoftService luxoftService;
     @Autowired
-    SoftserveService softserveService;
+    private SoftserveService softserveService;
 
-    @Scheduled (cron = "0 27 23 * * *")
+    @Scheduled (cron = "0 28 14 * * *")
     public void schedule() {
         epamService.collect();
         luxoftService.collect();
