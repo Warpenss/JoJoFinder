@@ -100,5 +100,5 @@ $.fn.pageMe = function (opts) {
 };
 
 $(document).ready(function () {
-    $('#tableBody').pageMe({pagerSelector: '#pages', showPrevNext: true, hidePageNumbers: false, perPage: 10});
+    $('#tableBody').pageMe({pagerSelector: '#pages', showPrevNext: true, hidePageNumbers: false, perPage: 20});
 });

@@ -29,3 +29,16 @@
     background-color: #eeeeee;
     border-color: #337ab7
 }
+
+.h2, h2 {
+    font-size: 26px;
+}
+
+.h1, .h2, .h3, h1, h2, h3 {
+    margin-top: 1px;
+    margin-bottom: 1px;
+}
+
+.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+    line-height: 1;
+}
