@@ -17,7 +17,7 @@ public class Scheduler {
     @Autowired
     private SoftserveService softserveService;
 
-    @Scheduled (cron = "0 28 14 * * *")
+    @Scheduled (cron = "0 0/5 * * * *")
     public void schedule() {
         epamService.collect();
         luxoftService.collect();
