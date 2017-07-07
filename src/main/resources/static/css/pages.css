@@ -47,19 +47,19 @@
     background-color: rgba(0, 137, 255, 0.8);
     color: #fff;
     border-radius: 4px;
-    padding: 6px 12px
+    padding: 3px 6px;
 }
 
 .city {
     background-color: rgba(0, 193, 22, 0.8);
     color: #fff;
     border-radius: 4px;
-    padding: 6px 12px
+    padding: 3px 12px;
 }
 
 .language {
     background-color: rgba(255, 0, 0, 0.8);
     color: #fff;
     border-radius: 4px;
-    padding: 6px 12px
+    padding: 3px 11px;
 }
