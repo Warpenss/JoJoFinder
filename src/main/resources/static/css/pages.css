@@ -35,10 +35,31 @@
 }
 
 .h1, .h2, .h3, h1, h2, h3 {
-    margin-top: 1px;
+    margin-top: -6px;
     margin-bottom: 1px;
 }
 
 .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
     line-height: 1;
+}
+
+.company {
+    background-color: rgba(0, 137, 255, 0.8);
+    color: #fff;
+    border-radius: 4px;
+    padding: 6px 12px
+}
+
+.city {
+    background-color: rgba(0, 193, 22, 0.8);
+    color: #fff;
+    border-radius: 4px;
+    padding: 6px 12px
+}
+
+.language {
+    background-color: rgba(255, 0, 0, 0.8);
+    color: #fff;
+    border-radius: 4px;
+    padding: 6px 12px
 }

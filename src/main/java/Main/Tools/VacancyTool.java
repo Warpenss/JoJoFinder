@@ -31,7 +31,7 @@ public class VacancyTool {
                 }
                 //If there is no vacancy in database with such URL - create new
                 if (jobRepository.findOne(fullURL) == null) {
-                    jobRepository.save(new JobSite(title, fullURL));
+                    jobRepository.save(new JobSite(title, fullURL, company, "Kiev", "Java"));
                 }
             } catch (MalformedURLException e) {
                 e.printStackTrace();
