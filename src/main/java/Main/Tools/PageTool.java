@@ -1,10 +1,13 @@
 package Main.Tools;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
+import com.gargoylesoftware.htmlunit.History;
+import com.gargoylesoftware.htmlunit.WaitingRefreshHandler;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 
 //This tool handle the WebClient and return page
 public class PageTool {
@@ -13,6 +16,16 @@ public class PageTool {
 
     //This method helps with page loading
     static public HtmlPage getPage(String url) {
+        try {
+            History window = webClient.getWebWindows().get(0).getHistory();
+            Field f = window.getClass().getDeclaredField("ignoreNewPages_"); //NoSuchFieldException
+            f.setAccessible(true);
+            ((ThreadLocal<Boolean>) f.get(window)).set(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new AssertionError("Can't disable history");
+        }
+
         HtmlPage page = null;
         try {
             //Get page from WebClient
@@ -27,6 +40,14 @@ public class PageTool {
             System.out.println("InterruptedException while thread sleep");
             e.printStackTrace();
         }
+
+
+        webClient.getOptions().setCssEnabled(false);
+        webClient.getOptions().setThrowExceptionOnScriptError(false);
+        webClient.getOptions().setPopupBlockerEnabled(true);
+
+
+
         return page;
     }
 }
