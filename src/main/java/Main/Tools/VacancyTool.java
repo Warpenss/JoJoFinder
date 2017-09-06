@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.net.MalformedURLException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -31,7 +32,8 @@ public class VacancyTool {
                 }
                 //If there is no vacancy in database with such URL - create new
                 if (jobRepository.findOne(fullURL) == null) {
-                    jobRepository.save(new JobSite(title, fullURL, company, "Kiev", "Java"));
+                    LocalDateTime time = LocalDateTime.now();
+                    jobRepository.save(new JobSite(time, title, fullURL, company, "Kiev", "Java"));
                 }
             } catch (MalformedURLException e) {
                 e.printStackTrace();

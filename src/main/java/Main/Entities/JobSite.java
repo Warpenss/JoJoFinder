@@ -3,6 +3,7 @@ package Main.Entities;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.time.LocalDateTime;
 
 @Entity
 public class JobSite {
@@ -20,10 +21,13 @@ public class JobSite {
 
     private String language;
 
+    private LocalDateTime time;
+
     public JobSite() {
     }
 
-    public JobSite(String title, String url, String company, String city, String language) {
+    public JobSite(LocalDateTime time, String title, String url, String company, String city, String language) {
+        this.time = time;
         this.title = title;
         this.url = url;
         this.company = company;
@@ -37,6 +41,14 @@ public class JobSite {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public LocalDateTime getTime() {
+        return time;
+    }
+
+    public void setTime(LocalDateTime time) {
+        this.time = time;
     }
 
     public String getTitle() {
