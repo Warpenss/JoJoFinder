@@ -4,6 +4,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
+import java.util.Locale;
+
+import static java.time.format.DateTimeFormatter.ofPattern;
 
 @Entity
 public class JobSite {
@@ -22,6 +25,8 @@ public class JobSite {
     private String language;
 
     private LocalDateTime time;
+
+    private String displayDate;
 
     public JobSite() {
     }
@@ -89,6 +94,10 @@ public class JobSite {
 
     public void setLanguage(String language) {
         this.language = language;
+    }
+
+    public String getDisplayDate() {
+        return time.format(ofPattern("d MMM y HH:mm", new Locale("en", "EN")));
     }
 
     @Override
