@@ -21,6 +21,6 @@ public class Scheduler {
     public void schedule() {
         epamService.collect();
         luxoftService.collect();
-        softserveService.collect();
+//        softserveService.collect();
     }
 }
