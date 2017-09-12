@@ -3,30 +3,17 @@ package Main.Controllers;
 import Main.Entities.JobSite;
 import Main.Repository.JobRepository;
 
-import Main.Services.EpamService;
-import Main.Services.LuxoftService;
 import Main.Services.SoftserveService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
 
 @Controller
 public class FinderController {
-
-    @Autowired
-    private EpamService epamService;
-    @Autowired
-    private LuxoftService luxoftService;
-    @Autowired
-    private SoftserveService softserveService;
-
-
     @Autowired
     JobRepository jobRepository;
 

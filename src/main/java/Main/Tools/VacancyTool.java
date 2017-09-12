@@ -29,6 +29,9 @@ public class VacancyTool {
                 } else {
                     //Get inside the main vacancy element to get title of Softserve vacancy
                     title = vacancy.getFirstElementChild().getFirstElementChild().getTextContent();
+                    if (title.contains("hot")) {
+                        title = vacancy.getFirstElementChild().getElementsByTagName("h4").get(0).getTextContent();
+                    }
                 }
                 //If there is no vacancy in database with such URL - create new
                 if (jobRepository.findOne(fullURL) == null) {

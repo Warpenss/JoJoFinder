@@ -1,6 +1,5 @@
 package Main.Tools;
 
-
 import Main.Services.EpamService;
 import Main.Services.LuxoftService;
 import Main.Services.SoftserveService;
@@ -21,6 +20,6 @@ public class Scheduler {
     public void schedule() {
         epamService.collect();
         luxoftService.collect();
-//        softserveService.collect();
+        softserveService.collect();
     }
 }

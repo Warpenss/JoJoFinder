@@ -13,6 +13,12 @@ import java.lang.reflect.Field;
 public class PageTool {
     //WebClient simulates Chrome browser that can handle Javascript on sites
     static private final WebClient webClient = new WebClient(BrowserVersion.CHROME);
+    static {
+        webClient.getOptions().setUseInsecureSSL(true);
+    }
+
+
+
 
     //This method helps with page loading
     static public HtmlPage getPage(String url) {
