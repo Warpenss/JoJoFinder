@@ -17,9 +17,6 @@ public class PageTool {
         webClient.getOptions().setUseInsecureSSL(true);
     }
 
-
-
-
     //This method helps with page loading
     static public HtmlPage getPage(String url) {
         try {

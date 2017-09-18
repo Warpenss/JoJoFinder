@@ -29,7 +29,7 @@ public class SoftserveService implements SiteService {
         javaCheckBox.setChecked(true);
 
         try {
-            Thread.sleep(3_000);
+            Thread.sleep(20000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
