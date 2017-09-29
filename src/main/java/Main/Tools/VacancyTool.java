@@ -18,6 +18,7 @@ public class VacancyTool {
     @Autowired
     JobRepository jobRepository;
 
+
     public void addVacancies(String company, List<HtmlElement> vacancies, HtmlPage page) {
         for (HtmlElement vacancy : vacancies) {
             try {
@@ -33,6 +34,7 @@ public class VacancyTool {
                         title = vacancy.getFirstElementChild().getElementsByTagName("h4").get(0).getTextContent();
                     }
                 }
+
                 //If there is no vacancy in database with such URL - create new
                 if (jobRepository.findOne(fullURL) == null) {
                     LocalDateTime time = LocalDateTime.now();
