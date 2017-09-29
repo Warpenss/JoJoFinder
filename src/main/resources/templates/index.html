@@ -90,16 +90,16 @@
                 <div class="col-md-12 text-center">
                     <ul class="pagination pager pages" id="pages"></ul>
                 </div>
-                <table class="table">
+                <table class=" responsive-table">
                     <tbody id="tableBody">
                     <tr data-th-each="job : ${jobs}">
-                        <td class="job">
+                        <th scope="row" class="job">
                             <a th:href="${job.url}" target="_blank">
                                 <h2>
                                     <small data-th-text="${job.title}"></small>
                                 </h2>
                             </a>
-                        </td>
+                        </th>
                         <td>
                             <h2>
                                 <small data-th-text="${job.displayDate}" class="time"></small>
