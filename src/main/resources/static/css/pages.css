@@ -63,3 +63,133 @@
     border-radius: 4px;
     padding: 3px 11px;
 }
+
+
+
+
+
+.responsive-table {
+    width: 100%;
+    margin-bottom: 1.5em;
+}
+@media (min-width: 48em) {
+    .responsive-table {
+        font-size: .9em;
+    }
+}
+@media (min-width: 62em) {
+    .responsive-table {
+        font-size: 1em;
+    }
+}
+.responsive-table thead {
+    position: absolute;
+    clip: rect(1px 1px 1px 1px);
+    /* IE6, IE7 */
+    clip: rect(1px, 1px, 1px, 1px);
+    padding: 0;
+    border: 0;
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
+}
+@media (min-width: 48em) {
+    .responsive-table thead {
+        position: relative;
+        clip: auto;
+        height: auto;
+        width: auto;
+        overflow: auto;
+    }
+}
+
+.responsive-table tbody,
+.responsive-table tr,
+.responsive-table th,
+.responsive-table td {
+    display: table-row-group;
+    padding: 0;
+    text-align: center;
+    white-space: normal;
+}
+@media (min-width: 48em) {
+    .responsive-table tr {
+        display: table-row;
+    }
+}
+.responsive-table th,
+.responsive-table td {
+    padding: .5em;
+    vertical-align: middle;
+}
+@media (min-width: 30em) {
+    .responsive-table th,
+    .responsive-table td {
+        padding: .75em .5em;
+    }
+}
+
+
+@media (max-width: 47em) {
+    .responsive-table tbody th,
+    .responsive-table tbody th h2 small {
+        background-color: #1d96b2;
+        color: white;
+    }
+    .responsive-table tbody tr {
+        padding-bottom: 30px;
+    }
+    .responsive-table tbody,
+    .responsive-table tr,
+    .responsive-table th,
+    .responsive-table td {
+        display: grid;
+        padding: 0;
+        text-align: center;
+        white-space: normal;
+    }
+}
+
+@media (max-width: 767px) {
+    .responsive-table tbody th,
+    .responsive-table tbody th h2 small {
+        background-color: #1d96b2;
+        color: white;
+    }
+    .responsive-table tbody tr {
+        padding-bottom: 30px;
+    }
+    .responsive-table tbody,
+    .responsive-table tr,
+    .responsive-table th,
+    .responsive-table td {
+        display: grid;
+        padding: 0;
+        text-align: center;
+        white-space: normal;
+    }
+}
+
+@media (min-width: 48em) {
+    .responsive-table th,
+    .responsive-table td {
+        display: table-cell;
+        padding: .5em;
+    }
+
+}
+@media (min-width: 62em) {
+    .responsive-table th,
+    .responsive-table td {
+        padding: .75em .5em;
+    }
+
+}
+@media (min-width: 75em) {
+    .responsive-table th,
+    .responsive-table td {
+        padding: .75em;
+    }
+
+}
+
