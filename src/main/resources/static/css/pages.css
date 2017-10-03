@@ -196,4 +196,10 @@
 
 .pages > li > a.go_up {
     padding: 20px 40px;
+    background-color: #eee;
+}
+
+.pages > li > a.go_up:hover {
+    padding: 20px 40px;
+    background-color: #e4e4e4;
 }
