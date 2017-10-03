@@ -22,7 +22,7 @@
     <!-- Pages CSS -->
     <link href="css/pages.css" rel="stylesheet"/>
 
-    <link href="css/jquery-responsive-tables.css" rel="stylesheet"  />
+    <link href="css/jquery-responsive-tables.css" rel="stylesheet"/>
 
     <!-- Add icon library -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
@@ -31,7 +31,10 @@
     <script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-102421271-1"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments)};
+        function gtag() {
+            dataLayer.push(arguments)
+        }
+        ;
         gtag('js', new Date());
 
         gtag('config', 'UA-102421271-1');
@@ -53,7 +56,6 @@
     <script src="js/scrolling-nav.js"></script>
 
     <script src="js/pages.js"></script>
-
 
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -153,7 +155,11 @@
                     </tr>
                     </tbody>
                 </table>
-
+                <div class="col-md-12 text-center">
+                    <ul class="pagination pager pages" id="pages_up">
+                        <li><a href="#" class="go_up">Up</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>

@@ -68,6 +68,7 @@
 
 
 
+
 .responsive-table {
     width: 100%;
     margin-bottom: 1.5em;
@@ -193,3 +194,6 @@
 
 }
 
+.pages > li > a.go_up {
+    padding: 20px 40px;
+}
