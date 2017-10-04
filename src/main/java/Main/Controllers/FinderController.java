@@ -15,12 +15,11 @@ import java.util.List;
 public class FinderController {
     @Autowired
     JobRepository jobRepository;
-    @Autowired
-    SoftserveService softserveService;
 
     //Catches the "/" request, adds jobs attribute and redirect to index.html
     @RequestMapping("/")
     public String index(Model model) {
+
         //Get all vacancies from database
         List<JobSite> allJobs = jobRepository.findAll();
 
