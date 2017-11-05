@@ -29,7 +29,9 @@ public class VacancyTool {
                     title = vacancy.getTextContent();
                 } else {
                     //Get inside the main vacancy element to get title of Softserve vacancy
-                    title = ((HtmlElement)vacancy.getFirstByXPath("//h4[@class='card-courses_title']")).asText();
+                    title = ((HtmlElement) vacancy.getByXPath("div[@class='vacancy-container']" +
+                            "/div[@class='vacancy-title clearfix']" +
+                            "/h4[@class='card-courses_title']").get(0)).asText();
                 }
 
                 //If there is no vacancy in database with such URL - create new
