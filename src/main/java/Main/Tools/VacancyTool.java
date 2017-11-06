@@ -34,11 +34,11 @@ public class VacancyTool {
                             "/h4[@class='card-courses_title']").get(0)).asText();
                 }
 
-                //If there is no vacancy in database with such URL - create new
-                if (jobRepository.findOne(fullURL) == null) {
+                if (jobRepository.findByUrl(fullURL).size() == 0) {
                     LocalDateTime time = LocalDateTime.now();
                     jobRepository.save(new JobSite(time, title, fullURL, company, "Kiev", "Java"));
                 }
+
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }

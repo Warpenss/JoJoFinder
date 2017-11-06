@@ -1,8 +1,6 @@
 package Main.Entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Locale;
 
@@ -10,13 +8,14 @@ import static java.time.format.DateTimeFormatter.ofPattern;
 
 @Entity
 public class JobSite {
-    @GeneratedValue
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private String title;
-
-    @Id
+    @Column(unique = true)
     private String url;
+
+    private String title;
 
     private String company;
 
@@ -26,6 +25,7 @@ public class JobSite {
 
     private LocalDateTime time;
 
+    @Transient
     private String displayDate;
 
     public JobSite() {

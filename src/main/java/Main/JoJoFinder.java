@@ -4,11 +4,14 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 // The @SpringBootApplication annotation is equivalent to using
 // @Configuration, @EnableAutoConfiguration and @ComponentScan with their default attributes
 // Whole project start here. And requests are send to Controllers
+
+@EnableJpaRepositories
 @EnableScheduling
 @SpringBootApplication
 public class JoJoFinder extends SpringBootServletInitializer {
