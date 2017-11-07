@@ -14,6 +14,9 @@ public class PageTool {
     static private final WebClient webClient = new WebClient(BrowserVersion.CHROME);
     static {
         webClient.getOptions().setUseInsecureSSL(true);
+        webClient.getOptions().setCssEnabled(false);
+        webClient.getOptions().setThrowExceptionOnScriptError(false);
+        webClient.getOptions().setPopupBlockerEnabled(true);
     }
 
     //This method helps with page loading
@@ -42,13 +45,6 @@ public class PageTool {
             System.out.println("InterruptedException while thread sleep");
             e.printStackTrace();
         }
-
-
-        webClient.getOptions().setCssEnabled(false);
-        webClient.getOptions().setThrowExceptionOnScriptError(false);
-        webClient.getOptions().setPopupBlockerEnabled(true);
-
-
 
         return page;
     }
