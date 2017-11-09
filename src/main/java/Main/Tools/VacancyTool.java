@@ -19,7 +19,7 @@ public class VacancyTool {
     JobRepository jobRepository;
 
 
-    public void addVacancies(String company, List<HtmlElement> vacancies, HtmlPage page) {
+    public void addVacancies(String company, List<HtmlElement> vacancies, HtmlPage page, String city) {
         for (HtmlElement vacancy : vacancies) {
             try {
                 String fullURL = page.getFullyQualifiedUrl(vacancy.getAttribute("href")).toString();
@@ -36,7 +36,7 @@ public class VacancyTool {
 
                 if (jobRepository.findByUrl(fullURL).size() == 0) {
                     LocalDateTime time = LocalDateTime.now();
-                    jobRepository.save(new JobSite(time, title, fullURL, company, "Kiev", "Java"));
+                    jobRepository.save(new JobSite(time, title, fullURL, company, city, "Java"));
                 }
 
             } catch (MalformedURLException e) {

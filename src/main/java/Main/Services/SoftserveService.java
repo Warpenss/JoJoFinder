@@ -20,13 +20,13 @@ public class SoftserveService implements SiteService {
     private static final String X_PATH = "//a[@class='unit-href']";
 
     public void collect()  {
-        HtmlPage page = PageTool.getPage(URL);
+        HtmlPage pageKievJava = PageTool.getPage(URL);
 
-        HtmlCheckBoxInput kievCheckBox = page.getHtmlElementById("city--Kyiv");
+        HtmlCheckBoxInput kievCheckBox = pageKievJava.getHtmlElementById("city--Kyiv");
         kievCheckBox.setChecked(true);
 
-        HtmlCheckBoxInput javaCheckBox = page.getHtmlElementById("technology--Java");
-        javaCheckBox.setChecked(true);
+        HtmlCheckBoxInput javaCheckBoxKiev = pageKievJava.getHtmlElementById("technology--Java");
+        javaCheckBoxKiev.setChecked(true);
 
         try {
             Thread.sleep(20000);
@@ -34,8 +34,27 @@ public class SoftserveService implements SiteService {
             e.printStackTrace();
         }
 
-        List<HtmlElement> vacancies = page.getByXPath(X_PATH);
+        List<HtmlElement> vacanciesKievJava = pageKievJava.getByXPath(X_PATH);
 
-        vacancyTool.addVacancies("Softserve", vacancies, page);
+        vacancyTool.addVacancies("Softserve", vacanciesKievJava, pageKievJava, "Kiev");
+
+
+        HtmlPage pagePolandJava = PageTool.getPage(URL);
+
+        HtmlCheckBoxInput polandCheckBox = pagePolandJava.getHtmlElementById("country--Poland");
+        polandCheckBox.setChecked(true);
+
+        HtmlCheckBoxInput javaCheckBoxPoland = pagePolandJava.getHtmlElementById("technology--Java");
+        javaCheckBoxPoland.setChecked(true);
+
+        try {
+            Thread.sleep(20000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        List<HtmlElement> vacanciesKrakowJava = pagePolandJava.getByXPath(X_PATH);
+
+        vacancyTool.addVacancies("Softserve", vacanciesKrakowJava, pagePolandJava, "Poland");
     }
 }
