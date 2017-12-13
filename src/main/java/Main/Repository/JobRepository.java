@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface JobRepository extends JpaRepository<JobSite, String> {
     List<JobSite> findByUrl(String url);
+
+    List<JobSite> findByTitleIgnoreCaseContaining(String url);
 }
