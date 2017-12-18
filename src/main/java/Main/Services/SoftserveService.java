@@ -56,5 +56,7 @@ public class SoftserveService implements SiteService {
         List<HtmlElement> vacanciesKrakowJava = pagePolandJava.getByXPath(X_PATH);
 
         vacancyTool.addVacancies("Softserve", vacanciesKrakowJava, pagePolandJava, "Poland");
+
+        PageTool.closeWindows();
     }
 }

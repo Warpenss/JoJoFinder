@@ -2,6 +2,7 @@ package Main.Tools;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.History;
+import com.gargoylesoftware.htmlunit.TopLevelWindow;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
@@ -47,5 +48,11 @@ public class PageTool {
         }
 
         return page;
+    }
+
+     static public void closeWindows() {
+        for (TopLevelWindow topLevelWindow : webClient.getTopLevelWindows()) {
+            topLevelWindow.close();
+        }
     }
 }
