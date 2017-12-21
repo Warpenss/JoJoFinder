@@ -95,74 +95,86 @@
             <div class="col-lg-12">
                 <h1>Vacancies</h1>
                 <form name="searchForm" method="GET" action="/search">
-                    <input type="text" name="title"/>
-                    <dl class="dropdown">
-                        <dt>
-                            <a>
-                                <span class="hida">Company</span>
-                                <p class="multiSel"></p>
-                            </a>
-                        </dt>
-                        <dd>
-                            <div class="mutliSelect">
-                                <ul>
-                                    <li>
-                                        <input type="checkbox" name="company" value="Luxoft" />Luxoft
-                                    </li>
-                                    <li>
-                                        <input type="checkbox" name="company" value="Epam" />Epam
-                                    </li>
-                                    <li>
-                                        <input type="checkbox" name="company" value="Softserve" />Softserve
-                                    </li>
-                                </ul>
-                            </div>
-                        </dd>
-                    </dl>
-                    <dl class="dropdown">
-                        <dt>
-                            <a>
-                                <span class="hida">Place</span>
-                                <p class="multiSel"></p>
-                            </a>
-                        </dt>
-                        <dd>
-                            <div class="mutliSelect">
-                                <ul>
-                                    <li>
-                                        <input type="checkbox" name="city" value="Kiev" />Kiev
-                                    </li>
-                                    <li>
-                                        <input type="checkbox" name="city" value="Krakow" />Krakow
-                                    </li>
-                                    <li>
-                                        <input type="checkbox" name="city" value="Poland" />Poland
-                                    </li>
-                                </ul>
-                            </div>
-                        </dd>
-                    </dl>
-                    <dl class="dropdown">
-                        <dt>
-                            <a>
-                                <span class="hida">Language</span>
-                                <p class="multiSel"></p>
-                            </a>
-                        </dt>
-                        <dd>
-                            <div class="mutliSelect">
-                                <ul>
-                                    <li>
-                                        <input type="checkbox" name="language" value="Java" />Java
-                                    </li>
-                                    <li>
-                                        <input type="checkbox" name="language" value="JavaScript" />JavaScript
-                                    </li>
-                                </ul>
-                            </div>
-                        </dd>
-                    </dl>
-                    <input type="submit" value="Search"/>
+
+                    <table class="table responsive-table">
+                        <tbody id="filterBody">
+                        <tr>
+                            <td>
+                                <h2>
+                                    <small><input type="text" name="title"/></small>
+                                </h2>
+                            </td>
+                            <td>
+                                <h2>
+                                    <small><dl class="dropdown companyFilter">
+                                        <dt>
+                                            <a>
+                                                <span class="hida">Company</span>
+                                                <p class="multiSel"></p>
+                                            </a>
+                                        </dt>
+                                    </dl></small>
+                                </h2>
+                            </td>
+                            <td>
+                                <h2>
+                                    <small><dl class="dropdown cityFilter">
+                                        <dt>
+                                            <a>
+                                                <span class="hida">City</span>
+                                                <p class="multiSel"></p>
+                                            </a>
+                                        </dt>
+                                        <dd>
+                                            <div class="mutliSelect">
+                                                <ul>
+                                                    <li>
+                                                        <input type="checkbox" name="city" value="Kiev" />Kiev
+                                                    </li>
+                                                    <li>
+                                                        <input type="checkbox" name="city" value="Krakow" />Krakow
+                                                    </li>
+                                                    <li>
+                                                        <input type="checkbox" name="city" value="Poland" />Poland
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </dd>
+                                    </dl></small>
+                                </h2>
+                            </td>
+                            <td>
+                                <h2>
+                                    <small><dl class="dropdown languageFilter">
+                                        <dt>
+                                            <a>
+                                                <span class="hida">Language</span>
+                                                <p class="multiSel"></p>
+                                            </a>
+                                        </dt>
+                                        <dd>
+                                            <div class="mutliSelect">
+                                                <ul>
+                                                    <li>
+                                                        <input type="checkbox" name="language" value="Java" />Java
+                                                    </li>
+                                                    <li>
+                                                        <input type="checkbox" name="language" value="JavaScript" />JavaScript
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </dd>
+                                    </dl></small>
+                                </h2>
+                            </td>
+                            <td>
+                                <h2>
+                                    <small><input type="submit" value="Search"/></small>
+                                </h2>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </form>
                 <p>
                     <span th:text="${#lists.size(jobs)}"></span>
