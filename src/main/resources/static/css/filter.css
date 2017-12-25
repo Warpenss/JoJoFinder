@@ -1,85 +1,41 @@
-.dropdown {
-    position: relative;
-}
-
-.dropdown a {
-    color: #fff;
-}
-
-.dropdown dd,
-.dropdown dt {
-    margin: 0px;
-    padding: 0px;
-}
-
 .dropdown dd {
     position: relative;
+
 }
 
 .dropdown a,
 .dropdown a:visited {
     color: #fff;
-    text-decoration: none;
-    outline: none;
-    font-size: 12px;
+    cursor: pointer;
 }
+
+
 
 .dropdown dt a {
     background-color: #4F6877;
     display: block;
-    padding: 8px 20px 5px 10px;
-    min-height: 25px;
-    line-height: 24px;
     overflow: hidden;
     border: 0;
-    width: 272px;
+    width: 10em;
+    border-radius: 4px 4px 0px 0px;
 }
 
 .dropdown dt a span,
 .multiSel span {
     cursor: pointer;
     display: inline-block;
-    padding: 0 3px 2px 0;
+    font-weight:normal;
+    border-radius: 4px;
 }
 
 .dropdown dd ul {
     background-color: #4F6877;
-    border: 0;
     color: #fff;
-    display: none;
-    left: 0px;
     padding: 2px 15px 2px 5px;
     position: absolute;
-    top: 2px;
-    width: 100%;
-    list-style: none;
+    width: 10em;
     height: 10em;
-    overflow: auto;
     z-index: 4;
-}
-
-.dropdown span.value {
-    display: none;
-}
-
-.dropdown dd ul li a {
-    padding: 5px;
-    display: block;
-}
-
-.dropdown dd ul li a:hover {
-    background-color: #fff;
-}
-
-.dropdown button {
-    background-color: #6BBE92;
-    width: 302px;
-    border: 0;
-    padding: 10px 0;
-    margin: 5px 0;
-    text-align: center;
-    color: #fff;
-    font-weight: bold;
 }
 
 .mutliSelect ul li {
@@ -90,4 +46,13 @@
 
 .mutliSelect ul::-webkit-scrollbar {
     display: none;
+}
+
+#filterBody .titleInput {
+    width: 10em;
+    height: 34px;
+    padding: 6px 12px;
+    color: #777;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }

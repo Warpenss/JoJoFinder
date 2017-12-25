@@ -1,267 +1,283 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-<head>
-    <meta charset="utf-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <meta name="description" content=""/>
-    <meta name="author" content=""/>
-    <title>JoJoFinder</title>
-    <!-- Bootstrap Core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet"/>
-    <!-- Custom CSS -->
-    <link href="css/scrolling-nav.css" rel="stylesheet"/>
-    <!-- Icons CSS -->
-    <link href="css/social-icons.css" rel="stylesheet"/>
-    <!-- Pages CSS -->
-    <link href="css/pages.css" rel="stylesheet"/>
-    <link href="css/jquery-responsive-tables.css" rel="stylesheet"/>
-    <link href="css/filter.css" rel="stylesheet"/>
-    <!-- Add icon library -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
-
-
-    <!-- Global Site Tag (gtag.js) - Google Analytics -->
-    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-102421271-1"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() {
-            dataLayer.push(arguments)
-        }
-        ;
-        gtag('js', new Date());
-
-        gtag('config', 'UA-102421271-1');
-    </script>
-    <!-- jQuery -->
-    <script src="js/jquery.js"></script>
-    <!-- Bootstrap Core JavaScript -->
-    <script src="js/bootstrap.min.js"></script>
-    <!-- Scrolling Nav JavaScript -->
-    <script src="js/jquery.easing.min.js"></script>
-    <script src="js/scrolling-nav.js"></script>
-    <script src="js/pages.js"></script>
-    <script type="text/javascript" src="https://swc.cdn.skype.com/contactme/v/1.0.0/skype-uri.min.js"></script>
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-</head>
-<!-- The #page-top ID is part of the scrolling feature - the data-spy and data-target are part of the built-in Bootstrap scrollspy function -->
-<body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
-<!-- Navigation -->
-<nav class="navbar navbar-default navbar-fixed-top top-nav-collapse" role="navigation">
-    <div class="container">
-        <div class="navbar-header page-scroll">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <!--<a class="navbar-brand page-scroll" href="#page-top">Home</a>-->
-        </div>
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse navbar-ex1-collapse">
-            <ul class="nav navbar-nav">
-                <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
-                <li class="hidden">
-                    <a class="page-scroll" href="#page-top"></a>
-                </li>
-                <li>
-                    <a class="page-scroll" href="/">Home</a>
-                </li>
-                <li>
-                    <a class="page-scroll" href="#services">Service</a>
-                </li>
-                <li>
-                    <a class="page-scroll" href="#about">About</a>
-                </li>
-                <li>
-                    <a class="page-scroll" href="#contact">Contacts</a>
-                </li>
-            </ul>
-        </div>
-        <!-- /.navbar-collapse -->
-    </div>
-    <!-- /.container -->
-</nav>
-<!-- Services Section -->
-<section id="services" class="services-section">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <h1>Vacancies</h1>
-                <form name="searchForm" method="GET" action="/search">
-
-                    <table class="table responsive-table">
+   <head>
+      <meta charset="utf-8"/>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+      <meta name="viewport" content="width=device-width, initial-scale=1"/>
+      <meta name="description" content=""/>
+      <meta name="author" content=""/>
+      <title>JoJoFinder</title>
+      <!-- Bootstrap Core CSS -->
+      <link href="css/bootstrap.min.css" rel="stylesheet"/>
+      <!-- Custom CSS -->
+      <link href="css/scrolling-nav.css" rel="stylesheet"/>
+      <!-- Icons CSS -->
+      <link href="css/social-icons.css" rel="stylesheet"/>
+      <!-- Pages CSS -->
+      <link href="css/pages.css" rel="stylesheet"/>
+      <link href="css/jquery-responsive-tables.css" rel="stylesheet"/>
+      <link href="css/filter.css" rel="stylesheet"/>
+      <!-- Add icon library -->
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+      <!-- Global Site Tag (gtag.js) - Google Analytics -->
+      <script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-102421271-1"></script>
+      <script>
+         window.dataLayer = window.dataLayer || [];
+         function gtag() {
+             dataLayer.push(arguments)
+         };
+         gtag('js', new Date());
+         gtag('config', 'UA-102421271-1');
+      </script>
+      <!-- jQuery -->
+      <script src="js/jquery.js"></script>
+      <!-- Bootstrap Core JavaScript -->
+      <script src="js/bootstrap.min.js"></script>
+      <!-- Scrolling Nav JavaScript -->
+      <script src="js/jquery.easing.min.js"></script>
+      <script src="js/scrolling-nav.js"></script>
+      <script src="js/pages.js"></script>
+      <script type="text/javascript" src="https://swc.cdn.skype.com/contactme/v/1.0.0/skype-uri.min.js"></script>
+      <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+      <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+      <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+      <![endif]-->
+   </head>
+   <!-- The #page-top ID is part of the scrolling feature - the data-spy and data-target are part of the built-in Bootstrap scrollspy function -->
+   <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
+      <!-- Navigation -->
+      <nav class="navbar navbar-default navbar-fixed-top top-nav-collapse" role="navigation">
+         <div class="container">
+            <div class="navbar-header page-scroll">
+               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+               <span class="sr-only">Toggle navigation</span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               </button>
+               <!--<a class="navbar-brand page-scroll" href="#page-top">Home</a>-->
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+               <ul class="nav navbar-nav">
+                  <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
+                  <li class="hidden">
+                     <a class="page-scroll" href="#page-top"></a>
+                  </li>
+                  <li>
+                     <a class="page-scroll" href="/">Home</a>
+                  </li>
+                  <li>
+                     <a class="page-scroll" href="#services">Service</a>
+                  </li>
+                  <li>
+                     <a class="page-scroll" href="#about">About</a>
+                  </li>
+                  <li>
+                     <a class="page-scroll" href="#contact">Contacts</a>
+                  </li>
+               </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+         </div>
+         <!-- /.container -->
+      </nav>
+      <!-- Services Section -->
+      <section id="services" class="services-section">
+         <div class="container">
+            <div class="row">
+               <div class="col-lg-12">
+                  <h1>Vacancies</h1>
+                  <form name="searchForm" method="GET" action="/search">
+                     <table class="table responsive-table">
                         <tbody id="filterBody">
-                        <tr>
-                            <td>
-                                <h2>
-                                    <small><input type="text" name="title"/></small>
-                                </h2>
-                            </td>
-                            <td>
-                                <h2>
-                                    <small><dl class="dropdown companyFilter">
-                                        <dt>
-                                            <a>
+                           <tr>
+                              <td>
+                                 <h2>
+                                    <small><input class="titleInput" type="text" name="title"/></small>
+                                 </h2>
+                              </td>
+                              <td>
+                                 <h2>
+                                    <small>
+                                       <dl class="dropdown companyFilter">
+                                          <dt>
+                                             <a>
                                                 <span class="hida">Company</span>
                                                 <p class="multiSel"></p>
-                                            </a>
-                                        </dt>
-                                    </dl></small>
-                                </h2>
-                            </td>
-                            <td>
-                                <h2>
-                                    <small><dl class="dropdown cityFilter">
-                                        <dt>
-                                            <a>
+                                             </a>
+                                          </dt>
+                                          <dd>
+                                             <div class="mutliSelect">
+                                                <ul>
+                                                   <li>
+                                                      <input type="checkbox" name="company" value="Epam" />Epam
+                                                   </li>
+                                                   <li>
+                                                      <input type="checkbox" name="company" value="Luxoft" />Luxoft
+                                                   </li>
+                                                   <li>
+                                                      <input type="checkbox" name="company" value="Softserve" />Softserve
+                                                   </li>
+                                                </ul>
+                                             </div>
+                                          </dd>
+                                       </dl>
+                                    </small>
+                                 </h2>
+                              </td>
+                              <td>
+                                 <h2>
+                                    <small>
+                                       <dl class="dropdown cityFilter">
+                                          <dt>
+                                             <a>
                                                 <span class="hida">City</span>
                                                 <p class="multiSel"></p>
-                                            </a>
-                                        </dt>
-                                        <dd>
-                                            <div class="mutliSelect">
+                                             </a>
+                                          </dt>
+                                          <dd>
+                                             <div class="mutliSelect">
                                                 <ul>
-                                                    <li>
-                                                        <input type="checkbox" name="city" value="Kiev" />Kiev
-                                                    </li>
-                                                    <li>
-                                                        <input type="checkbox" name="city" value="Krakow" />Krakow
-                                                    </li>
-                                                    <li>
-                                                        <input type="checkbox" name="city" value="Poland" />Poland
-                                                    </li>
+                                                   <li>
+                                                      <input type="checkbox" name="city" value="Kiev" />Kiev
+                                                   </li>
+                                                   <li>
+                                                      <input type="checkbox" name="city" value="Krakow" />Krakow
+                                                   </li>
+                                                   <li>
+                                                      <input type="checkbox" name="city" value="Poland" />Poland
+                                                   </li>
                                                 </ul>
-                                            </div>
-                                        </dd>
-                                    </dl></small>
-                                </h2>
-                            </td>
-                            <td>
-                                <h2>
-                                    <small><dl class="dropdown languageFilter">
-                                        <dt>
-                                            <a>
+                                             </div>
+                                          </dd>
+                                       </dl>
+                                    </small>
+                                 </h2>
+                              </td>
+                              <td>
+                                 <h2>
+                                    <small>
+                                       <dl class="dropdown languageFilter">
+                                          <dt>
+                                             <a>
                                                 <span class="hida">Language</span>
                                                 <p class="multiSel"></p>
-                                            </a>
-                                        </dt>
-                                        <dd>
-                                            <div class="mutliSelect">
+                                             </a>
+                                          </dt>
+                                          <dd>
+                                             <div class="mutliSelect">
                                                 <ul>
-                                                    <li>
-                                                        <input type="checkbox" name="language" value="Java" />Java
-                                                    </li>
-                                                    <li>
-                                                        <input type="checkbox" name="language" value="JavaScript" />JavaScript
-                                                    </li>
+                                                   <li>
+                                                      <input type="checkbox" name="language" value="Java" />Java
+                                                   </li>
+                                                   <li>
+                                                      <input type="checkbox" name="language" value="JavaScript" />JavaScript
+                                                   </li>
                                                 </ul>
-                                            </div>
-                                        </dd>
-                                    </dl></small>
-                                </h2>
-                            </td>
-                            <td>
-                                <h2>
+                                             </div>
+                                          </dd>
+                                       </dl>
+                                    </small>
+                                 </h2>
+                              </td>
+                              <td>
+                                 <h2>
                                     <small><input type="submit" value="Search"/></small>
-                                </h2>
-                            </td>
-                        </tr>
+                                 </h2>
+                              </td>
+                           </tr>
                         </tbody>
-                    </table>
-                </form>
-                <p>
-                    <span th:text="${#lists.size(jobs)}"></span>
-                    found
-                </p>
-                <div class="col-md-12 text-center">
-                    <ul class="pagination pager pages" id="pages"></ul>
-                </div>
-                <table class="table responsive-table">
-                    <tbody id="tableBody">
-                    <tr data-th-each="job : ${jobs}">
-                        <th class="job">
-                            <a th:href="${job.url}" target="_blank">
-                                <h2>
+                     </table>
+                  </form>
+                  <p>
+                     <span th:text="${#lists.size(jobs)}"></span>
+                     found
+                  </p>
+                  <div class="col-md-12 text-center">
+                     <ul class="pagination pager pages" id="pages"></ul>
+                  </div>
+                  <table class="table responsive-table">
+                     <tbody id="tableBody">
+                        <tr data-th-each="job : ${jobs}">
+                           <th class="job">
+                              <a th:href="${job.url}" target="_blank">
+                                 <h2>
                                     <small data-th-text="${job.title}"></small>
-                                </h2>
-                            </a>
-                        </th>
-                        <td>
-                            <h2>
-                                <small data-th-text="${job.displayDate}" class="time"></small>
-                            </h2>
-                        </td>
-                        <td>
-                            <h2>
-                                <small data-th-text="${job.company}" class="company"></small>
-                            </h2>
-                        </td>
-                        <td>
-                            <h2>
-                                <small data-th-text="${job.city}" class="city"></small>
-                            </h2>
-                        </td>
-                        <td>
-                            <h2>
-                                <small data-th-text="${job.language}" class="language"></small>
-                            </h2>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-                <div class="col-md-12 text-center">
-                    <ul class="pagination pager pages" id="pages_up">
+                                 </h2>
+                              </a>
+                           </th>
+                           <td>
+                              <h2>
+                                 <small data-th-text="${job.displayDate}" class="time"></small>
+                              </h2>
+                           </td>
+                           <td>
+                              <h2>
+                                 <small data-th-text="${job.company}" class="company"></small>
+                              </h2>
+                           </td>
+                           <td>
+                              <h2>
+                                 <small data-th-text="${job.city}" class="city"></small>
+                              </h2>
+                           </td>
+                           <td>
+                              <h2>
+                                 <small data-th-text="${job.language}" class="language"></small>
+                              </h2>
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+                  <div class="col-md-12 text-center">
+                     <ul class="pagination pager pages" id="pages_up">
                         <li>
-                            <a href="#" class="go_up glyphicon glyphicon-chevron-up" aria-hidden="true"></a>
+                           <a href="#" class="go_up glyphicon glyphicon-chevron-up" aria-hidden="true"></a>
                         </li>
-                    </ul>
-                </div>
+                     </ul>
+                  </div>
+               </div>
             </div>
-        </div>
-    </div>
-</section>
-<!-- About Section -->
-<section id="about" class="about-section">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <h1>About</h1>
-                <p>Collecting vacancies from Epam, Luxoft and Softserve.</p>
-                <p>I have plans to add a filter by:</p>
-                <p>City</p>
-                <p>Country</p>
-                <p>Language</p>
-                <p>Years of experience</p>
+         </div>
+      </section>
+      <!-- About Section -->
+      <section id="about" class="about-section">
+         <div class="container">
+            <div class="row">
+               <div class="col-lg-12">
+                  <h1>About</h1>
+                  <p>Collecting vacancies from Epam, Luxoft and Softserve.</p>
+                  <p>I have plans to add a filter by:</p>
+                  <p>City</p>
+                  <p>Country</p>
+                  <p>Language</p>
+                  <p>Years of experience</p>
+               </div>
             </div>
-        </div>
-    </div>
-</section>
-<!-- Contact Section -->
-<section id="contact" class="contact-section">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <h1>Contacts</h1>
-                <p>Feel free to contribute!</p>
-                <p>Made by <a href="https://github.com/Warpenss" target="_blank">Warpenss</a></p>
-                <p>smyrnoveugene@gmail.com</p>
-                <a href="https://github.com/Warpenss" target="_blank"><i class="fa fa-github fa-5x"></i></a>
-                <a href="https://www.facebook.com/warpenss" target="_blank"><i class="fa fa-facebook-square fa-5x"></i></a>
-                <a href="javascript://" onclick="SkypeWebControl.SDK.Chat.startChat(
+         </div>
+      </section>
+      <!-- Contact Section -->
+      <section id="contact" class="contact-section">
+         <div class="container">
+            <div class="row">
+               <div class="col-lg-12">
+                  <h1>Contacts</h1>
+                  <p>Feel free to contribute!</p>
+                  <p>Made by <a href="https://github.com/Warpenss" target="_blank">Warpenss</a></p>
+                  <p>smyrnoveugene@gmail.com</p>
+                  <a href="https://github.com/Warpenss" target="_blank"><i class="fa fa-github fa-5x"></i></a>
+                  <a href="https://www.facebook.com/warpenss" target="_blank"><i class="fa fa-facebook-square fa-5x"></i></a>
+                  <a href="javascript://" onclick="SkypeWebControl.SDK.Chat.startChat(
                      {ConversationType: 'person', ConversationId: 'warpenss'});">
-                    <i class="fa fa-skype fa-5x" role="Button"></i></a>
-                <a href="https://www.linkedin.com/in/warpen" target="_blank"><i class="fa fa-linkedin-square fa-5x"></i></a>
+                  <i class="fa fa-skype fa-5x" role="Button"></i></a>
+                  <a href="https://www.linkedin.com/in/warpen" target="_blank"><i class="fa fa-linkedin-square fa-5x"></i></a>
+               </div>
             </div>
-        </div>
-    </div>
-</section>
-<script  src="js/filter.js"></script>
-</body>
+         </div>
+      </section>
+      <script  src="js/filter.js"></script>
+   </body>
 </html>

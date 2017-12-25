@@ -1,3 +1,4 @@
+
 $(".dropdown.companyFilter dt a").on('click', function() {
     $(".dropdown.companyFilter dd ul").slideToggle('fast');
 });
@@ -17,15 +18,15 @@ $(document).bind('click', function(e) {
 
 $('.companyFilter .mutliSelect input[type="checkbox"]').on('click', function() {
 
-    var company = $(this).closest('.companyFilter .mutliSelect').find('.companyFilter input[type="checkbox"]').val(),
-        company = $(this).val() + ",";
+    var city = $(this).closest('.companyFilter .mutliSelect').find('.companyFilter input[type="checkbox"]').val(),
+        city = $(this).val() + ",";
 
     if ($(this).is(':checked')) {
-        var html = '<span company="' + company + '">' + company + '</span>';
+        var html = '<span city="' + city + '">' + city + '</span>';
         $('.companyFilter .multiSel').append(html);
         $(".companyFilter .hida").hide();
     } else {
-        $('span[company="' + company + '"]').remove();
+        $('span[city="' + city + '"]').remove();
         var ret = $(".companyFilter .hida");
         $('.companyFilter .dropdown dt a').append(ret);
         if ($('.companyFilter .multiSel').has('span').length == 0) {
