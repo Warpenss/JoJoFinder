@@ -9,33 +9,39 @@
     cursor: pointer;
 }
 
-
-
 .dropdown dt a {
     background-color: #4F6877;
     display: block;
     overflow: hidden;
     border: 0;
     width: 10em;
-    border-radius: 4px 4px 0px 0px;
+    border-radius: 4px;
+    vertical-align: middle;
 }
 
 .dropdown dt a span,
 .multiSel span {
     cursor: pointer;
     display: inline-block;
-    font-weight:normal;
+    font-weight: normal;
     border-radius: 4px;
+    vertical-align: middle;
+    line-height: 1;
+    margin-top: 6px;
 }
 
 .dropdown dd ul {
+    display: none;
     background-color: #4F6877;
     color: #fff;
-    padding: 2px 15px 2px 5px;
+    padding: 10px 15px 2px 5px;
     position: absolute;
     width: 10em;
     height: 10em;
     z-index: 4;
+    list-style: none;
+    border-radius: 4px;
+    top: -5px;
 }
 
 .mutliSelect ul li {
@@ -49,10 +55,96 @@
 }
 
 #filterBody .titleInput {
+    text-align: center;
     width: 10em;
     height: 34px;
     padding: 6px 12px;
     color: #777;
     border: 1px solid #ccc;
     border-radius: 4px;
+}
+
+dl.dropdown {
+    margin-bottom: -5px
+}
+
+#filterBody input.btn {
+    width: 100%;
+    font-size: inherit;
+    height: 34px;
+    padding-bottom: 8px;
+    padding-top: 4px;
+
+}
+#filterBody td {
+    border-top: none;
+}
+
+@media (max-width: 767px) {
+    .dropdown dt a {
+        width: 100%;
+    }
+
+    .dropdown dd ul {
+        width: 100%;
+    }
+
+    .dropdown dd ul li {
+        margin-left: 40%;
+    }
+
+    input[type=checkbox] {
+        -ms-transform: scale(2); /* IE */
+        -moz-transform: scale(2); /* FF */
+        -webkit-transform: scale(2); /* Safari and Chrome */
+        -o-transform: scale(2); /* Opera */
+        padding: 10px;
+        margin-right: 10px;
+    }
+
+    #filterBody td {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+
+    #filterBody .titleInput {
+        width: 100%
+    }
+
+    .dropdown dd ul li {
+        margin-left: 37%;
+    }
+}
+
+@media (min-width: 48em) {
+    .dropdown dt a {
+        width: 7em;
+    }
+
+    .dropdown dd ul {
+        width: 7em;
+    }
+
+    .dropdown dd ul li {
+        padding-left: 0px
+    }
+
+}
+
+@media (min-width: 62em) {
+    .dropdown dt a {
+        width: 10em;
+    }
+
+    .dropdown dd ul {
+        width: 10em;
+    }
+}
+
+@media (min-width: 75em) {
+
+}
+
+input.btn {
+    vertical-align: top;
 }
