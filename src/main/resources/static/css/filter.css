@@ -93,15 +93,6 @@ dl.dropdown {
         margin-left: 40%;
     }
 
-    input[type=checkbox] {
-        -ms-transform: scale(2); /* IE */
-        -moz-transform: scale(2); /* FF */
-        -webkit-transform: scale(2); /* Safari and Chrome */
-        -o-transform: scale(2); /* Opera */
-        padding: 10px;
-        margin-right: 10px;
-    }
-
     #filterBody td {
         padding-left: 0px;
         padding-right: 0px;

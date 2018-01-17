@@ -59,8 +59,8 @@ public class PageTool {
 
     static public void closeWindows() {
         for (TopLevelWindow topLevelWindow : webClient.getTopLevelWindows()) {
-            System.out.println(topLevelWindow.toString() + " - window is closed");
             topLevelWindow.close();
+            System.out.println(topLevelWindow.toString() + " - window is closed");
         }
 
         webClient.close();

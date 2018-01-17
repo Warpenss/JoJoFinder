@@ -25,7 +25,7 @@ public class SoftserveService implements SiteService {
         HtmlCheckBoxInput kievCheckBox = pageKievJava.getHtmlElementById("city--Kyiv");
         kievCheckBox.setChecked(true);
 
-        HtmlCheckBoxInput javaCheckBoxKiev = pageKievJava.getHtmlElementById("technology--Java");
+        HtmlCheckBoxInput javaCheckBoxKiev = pageKievJava.getHtmlElementById("technology--36");
         javaCheckBoxKiev.setChecked(true);
 
         try {
@@ -44,7 +44,7 @@ public class SoftserveService implements SiteService {
         HtmlCheckBoxInput polandCheckBox = pagePolandJava.getHtmlElementById("country--Poland");
         polandCheckBox.setChecked(true);
 
-        HtmlCheckBoxInput javaCheckBoxPoland = pagePolandJava.getHtmlElementById("technology--Java");
+        HtmlCheckBoxInput javaCheckBoxPoland = pagePolandJava.getHtmlElementById("technology--36");
         javaCheckBoxPoland.setChecked(true);
 
         try {
@@ -56,7 +56,5 @@ public class SoftserveService implements SiteService {
         List<HtmlElement> vacanciesKrakowJava = pagePolandJava.getByXPath(X_PATH);
 
         vacancyTool.addVacancies("Softserve", vacanciesKrakowJava, pagePolandJava, "Poland");
-
-        PageTool.closeWindows();
     }
 }
