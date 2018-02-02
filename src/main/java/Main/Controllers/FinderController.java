@@ -28,6 +28,10 @@ public class FinderController {
         //Access list of jobs in html with this attribute
         model.addAttribute("jobs", allJobs);
 
+        model.addAttribute("companies", jobRepository.findDistinctCompany());
+        model.addAttribute("cities", jobRepository.findDistinctCity());
+        model.addAttribute("languages", jobRepository.findDistinctLanguage());
+
         return "index";
     }
 
@@ -111,6 +115,12 @@ public class FinderController {
 
         jobsList.sort(Comparator.comparing(JobSite::getTime).reversed());
         model.addAttribute("jobs", jobsList);
+
+
+        model.addAttribute("companies", jobRepository.findDistinctCompany());
+        model.addAttribute("cities", jobRepository.findDistinctCity());
+        model.addAttribute("languages", jobRepository.findDistinctLanguage());
+
 
         return "index";
     }

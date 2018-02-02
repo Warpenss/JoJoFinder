@@ -112,14 +112,8 @@
                                           <dd>
                                              <div class="mutliSelect">
                                                 <ul>
-                                                   <li>
-                                                      <input type="checkbox" name="company" value="Epam" />Epam
-                                                   </li>
-                                                   <li>
-                                                      <input type="checkbox" name="company" value="Luxoft" />Luxoft
-                                                   </li>
-                                                   <li>
-                                                      <input type="checkbox" name="company" value="Softserve" />Softserve
+                                                   <li th:each="company : ${companies}">
+                                                      <input type="checkbox" name="company" th:value="${company}" data-th-text="${company}" />
                                                    </li>
                                                 </ul>
                                              </div>
@@ -134,21 +128,15 @@
                                        <dl class="dropdown cityFilter">
                                           <dt>
                                              <a>
-                                                <span class="hida">City</span>
+                                                <span class="hida">Location</span>
                                                 <p class="multiSel"></p>
                                              </a>
                                           </dt>
                                           <dd>
                                              <div class="mutliSelect">
                                                 <ul>
-                                                   <li>
-                                                      <input type="checkbox" name="city" value="Kiev" />Kiev
-                                                   </li>
-                                                   <li>
-                                                      <input type="checkbox" name="city" value="Krakow" />Krakow
-                                                   </li>
-                                                   <li>
-                                                      <input type="checkbox" name="city" value="Poland" />Poland
+                                                   <li th:each="city : ${cities}">
+                                                      <input type="checkbox" name="city" th:value="${city}" data-th-text="${city}"/>
                                                    </li>
                                                 </ul>
                                              </div>
@@ -169,12 +157,9 @@
                                           </dt>
                                           <dd>
                                              <div class="mutliSelect">
-                                                <ul>
-                                                   <li>
-                                                      <input type="checkbox" name="language" value="Java" />Java
-                                                   </li>
-                                                   <li>
-                                                      <input type="checkbox" name="language" value="JavaScript" />JavaScript
+                                                <ul >
+                                                   <li th:each="language : ${languages}">
+                                                      <input type="checkbox" name="language" th:value="${language}" data-th-text="${language}"/>
                                                    </li>
                                                 </ul>
                                              </div>
