@@ -1,8 +1,8 @@
 package Main.Controllers;
 
-import Main.Entities.JobSite;
+import Main.Entities.Vacancy;
 
-import Main.Repository.JobRepository;
+import Main.Repository.VacancyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,21 +16,21 @@ import java.util.*;
 @Controller
 public class FinderController {
     @Autowired
-    JobRepository jobRepository;
+    VacancyRepository vacancyRepository;
 
     //Catches the "/" request, adds jobs attribute and redirect to index.html
     @RequestMapping("/")
     public String index(Model model) {
         //Get all vacancies from database
-        List<JobSite> allJobs = jobRepository.findAll();
+        List<Vacancy> allJobs = vacancyRepository.findAll();
 
-        allJobs.sort(Comparator.comparing(JobSite::getTime).reversed());
+        allJobs.sort(Comparator.comparing(Vacancy::getTime).reversed());
         //Access list of jobs in html with this attribute
         model.addAttribute("jobs", allJobs);
 
-        model.addAttribute("companies", jobRepository.findDistinctCompany());
-        model.addAttribute("cities", jobRepository.findDistinctCity());
-        model.addAttribute("languages", jobRepository.findDistinctLanguage());
+        model.addAttribute("companies", vacancyRepository.findDistinctCompany());
+        model.addAttribute("cities", vacancyRepository.findDistinctCity());
+        model.addAttribute("languages", vacancyRepository.findDistinctLanguage());
 
         return "index";
     }
@@ -38,11 +38,11 @@ public class FinderController {
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public String submit(@RequestParam MultiValueMap<String, String> params, Model model) {
 
-        List<JobSite> jobsList = jobRepository.findByTitleIgnoreCaseContaining(params.getFirst("title"));
+        List<Vacancy> jobsList = vacancyRepository.findByTitleIgnoreCaseContaining(params.getFirst("title"));
 
-        HashSet<JobSite> resultCompany = new HashSet<>();
-        HashSet<JobSite> resultCity = new HashSet<>();
-        HashSet<JobSite> resultLanguage = new HashSet<>();
+        HashSet<Vacancy> resultCompany = new HashSet<>();
+        HashSet<Vacancy> resultCity = new HashSet<>();
+        HashSet<Vacancy> resultLanguage = new HashSet<>();
 
         boolean resultFlag = false;
 
@@ -54,7 +54,7 @@ public class FinderController {
         {
             if (entry.getKey().equals("company")) {
                 for (String parameter : entry.getValue()) {
-                    for (JobSite job : jobsList) {
+                    for (Vacancy job : jobsList) {
                         if (job.getCompany().equals(parameter)) {
                             resultCompany.add(job);
                         }
@@ -70,7 +70,7 @@ public class FinderController {
                     if (resultCompany.isEmpty()) {
                         resultCompany.addAll(jobsList);
                     }
-                    for (JobSite job : resultCompany) {
+                    for (Vacancy job : resultCompany) {
                         if (job.getCity().equals(parameter)) {
                             resultCity.add(job);
                         }
@@ -87,7 +87,7 @@ public class FinderController {
                     if (resultCity.isEmpty()) {
                         resultCity.addAll(jobsList);
                     }
-                    for (JobSite job : resultCity) {
+                    for (Vacancy job : resultCity) {
                         if (job.getLanguage().equals(parameter)) {
                             resultLanguage.add(job);
                         }
@@ -113,14 +113,11 @@ public class FinderController {
         jobsList.clear();
         jobsList.addAll(resultLanguage);
 
-        jobsList.sort(Comparator.comparing(JobSite::getTime).reversed());
+        jobsList.sort(Comparator.comparing(Vacancy::getTime).reversed());
         model.addAttribute("jobs", jobsList);
-
-
-        model.addAttribute("companies", jobRepository.findDistinctCompany());
-        model.addAttribute("cities", jobRepository.findDistinctCity());
-        model.addAttribute("languages", jobRepository.findDistinctLanguage());
-
+        model.addAttribute("companies", vacancyRepository.findDistinctCompany());
+        model.addAttribute("cities", vacancyRepository.findDistinctCity());
+        model.addAttribute("languages", vacancyRepository.findDistinctLanguage());
 
         return "index";
     }

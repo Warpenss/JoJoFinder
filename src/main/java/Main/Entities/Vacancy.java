@@ -7,7 +7,7 @@ import java.util.Locale;
 import static java.time.format.DateTimeFormatter.ofPattern;
 
 @Entity
-public class JobSite {
+public class Vacancy {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -28,10 +28,8 @@ public class JobSite {
     @Transient
     private String displayDate;
 
-    public JobSite() {
-    }
 
-    public JobSite(LocalDateTime time, String title, String url, String company, String city, String language) {
+    public Vacancy(LocalDateTime time, String title, String url, String company, String city, String language) {
         this.time = time;
         this.title = title;
         this.url = url;

@@ -1,7 +1,7 @@
 package Main.Tools;
 
-import Main.Entities.JobSite;
-import Main.Repository.JobRepository;
+import Main.Entities.Vacancy;
+import Main.Repository.VacancyRepository;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import java.util.List;
 @Component
 public class VacancyTool {
     @Autowired
-    JobRepository jobRepository;
+    VacancyRepository vacancyRepository;
 
 
     public void addVacancies(String company, List<HtmlElement> vacancies, HtmlPage page, String city) {
@@ -34,9 +34,9 @@ public class VacancyTool {
                             "/h4[@class='card-courses_title']").get(0)).asText();
                 }
 
-                if (jobRepository.findByUrl(fullURL).size() == 0) {
+                if (vacancyRepository.findByUrl(fullURL).size() == 0) {
                     LocalDateTime time = LocalDateTime.now();
-                    jobRepository.save(new JobSite(time, title, fullURL, company, city, "Java"));
+                    vacancyRepository.save(new Vacancy(time, title, fullURL, company, city, "Java"));
                 }
 
             } catch (MalformedURLException e) {

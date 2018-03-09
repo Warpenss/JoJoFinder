@@ -18,12 +18,15 @@ public class Scheduler {
 
     @Scheduled (cron = "0 0/30 * * * *")
     public void schedule() {
+        PageTool.initiateClient();
+
         epamService.collect();
         System.out.println("Epam collected");
         luxoftService.collect();
         System.out.println("Luxoft collected");
         softserveService.collect();
         System.out.println("Softserve collected");
-        PageTool.closeWindows();
+
+        PageTool.closeClient();
     }
 }
