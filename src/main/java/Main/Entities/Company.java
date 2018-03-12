@@ -15,5 +15,43 @@ public class Company {
     private String citySelector;
     private String typeSelector;
 
+    public String getCompanyName() {
+        return companyName;
+    }
 
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getSearchUrl() {
+        return searchUrl;
+    }
+
+    public void setSearchUrl(String searchUrl) {
+        this.searchUrl = searchUrl;
+    }
+
+    public String getTitleSelector() {
+        return titleSelector;
+    }
+
+    public void setTitleSelector(String titleSelector) {
+        this.titleSelector = titleSelector;
+    }
+
+    public String getCitySelector() {
+        return citySelector;
+    }
+
+    public void setCitySelector(String citySelector) {
+        this.citySelector = citySelector;
+    }
+
+    public String getTypeSelector() {
+        return typeSelector;
+    }
+
+    public void setTypeSelector(String typeSelector) {
+        this.typeSelector = typeSelector;
+    }
 }

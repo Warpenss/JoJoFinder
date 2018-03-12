@@ -28,6 +28,8 @@ public class Vacancy {
     @Transient
     private String displayDate;
 
+    public Vacancy() {
+    }
 
     public Vacancy(LocalDateTime time, String title, String url, String company, String city, String language) {
         this.time = time;

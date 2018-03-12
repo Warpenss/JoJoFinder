@@ -3,6 +3,7 @@ package Main.Controllers;
 import Main.Entities.Vacancy;
 
 import Main.Repository.VacancyRepository;
+import Main.Services.Collector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -120,5 +121,11 @@ public class FinderController {
         model.addAttribute("languages", vacancyRepository.findDistinctLanguage());
 
         return "index";
+    }
+
+    @RequestMapping("/test")
+    public String test(Model model) {
+        Collector.collect();
+        return "test";
     }
 }
