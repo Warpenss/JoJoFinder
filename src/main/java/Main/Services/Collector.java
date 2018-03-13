@@ -8,6 +8,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -23,6 +24,15 @@ public class Collector {
         ArrayList<Company> companies = CompanyList.getCompanies();
         for (Company company : companies) {
             HtmlPage page = PageTool.getPage(company.getSearchUrl());
+//            if (company.getCompanyName().equals("EPAM")){
+//                while (true) {
+//                    try {
+//                        page = ((HtmlElement) page.getByXPath("//a[@class='search-result__view-more'][contains(@style,'display:block')]").get(0)).click();
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
             List<HtmlElement> vacancies = page.getByXPath(company.getTitleSelector());
             for (HtmlElement htmlElement : vacancies) {
                 LocalDateTime time;

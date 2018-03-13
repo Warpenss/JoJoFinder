@@ -19,9 +19,9 @@ public class Vacancy {
 
     private String company;
 
-    private String city;
+    private String location;
 
-    private String language;
+    private String type;
 
     private LocalDateTime time;
 
@@ -31,13 +31,13 @@ public class Vacancy {
     public Vacancy() {
     }
 
-    public Vacancy(LocalDateTime time, String title, String url, String company, String city, String language) {
+    public Vacancy(LocalDateTime time, String title, String url, String company, String location, String type) {
         this.time = time;
         this.title = title;
         this.url = url;
         this.company = company;
-        this.city = city;
-        this.language = language;
+        this.location = location;
+        this.type = type;
     }
 
     public int getId() {
@@ -80,20 +80,20 @@ public class Vacancy {
         this.company = company;
     }
 
-    public String getCity() {
-        return city;
+    public String getLocation() {
+        return location;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
-    public String getLanguage() {
-        return language;
+    public String getType() {
+        return type;
     }
 
-    public void setLanguage(String language) {
-        this.language = language;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getDisplayDate() {

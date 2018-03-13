@@ -6,13 +6,14 @@
 </head>
 <body>
 <ul>
+    <span th:text="${#lists.size(vacancies)}"></span>
     <li th:each="vacancy : ${vacancies}">
             <p data-th-text="${vacancy.time}">...</p>
             <p data-th-text="${vacancy.title}">...</p>
             <p data-th-text="${vacancy.url}">...</p>
             <p data-th-text="${vacancy.company}">...</p>
-            <p data-th-text="${vacancy.city}">...</p>
-            <p data-th-text="${vacancy.language}">...</p>
+            <p data-th-text="${vacancy.location}">...</p>
+            <p data-th-text="${vacancy.type}">...</p>
     </li>
 </ul>
 </body>

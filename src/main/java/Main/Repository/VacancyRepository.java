@@ -12,11 +12,11 @@ public interface VacancyRepository extends JpaRepository<Vacancy, String> {
     @Query("SELECT DISTINCT j.company FROM Vacancy j")
     List<String> findDistinctCompany();
 
-    @Query("SELECT DISTINCT j.city FROM Vacancy j")
-    List<String> findDistinctCity();
+    @Query("SELECT DISTINCT j.location FROM Vacancy j")
+    List<String> findDistinctLocation();
 
-    @Query("SELECT DISTINCT j.language FROM Vacancy j")
-    List<String> findDistinctLanguage();
+    @Query("SELECT DISTINCT j.type FROM Vacancy j")
+    List<String> findDistinctType();
 
     List<Vacancy> findByUrl(String url);
 

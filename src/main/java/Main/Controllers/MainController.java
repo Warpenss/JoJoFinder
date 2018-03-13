@@ -31,8 +31,8 @@ public class MainController {
         model.addAttribute("jobs", allJobs);
 
         model.addAttribute("companies", vacancyRepository.findDistinctCompany());
-        model.addAttribute("cities", vacancyRepository.findDistinctCity());
-        model.addAttribute("languages", vacancyRepository.findDistinctLanguage());
+        model.addAttribute("location", vacancyRepository.findDistinctLocation());
+        model.addAttribute("types", vacancyRepository.findDistinctType());
 
         return "index";
     }
@@ -73,7 +73,7 @@ public class MainController {
                         resultCompany.addAll(jobsList);
                     }
                     for (Vacancy job : resultCompany) {
-                        if (job.getCity().equals(parameter)) {
+                        if (job.getLocation().equals(parameter)) {
                             resultCity.add(job);
                         }
                     }
@@ -90,7 +90,7 @@ public class MainController {
                         resultCity.addAll(jobsList);
                     }
                     for (Vacancy job : resultCity) {
-                        if (job.getLanguage().equals(parameter)) {
+                        if (job.getType().equals(parameter)) {
                             resultLanguage.add(job);
                         }
                     }
@@ -118,8 +118,8 @@ public class MainController {
         jobsList.sort(Comparator.comparing(Vacancy::getTime).reversed());
         model.addAttribute("jobs", jobsList);
         model.addAttribute("companies", vacancyRepository.findDistinctCompany());
-        model.addAttribute("cities", vacancyRepository.findDistinctCity());
-        model.addAttribute("languages", vacancyRepository.findDistinctLanguage());
+        model.addAttribute("cities", vacancyRepository.findDistinctLocation());
+        model.addAttribute("languages", vacancyRepository.findDistinctType());
 
         return "index";
     }

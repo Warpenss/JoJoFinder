@@ -135,8 +135,8 @@
                                           <dd>
                                              <div class="mutliSelect">
                                                 <ul>
-                                                   <li th:each="city : ${cities}">
-                                                      <input type="checkbox" name="city" th:value="${city}" data-th-text="${city}"/>
+                                                   <li th:each="location : ${cities}">
+                                                      <input type="checkbox" name="location" th:value="${location}" data-th-text="${location}"/>
                                                    </li>
                                                 </ul>
                                              </div>
@@ -158,8 +158,8 @@
                                           <dd>
                                              <div class="mutliSelect">
                                                 <ul >
-                                                   <li th:each="language : ${languages}">
-                                                      <input type="checkbox" name="language" th:value="${language}" data-th-text="${language}"/>
+                                                   <li th:each="type : ${languages}">
+                                                      <input type="checkbox" name="type" th:value="${type}" data-th-text="${type}"/>
                                                    </li>
                                                 </ul>
                                              </div>
@@ -206,12 +206,12 @@
                            </td>
                            <td>
                               <h2>
-                                 <small data-th-text="${job.city}" class="city"></small>
+                                 <small data-th-text="${job.location}" class="location"></small>
                               </h2>
                            </td>
                            <td>
                               <h2>
-                                 <small data-th-text="${job.language}" class="language"></small>
+                                 <small data-th-text="${job.type}" class="type"></small>
                               </h2>
                            </td>
                         </tr>
