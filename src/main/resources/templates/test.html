@@ -1,10 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Test</title>
 </head>
 <body>
-
+<ul>
+    <li th:each="vacancy : ${vacancies}">
+            <p data-th-text="${vacancy.time}">...</p>
+            <p data-th-text="${vacancy.title}">...</p>
+            <p data-th-text="${vacancy.url}">...</p>
+            <p data-th-text="${vacancy.company}">...</p>
+            <p data-th-text="${vacancy.city}">...</p>
+            <p data-th-text="${vacancy.language}">...</p>
+    </li>
+</ul>
 </body>
 </html>

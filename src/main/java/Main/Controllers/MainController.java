@@ -12,10 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.net.MalformedURLException;
 import java.util.*;
 
 @Controller
-public class FinderController {
+public class MainController {
     @Autowired
     VacancyRepository vacancyRepository;
 
@@ -124,8 +125,9 @@ public class FinderController {
     }
 
     @RequestMapping("/test")
-    public String test(Model model) {
-        Collector.collect();
+    public String test(Model model) throws MalformedURLException {
+        ArrayList<Vacancy> vacancies = Collector.collect();
+        model.addAttribute("vacancies", vacancies);
         return "test";
     }
 }

@@ -16,9 +16,9 @@ public class CompanyList {
 
         companyName = "EPAM";
         searchUrl = "https://www.epam.com/careers/job-listings";
-        titleSelector = "search-result__item-name";
-        citySelector = "search-result__location";
-        typeSelector = "search-result__item-name";
+        titleSelector = "//a[@class='search-result__item-name']";
+        citySelector = "../../strong[@class='search-result__location']";
+        typeSelector = ".";
 
         companies.add(new Company(companyName, searchUrl, titleSelector, citySelector, typeSelector));
 

@@ -54,4 +54,15 @@ public class Company {
     public void setTypeSelector(String typeSelector) {
         this.typeSelector = typeSelector;
     }
+
+    @Override
+    public String toString() {
+        return "Company{" +
+                "companyName='" + companyName + '\'' +
+                ", searchUrl='" + searchUrl + '\'' +
+                ", titleSelector='" + titleSelector + '\'' +
+                ", citySelector='" + citySelector + '\'' +
+                ", typeSelector='" + typeSelector + '\'' +
+                '}';
+    }
 }
