@@ -8,7 +8,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.io.IOException;
+
 import java.net.MalformedURLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
