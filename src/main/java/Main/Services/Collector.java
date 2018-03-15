@@ -6,8 +6,8 @@ import Main.Repository.VacancyRepository;
 import Main.Tools.PageTool;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -26,22 +26,26 @@ public class Collector {
         for (Company company : companies) {
             HtmlPage page = PageTool.getPage(company.getSearchUrl());
 
-                while (true) {
-
-                        boolean pageEnd = page.getByXPath("//a[@class='search-result__view-more'][contains(@style,'display: block')]").isEmpty();
-                        if (pageEnd) {
-                            System.out.println("end");
-                            break;
-                        }
-                        else {
-                            try {
-                                page = ((HtmlElement) page.getByXPath("//a[@class='search-result__view-more']").get(0)).click();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
+            while (true) {
+                try {
+                    page = ((HtmlElement) page.getByXPath("//a[@class='search-result__view-more']").get(0)).click();
+                    System.out.println("Clicked");
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                boolean pageEnd = page.getByXPath("//a[@class='search-result__view-more']" +
+                        "[contains(@style,'display: none')]").size() > 0;
+                if (pageEnd) {
+                    System.out.println("end");
+                    break;
+                }
+
+            }
 
             List<HtmlElement> vacancies = page.getByXPath(company.getTitleSelector());
             for (HtmlElement htmlElement : vacancies) {
@@ -50,6 +54,7 @@ public class Collector {
                 String url;
                 String companyName;
                 String city;
+                String typeSelector;
                 String type;
 
                 time = LocalDateTime.now();
@@ -57,11 +62,105 @@ public class Collector {
                 url = page.getFullyQualifiedUrl(htmlElement.getAttribute("href")).toString();
                 companyName = company.getCompanyName();
                 city = ((HtmlElement) htmlElement.getByXPath(company.getCitySelector()).get(0)).getTextContent();
-                type = ((HtmlElement) htmlElement.getByXPath(company.getTypeSelector()).get(0)).getTextContent();
+                typeSelector = ((HtmlElement) htmlElement.getByXPath(company.getTypeSelector()).get(0)).getTextContent();
+                type = plainType(typeSelector);
+
                 vacanciesReady.add(new Vacancy(time, title, url, companyName, city, type));
             }
         }
 
         return vacanciesReady;
+    }
+
+    static private String plainType(String rawType) {
+        String plainType = "Other";
+
+        if (StringUtils.containsIgnoreCase(rawType, "JavaScript")) {
+            plainType = "JavaScript";
+        }
+        else if (StringUtils.containsIgnoreCase(rawType, "Java")) {
+            plainType = "Java";
+        }
+        else if (StringUtils.containsIgnoreCase(rawType, "C++")) {
+            plainType = "C++";
+        }
+        else if (StringUtils.containsIgnoreCase(rawType, "C#")) {
+            plainType = "C#";
+        }
+        else if (StringUtils.containsIgnoreCase(rawType, ".NET")) {
+            plainType = ".NET";
+        }
+        else if (StringUtils.containsIgnoreCase(rawType, "Python")) {
+            plainType = "Python";
+        }
+        else if (StringUtils.containsIgnoreCase(rawType, "UI")) {
+            plainType = "UI";
+        }
+        else if (StringUtils.containsIgnoreCase(rawType, "iOS")) {
+            plainType = "iOS";
+        }
+        else if (StringUtils.containsIgnoreCase(rawType, "Manager")) {
+            plainType = "Manager";
+        }
+        else if (StringUtils.containsIgnoreCase(rawType, "Test")) {
+            plainType = "Testing";
+        }
+        else if (StringUtils.containsIgnoreCase(rawType, "Consultant")) {
+            plainType = "Consultant";
+        }
+        else if (StringUtils.containsIgnoreCase(rawType, "Assistant")) {
+            plainType = "Assistant";
+        }
+        else if (StringUtils.containsIgnoreCase(rawType, "SQL")) {
+            plainType = "SQL ";
+        }
+        else if (StringUtils.containsIgnoreCase(rawType, "Analyst")) {
+            plainType = "Analyst ";
+        }
+        else if (StringUtils.containsIgnoreCase(rawType, "Big Data")) {
+            plainType = "Big Data";
+        }
+        else if (StringUtils.containsIgnoreCase(rawType, "Recruiter")) {
+            plainType = "Recruiter";
+        }
+        else if (StringUtils.containsIgnoreCase(rawType, "Solution")) {
+            plainType = "Solution Engineer";
+        }
+        else if (StringUtils.containsIgnoreCase(rawType, "Director")) {
+            plainType = "Director";
+        }
+        else if (StringUtils.containsIgnoreCase(rawType, "Designer")) {
+            plainType = "Designer";
+        }
+        else if (StringUtils.containsIgnoreCase(rawType, "DevOps")) {
+            plainType = "DevOps";
+        }
+        else if (StringUtils.containsIgnoreCase(rawType, "DevOps")) {
+            plainType = "DevOps";
+        }
+        else if (StringUtils.containsIgnoreCase(rawType, "Front-end")) {
+            plainType = "Front-end";
+        }
+        else if (StringUtils.containsIgnoreCase(rawType, "Automation")) {
+            plainType = "Automation";
+        }
+        else if (StringUtils.containsIgnoreCase(rawType, "Automation")) {
+            plainType = "Automation";
+        }
+        else if (StringUtils.containsIgnoreCase(rawType, "Accountant")) {
+            plainType = "Accountant";
+        }
+        else if (StringUtils.containsIgnoreCase(rawType, "HR")) {
+            plainType = "HR";
+        }
+        else if (StringUtils.containsIgnoreCase(rawType, "Security")) {
+            plainType = "Security";
+        }
+        else if (StringUtils.containsIgnoreCase(rawType, "QA")) {
+            plainType = "QA";
+        }
+
+        return plainType;
+
     }
 }

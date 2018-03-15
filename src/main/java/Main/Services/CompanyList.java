@@ -16,7 +16,7 @@ public class CompanyList {
                 "https://www.epam.com/careers/job-listings?sort=time",
                 "//a[@class='search-result__item-name']",
                 "../../strong[@class='search-result__location']",
-                "."
+                "..//a[@class='search-result__item-name']"
         ));
 
         return companies;
