@@ -20,6 +20,21 @@ public class Collector {
     VacancyRepository vacancyRepository;
 
     public static ArrayList<Vacancy> collect() throws MalformedURLException {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         ArrayList<Vacancy> vacanciesReady = new ArrayList<>();
         PageTool.initiateClient();
         ArrayList<Company> companies = CompanyList.getCompanies();
@@ -34,7 +49,7 @@ public class Collector {
                     e.printStackTrace();
                 }
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(2000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -78,7 +93,8 @@ public class Collector {
         if (StringUtils.containsIgnoreCase(rawType, "JavaScript")) {
             plainType = "JavaScript";
         }
-        else if (StringUtils.containsIgnoreCase(rawType, "Java")) {
+        else if (StringUtils.containsIgnoreCase(rawType, "Java") ||
+                (StringUtils.containsIgnoreCase(rawType, "Android"))) {
             plainType = "Java";
         }
         else if (StringUtils.containsIgnoreCase(rawType, "C++")) {
@@ -135,14 +151,8 @@ public class Collector {
         else if (StringUtils.containsIgnoreCase(rawType, "DevOps")) {
             plainType = "DevOps";
         }
-        else if (StringUtils.containsIgnoreCase(rawType, "DevOps")) {
-            plainType = "DevOps";
-        }
         else if (StringUtils.containsIgnoreCase(rawType, "Front-end")) {
             plainType = "Front-end";
-        }
-        else if (StringUtils.containsIgnoreCase(rawType, "Automation")) {
-            plainType = "Automation";
         }
         else if (StringUtils.containsIgnoreCase(rawType, "Automation")) {
             plainType = "Automation";
@@ -150,7 +160,8 @@ public class Collector {
         else if (StringUtils.containsIgnoreCase(rawType, "Accountant")) {
             plainType = "Accountant";
         }
-        else if (StringUtils.containsIgnoreCase(rawType, "HR")) {
+        else if (StringUtils.containsIgnoreCase(rawType, "HR") ||
+                StringUtils.containsIgnoreCase(rawType, "Human Resources")) {
             plainType = "HR";
         }
         else if (StringUtils.containsIgnoreCase(rawType, "Security")) {
@@ -159,6 +170,13 @@ public class Collector {
         else if (StringUtils.containsIgnoreCase(rawType, "QA")) {
             plainType = "QA";
         }
+        else if (StringUtils.containsIgnoreCase(rawType, "Android")) {
+            plainType = "Android";
+        }
+        else if (StringUtils.containsIgnoreCase(rawType, "PHP")) {
+            plainType = "PHP";
+        }
+
 
         return plainType;
 
