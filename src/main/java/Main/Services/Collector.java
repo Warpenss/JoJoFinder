@@ -11,30 +11,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Collector {
     @Autowired
     VacancyRepository vacancyRepository;
 
     public static ArrayList<Vacancy> collect() throws MalformedURLException {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         ArrayList<Vacancy> vacanciesReady = new ArrayList<>();
         PageTool.initiateClient();
         ArrayList<Company> companies = CompanyList.getCompanies();
@@ -79,6 +65,13 @@ public class Collector {
                 city = ((HtmlElement) htmlElement.getByXPath(company.getCitySelector()).get(0)).getTextContent();
                 typeSelector = ((HtmlElement) htmlElement.getByXPath(company.getTypeSelector()).get(0)).getTextContent();
                 type = plainType(typeSelector);
+
+
+                Date date = new Date();
+                DateFormat df = new SimpleDateFormat("dd MMM yyyy HH:mm", Locale.ENGLISH);
+                df.setTimeZone(TimeZone.getTimeZone("Europe/Kiev"));
+                System.out.println("Date and time in Kiev: " + df.format(date));
+
 
                 vacanciesReady.add(new Vacancy(time, title, url, companyName, city, type));
             }
