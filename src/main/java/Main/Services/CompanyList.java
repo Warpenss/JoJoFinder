@@ -19,6 +19,13 @@ public class CompanyList {
                 "..//a[@class='search-result__item-name']"
         ));
 
+        companies.add(new Company("LUXOFT",
+                "https://career.luxoft.com/job-opportunities/",
+                "//a[@class='search-result__item-name']",
+                "../../strong[@class='search-result__location']",
+                "..//a[@class='search-result__item-name']"
+        ));
+
         return companies;
     }
 }
