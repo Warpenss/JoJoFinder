@@ -36,6 +36,22 @@ public class CompanyList {
                 "..//h4[@class='card-courses_title']"
         ));
 
+        companies.add(new Company("DOU",
+                "https://jobs.dou.ua/vacancies/?switch_lang=en",
+                "..//a[@class='vt']",
+                "//a[@class='vt']",
+                "..//span[@class='cities']",
+                "..//a[@class='vt']"
+        ));
+
+        companies.add(new Company("djinni",
+                "https://djinni.co/jobs/?lang=en",
+                "..//a",
+                "//div[@class='list-jobs__title']/a",
+                "../..//div[@class='list-jobs__details']",
+                "..//a"
+        ));
+
         return companies;
     }
 }

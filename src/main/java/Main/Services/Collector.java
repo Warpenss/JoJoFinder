@@ -2,21 +2,17 @@ package Main.Services;
 
 import Main.Entities.Company;
 import Main.Entities.Vacancy;
-import Main.Repository.VacancyRepository;
 import Main.Tools.PageTool;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.geonames.*;
 
 import java.net.MalformedURLException;
 import java.time.LocalDateTime;
 import java.util.*;
 
 public class Collector {
-    @Autowired
-    VacancyRepository vacancyRepository;
-
     public ArrayList<Vacancy> collect() throws MalformedURLException {
         ArrayList<Vacancy> vacanciesReady = new ArrayList<>();
         PageTool.initiateClient();
@@ -58,24 +54,34 @@ public class Collector {
                 String url;
                 String companyName;
                 String location;
-                String typeSelector;
                 String type;
 
                 time = LocalDateTime.now();
                 System.out.println(time);
-                title = htmlElement.getTextContent().trim().replaceAll("\u00A0", "");
+
+                title = htmlElement.getTextContent().trim();
                 System.out.println(title);
+
                 url = page.getFullyQualifiedUrl(((HtmlElement) htmlElement.getByXPath(company.getUrlSelector())
                         .get(0)).getAttribute("href")).toString();
                 System.out.println(url);
+
                 companyName = company.getCompanyName();
                 System.out.println(companyName);
-                location = StringUtils.substringBefore(((HtmlElement) htmlElement.getByXPath(company.getCitySelector())
-                        .get(0)).getTextContent(), ",").trim();
+
+                if (company.getCompanyName().equals("djinni")) {
+                    location = StringUtils.substringAfterLast(((HtmlElement) htmlElement.getByXPath(company.getCitySelector())
+                            .get(0)).getTextContent(), "\u00a0").trim();
+                } else {
+                    location = StringUtils.substringBefore(((HtmlElement) htmlElement.getByXPath(company.getCitySelector())
+                            .get(0)).getTextContent(), ",").trim();
+                }
+                location = plainCity(location);
                 System.out.println(location);
-                typeSelector = ((HtmlElement) htmlElement.getByXPath(company.getTypeSelector()).get(0)).getTextContent();
-                System.out.println(typeSelector);
-                type = plainType(typeSelector);
+
+                type = ((HtmlElement) htmlElement.getByXPath(company.getTypeSelector()).get(0)).getTextContent();
+                type = plainType(type);
+                System.out.println(type);
 
                 vacanciesReady.add(new Vacancy(time, title, url, companyName, location, type));
             }
@@ -84,14 +90,28 @@ public class Collector {
         return vacanciesReady;
     }
 
+    private String plainCity(String rawCity) {
+        String plainCity = rawCity;
+
+        try {
+            WebService.setUserName("warpenss"); // add your username here
+            ToponymSearchCriteria searchCriteria = new ToponymSearchCriteria();
+            searchCriteria.setName(rawCity);
+            ToponymSearchResult searchResult = WebService.search(searchCriteria);
+            plainCity = searchResult.getToponyms().get(0).getName();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return plainCity;
+    }
 
     private String plainType(String rawType) {
         String plainType = "Other";
 
         if (StringUtils.containsIgnoreCase(rawType, "JavaScript")) {
             plainType = "JavaScript";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Java") ||
-                (StringUtils.containsIgnoreCase(rawType, "Android"))) {
+        } else if (StringUtils.containsIgnoreCase(rawType, "Java")) {
             plainType = "Java";
         } else if (StringUtils.containsIgnoreCase(rawType, "C++")) {
             plainType = "C++";
@@ -146,8 +166,17 @@ public class Collector {
             plainType = "Android";
         } else if (StringUtils.containsIgnoreCase(rawType, "PHP")) {
             plainType = "PHP";
+        } else if (StringUtils.containsIgnoreCase(rawType, "Sales")) {
+            plainType = "Sales";
+        } else if (StringUtils.containsIgnoreCase(rawType, "Angular")) {
+            plainType = "Angular";
+        } else if (StringUtils.containsIgnoreCase(rawType, "Node.js")) {
+            plainType = "Node.js";
+        } else if (StringUtils.containsIgnoreCase(rawType, " C ")) {
+            plainType = "C";
+        } else if (StringUtils.containsIgnoreCase(rawType, "Scala")) {
+            plainType = "Scala";
         }
-
 
         return plainType;
 
