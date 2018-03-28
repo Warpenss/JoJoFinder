@@ -1,9 +1,10 @@
 package Main.Entities;
 
 public class Company {
-    public Company(String companyName, String searchUrl, String titleSelector, String citySelector, String typeSelector) {
+    public Company(String companyName, String searchUrl, String urlSelector, String titleSelector, String citySelector, String typeSelector) {
         this.companyName = companyName;
         this.searchUrl = searchUrl;
+        this.urlSelector = urlSelector;
         this.titleSelector = titleSelector;
         this.citySelector = citySelector;
         this.typeSelector = typeSelector;
@@ -11,6 +12,7 @@ public class Company {
 
     private String companyName;
     private String searchUrl;
+    private String urlSelector;
     private String titleSelector;
     private String citySelector;
     private String typeSelector;
@@ -29,6 +31,14 @@ public class Company {
 
     public void setSearchUrl(String searchUrl) {
         this.searchUrl = searchUrl;
+    }
+
+    public String getUrlSelector() {
+        return urlSelector;
+    }
+
+    public void setUrlSelector(String urlSelector) {
+        this.urlSelector = urlSelector;
     }
 
     public String getTitleSelector() {
@@ -60,6 +70,7 @@ public class Company {
         return "Company{" +
                 "companyName='" + companyName + '\'' +
                 ", searchUrl='" + searchUrl + '\'' +
+                ", urlSelector='" + urlSelector + '\'' +
                 ", titleSelector='" + titleSelector + '\'' +
                 ", citySelector='" + citySelector + '\'' +
                 ", typeSelector='" + typeSelector + '\'' +

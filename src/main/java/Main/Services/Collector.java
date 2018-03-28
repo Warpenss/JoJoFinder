@@ -22,6 +22,7 @@ public class Collector {
         PageTool.initiateClient();
         ArrayList<Company> companies = CompanyList.getCompanies();
         for (Company company : companies) {
+            System.out.println(company.getCompanyName());
             HtmlPage page = PageTool.getPage(company.getSearchUrl());
 
             // In development
@@ -48,6 +49,9 @@ public class Collector {
 //            }
 
             List<HtmlElement> vacancies = page.getByXPath(company.getTitleSelector());
+            if (vacancies.isEmpty()) {
+                System.out.println("Empty");
+            }
             for (HtmlElement htmlElement : vacancies) {
                 LocalDateTime time;
                 String title;
@@ -58,12 +62,19 @@ public class Collector {
                 String type;
 
                 time = LocalDateTime.now();
-                title = htmlElement.getTextContent();
-                url = page.getFullyQualifiedUrl(htmlElement.getAttribute("href")).toString();
+                System.out.println(time);
+                title = htmlElement.getTextContent().trim().replaceAll("\u00A0", "");
+                System.out.println(title);
+                url = page.getFullyQualifiedUrl(((HtmlElement) htmlElement.getByXPath(company.getUrlSelector())
+                        .get(0)).getAttribute("href")).toString();
+                System.out.println(url);
                 companyName = company.getCompanyName();
+                System.out.println(companyName);
                 location = StringUtils.substringBefore(((HtmlElement) htmlElement.getByXPath(company.getCitySelector())
-                        .get(0)).getTextContent(), ",");
+                        .get(0)).getTextContent(), ",").trim();
+                System.out.println(location);
                 typeSelector = ((HtmlElement) htmlElement.getByXPath(company.getTypeSelector()).get(0)).getTextContent();
+                System.out.println(typeSelector);
                 type = plainType(typeSelector);
 
                 vacanciesReady.add(new Vacancy(time, title, url, companyName, location, type));
