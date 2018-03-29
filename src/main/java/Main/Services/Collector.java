@@ -69,8 +69,8 @@ public class Collector {
                     } else {
                         location = StringUtils.substringBefore(((HtmlElement) list.get(0)).getTextContent(), ",").trim();
                     }
+                    location = plainCity(location);
                 }
-                location = plainCity(location);
                 System.out.println(location);
 
                 type = ((HtmlElement) htmlElement.getByXPath(company.getTypeSelector()).get(0)).getTextContent();
