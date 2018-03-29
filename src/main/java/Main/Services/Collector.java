@@ -143,7 +143,9 @@ public class Collector {
             plainType = "Designer";
         } else if (StringUtils.containsIgnoreCase(rawType, "DevOps")) {
             plainType = "DevOps";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Front-end")) {
+        } else if (StringUtils.containsIgnoreCase(rawType, "Front-end") ||
+                StringUtils.containsIgnoreCase(rawType, "Front end") ||
+                StringUtils.containsIgnoreCase(rawType, "Frontend")){
             plainType = "Front-end";
         } else if (StringUtils.containsIgnoreCase(rawType, "Automation")) {
             plainType = "Automation";
@@ -164,12 +166,22 @@ public class Collector {
             plainType = "Sales";
         } else if (StringUtils.containsIgnoreCase(rawType, "Angular")) {
             plainType = "Angular";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Node.js")) {
+        } else if (StringUtils.containsIgnoreCase(rawType, "Node.js") ||
+                StringUtils.containsIgnoreCase(rawType, "NodeJS")) {
             plainType = "Node.js";
         } else if (StringUtils.containsIgnoreCase(rawType, " C ")) {
             plainType = "C";
         } else if (StringUtils.containsIgnoreCase(rawType, "Scala")) {
             plainType = "Scala";
+        } else if (StringUtils.containsIgnoreCase(rawType, "Ruby") ||
+                StringUtils.containsIgnoreCase(rawType, "RoR")) {
+            plainType = "Ruby";
+        } else if (StringUtils.containsIgnoreCase(rawType, "Data Scientist")) {
+            plainType = "Data Scientist";
+        } else if (StringUtils.containsIgnoreCase(rawType, "TypeScript")) {
+            plainType = "TypeScript";
+        } else if (StringUtils.containsIgnoreCase(rawType, "React")) {
+            plainType = "React";
         }
 
         return plainType;
