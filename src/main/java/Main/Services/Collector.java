@@ -62,14 +62,11 @@ public class Collector {
                 System.out.println(companyName);
 
                 location = "Undefined";
-                if (company.getCompanyName().equals("djinni")) {
-                    List list = htmlElement.getByXPath(company.getCitySelector());
-                    if (!list.isEmpty()) {
+                List list = htmlElement.getByXPath(company.getCitySelector());
+                if (!list.isEmpty()) {
+                    if (company.getCompanyName().equals("djinni")) {
                         location = StringUtils.substringAfterLast(((HtmlElement) list.get(0)).getTextContent(), "\u00a0").trim();
-                    }
-                } else {
-                    List list = htmlElement.getByXPath(company.getCitySelector());
-                    if (!list.isEmpty()) {
+                    } else {
                         location = StringUtils.substringBefore(((HtmlElement) list.get(0)).getTextContent(), ",").trim();
                     }
                 }
