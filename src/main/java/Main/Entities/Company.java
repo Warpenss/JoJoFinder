@@ -1,13 +1,16 @@
 package Main.Entities;
 
 public class Company {
-    public Company(String companyName, String searchUrl, String urlSelector, String titleSelector, String citySelector, String typeSelector) {
+    public Company(String companyName, String searchUrl, String urlSelector, String titleSelector, String citySelector,
+                   String typeSelector, String paginationType, String paginationSelector) {
         this.companyName = companyName;
         this.searchUrl = searchUrl;
         this.urlSelector = urlSelector;
         this.titleSelector = titleSelector;
         this.citySelector = citySelector;
         this.typeSelector = typeSelector;
+        this.paginationType = paginationType;
+        this.paginationSelector = paginationSelector;
     }
 
     private String companyName;
@@ -16,6 +19,8 @@ public class Company {
     private String titleSelector;
     private String citySelector;
     private String typeSelector;
+    private String paginationType;
+    private String paginationSelector;
 
     public String getCompanyName() {
         return companyName;
@@ -65,15 +70,19 @@ public class Company {
         this.typeSelector = typeSelector;
     }
 
-    @Override
-    public String toString() {
-        return "Company{" +
-                "companyName='" + companyName + '\'' +
-                ", searchUrl='" + searchUrl + '\'' +
-                ", urlSelector='" + urlSelector + '\'' +
-                ", titleSelector='" + titleSelector + '\'' +
-                ", citySelector='" + citySelector + '\'' +
-                ", typeSelector='" + typeSelector + '\'' +
-                '}';
+    public String getPaginationType() {
+        return paginationType;
+    }
+
+    public void setPaginationType(String paginationType) {
+        this.paginationType = paginationType;
+    }
+
+    public String getPaginationSelector() {
+        return paginationSelector;
+    }
+
+    public void setPaginationSelector(String paginationSelector) {
+        this.paginationSelector = paginationSelector;
     }
 }

@@ -8,6 +8,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.apache.commons.lang3.StringUtils;
 import org.geonames.*;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -22,32 +23,23 @@ public class Collector {
             HtmlPage page = PageTool.getPage(company.getSearchUrl());
 
             // In development
-//            if (company.getCompanyName().equals("EPAM")) {
-//                while (true) {
-//                    try {
-//                        page = ((HtmlElement) page.getByXPath("//a[@class='search-result__view-more']").get(0)).click();
-//                        System.out.println("Clicked");
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                    try {
-//                        Thread.sleep(2000);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                    boolean pageEnd = page.getByXPath("//a[@class='search-result__view-more']" +
-//                            "[contains(@style,'display: none')]").size() > 0;
-//                    if (pageEnd) {
-//                        System.out.println("end");
-//                        break;
-//                    }
-//                }
-//            }
+            if (company.getPaginationType().equals("LOAD")) {
+                for (int i = 0; i < 50; i++) {
+                    try {
+                        page = ((HtmlElement) page.getByXPath(company.getPaginationSelector()).get(0)).click();
+                        Thread.sleep(1000);
+                        System.out.println("Clicked");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
 
             List<HtmlElement> vacancies = page.getByXPath(company.getTitleSelector());
-            if (vacancies.isEmpty()) {
-                System.out.println("Empty");
-            }
+
             for (HtmlElement htmlElement : vacancies) {
                 LocalDateTime time;
                 String title;
@@ -69,12 +61,17 @@ public class Collector {
                 companyName = company.getCompanyName();
                 System.out.println(companyName);
 
+                location = "Undefined";
                 if (company.getCompanyName().equals("djinni")) {
-                    location = StringUtils.substringAfterLast(((HtmlElement) htmlElement.getByXPath(company.getCitySelector())
-                            .get(0)).getTextContent(), "\u00a0").trim();
+                    List list = htmlElement.getByXPath(company.getCitySelector());
+                    if (!list.isEmpty()) {
+                        location = StringUtils.substringAfterLast(((HtmlElement) list.get(0)).getTextContent(), "\u00a0").trim();
+                    }
                 } else {
-                    location = StringUtils.substringBefore(((HtmlElement) htmlElement.getByXPath(company.getCitySelector())
-                            .get(0)).getTextContent(), ",").trim();
+                    List list = htmlElement.getByXPath(company.getCitySelector());
+                    if (!list.isEmpty()) {
+                        location = StringUtils.substringBefore(((HtmlElement) list.get(0)).getTextContent(), ",").trim();
+                    }
                 }
                 location = plainCity(location);
                 System.out.println(location);
@@ -86,9 +83,9 @@ public class Collector {
                 vacanciesReady.add(new Vacancy(time, title, url, companyName, location, type));
             }
         }
-
         return vacanciesReady;
     }
+
 
     private String plainCity(String rawCity) {
         String plainCity = rawCity;
@@ -182,3 +179,4 @@ public class Collector {
 
     }
 }
+
