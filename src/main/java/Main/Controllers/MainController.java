@@ -125,7 +125,7 @@ public class MainController {
     }
 
     @RequestMapping("/test")
-    public String test(Model model) throws MalformedURLException {
+    public String test(Model model) {
         ArrayList<Vacancy> vacancies = new Collector().collect();
         model.addAttribute("vacancies", vacancies);
         return "test";

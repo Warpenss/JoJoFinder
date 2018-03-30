@@ -1,19 +1,18 @@
 package Main.Tools;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
-import com.gargoylesoftware.htmlunit.History;
 import com.gargoylesoftware.htmlunit.TopLevelWindow;
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.WebWindow;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
+import java.util.List;
 
 //This tool handle the WebClient and returns page
 public class PageTool {
     //WebClient simulates Chrome browser that can handle Javascript on sites
     static private WebClient webClient;
-
     static public void initiateClient() {
         webClient = new WebClient(BrowserVersion.CHROME);
         webClient.getOptions().setUseInsecureSSL(true);
@@ -24,11 +23,17 @@ public class PageTool {
     }
 
     static public void closeClient() {
+        final List<WebWindow> windows = webClient.getWebWindows();
+        for (final WebWindow wd : windows) {
+            wd.getJobManager().removeAllJobs();
+        }
+
         for (TopLevelWindow topLevelWindow : webClient.getTopLevelWindows()) {
             topLevelWindow.close();
             System.out.println(topLevelWindow.toString() + " - window is closed");
         }
         webClient.close();
+        System.gc();
         System.out.println("WebClient is closed");
     }
 
@@ -50,10 +55,7 @@ public class PageTool {
         if (page == null) {
             System.out.println("Trouble with page loading");
         }
-
         return page;
-
-
     }
 
 
