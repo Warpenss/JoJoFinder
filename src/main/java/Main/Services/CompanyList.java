@@ -37,7 +37,7 @@ public class CompanyList {
                 "../..//dl[2]/dd",
                 "..//h4[@class='card-courses_title']",
                 "PAGE",
-                "//ul[@class='pagination']/li[7]/a"
+                "//ul[@class='pagination']/li[last()]/a"
         ));
 
 //        companies.add(new Company("DOU",

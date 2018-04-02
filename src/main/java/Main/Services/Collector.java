@@ -27,12 +27,12 @@ public class Collector {
     }
 
     public ArrayList<Vacancy> collect() {
-        PageTool.initiateClient();
-
         ArrayList<Vacancy> vacanciesReady = new ArrayList<>();
         ArrayList<Company> companies = CompanyList.getCompanies();
 
         for (Company company : companies) {
+            PageTool.initiateClient();
+
             System.out.println(company.getCompanyName());
             List<HtmlElement> vacancies = new ArrayList<>();
             HtmlPage page = PageTool.getPage(company.getSearchUrl());
@@ -75,6 +75,7 @@ public class Collector {
                         time = LocalDateTime.now();
                         System.out.println(time);
 
+
                         title = htmlElement.getTextContent().trim();
                         System.out.println(title);
 
@@ -85,10 +86,20 @@ public class Collector {
                         List<HtmlElement> list = htmlElement.getByXPath(company.getCitySelector());
                         if (!list.isEmpty()) {
                             if (company.getCompanyName().equals("djinni")) {
-                                location = StringUtils.substringAfterLast((list.get(0)).getTextContent(), "\u00a0").trim();
-                                location = StringUtils.substringBefore(location, ",").trim();
+                                location = StringUtils.substringAfterLast((list.get(0)).getTextContent(), "\u00a0");
+                                location = StringUtils.substringBefore(location, ",");
+                                if (location.contains(".")) {
+                                    location = StringUtils.substringAfter(location, ".").trim();
+                                }
+
                             } else {
-                                location = StringUtils.substringBefore((list.get(0)).getTextContent(), ",").trim();
+                                location = StringUtils.substringBefore((list.get(0)).getTextContent(), ",");
+                                System.out.println(location);
+                                if (location.contains(".")) {
+                                    location = StringUtils.substringAfter(location, ".").trim();
+                                }
+                                System.out.println(location);
+
                             }
                             if (vacancyRepository.findByLocation(location).size() == 0) {
                                 location = plainCity(location);
@@ -107,14 +118,24 @@ public class Collector {
                     e.printStackTrace();
                 }
             }
+            PageTool.closeClient();
         }
-        PageTool.closeClient();
+
         return vacanciesReady;
     }
 
     private HtmlPage paginationClick(HtmlPage page, String paginationSelector) {
         try {
-            page = ((HtmlElement) page.getByXPath(paginationSelector).get(0)).click();
+            List<HtmlElement> list = page.getByXPath(paginationSelector);
+
+            if (!list.isEmpty()) {
+                System.out.println("Before click");
+                page = list.get(0).click();
+                System.out.println("After click");
+            } else {
+                System.out.println("Empty");
+            }
+
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -132,7 +153,10 @@ public class Collector {
             ToponymSearchCriteria searchCriteria = new ToponymSearchCriteria();
             searchCriteria.setName(rawCity);
             ToponymSearchResult searchResult = WebService.search(searchCriteria);
-            plainCity = searchResult.getToponyms().get(0).getName();
+            List<Toponym> searchResultToponyms = searchResult.getToponyms();
+            if (!searchResultToponyms.isEmpty()) {
+                plainCity = searchResultToponyms.get(0).getName();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -231,9 +255,49 @@ public class Collector {
             plainType = "Blockchain";
         } else if (StringUtils.containsIgnoreCase(rawType, "Back-end") ||
                 StringUtils.containsIgnoreCase(rawType, "Back end") ||
-                StringUtils.containsIgnoreCase(rawType, "Backend"))  {
+                StringUtils.containsIgnoreCase(rawType, "Backend")) {
             plainType = "Back-end";
+        } else if (StringUtils.containsIgnoreCase(rawType, "Service Desk") ||
+                StringUtils.containsIgnoreCase(rawType, "HelpDesk")) {
+            plainType = "HelpDesk";
+        } else if (StringUtils.containsIgnoreCase(rawType, "Go ") ||
+                StringUtils.containsIgnoreCase(rawType, "Golang")) {
+            plainType = "Go";
+        } else if (StringUtils.containsIgnoreCase(rawType, "R&D")) {
+            plainType = "R&D";
+        } else if (StringUtils.containsIgnoreCase(rawType, "Administrator")) {
+            plainType = "Administrator";
+        } else if (StringUtils.containsIgnoreCase(rawType, "ELT")) {
+            plainType = "ELT";
+        } else if (StringUtils.containsIgnoreCase(rawType, "Coordinator")) {
+            plainType = "Coordinator";
+        } else if (StringUtils.containsIgnoreCase(rawType, "Delphi")) {
+            plainType = "Delphi";
+        } else if (StringUtils.containsIgnoreCase(rawType, "Splunk")) {
+            plainType = "Splunk";
+        } else if (StringUtils.containsIgnoreCase(rawType, "Tableau")) {
+            plainType = "Tableau";
+        } else if (StringUtils.containsIgnoreCase(rawType, "Business Intelligence")) {
+            plainType = "Business Intelligence";
+        } else if (StringUtils.containsIgnoreCase(rawType, "Data Warehouse") ||
+                StringUtils.containsIgnoreCase(rawType, "DWH"))  {
+            plainType = "Data Warehouse";
+        } else if (StringUtils.containsIgnoreCase(rawType, "Teacher")) {
+            plainType = "Teacher";
+        } else if (StringUtils.containsIgnoreCase(rawType, "Training and Development")) {
+            plainType = "Training and Development";
+        } else if (StringUtils.containsIgnoreCase(rawType, "Experience Design")) {
+            plainType = "Experience Design";
+        } else if (StringUtils.containsIgnoreCase(rawType, "OPS")) {
+            plainType = "OPS";
+        } else if (StringUtils.containsIgnoreCase(rawType, "Support")) {
+            plainType = "Support";
+        } else if (StringUtils.containsIgnoreCase(rawType, "Quality Control")) {
+            plainType = "Quality Control";
+        } else if (StringUtils.containsIgnoreCase(rawType, "Procurement")) {
+            plainType = "Procurement";
         }
+
 
         return plainType;
 
