@@ -20,26 +20,26 @@ public class CompanyList {
 //
 //        ));
 //
-        companies.add(new Company("LUXOFT",
-                "https://career.luxoft.com/job-opportunities/",
-                "..//a[@data-offers='title']",
-                "//a[@data-offers='title']",
-                "../..//span[@itemprop='jobLocation']",
-                "../..//span[@class='label label-default']",
-                "PAGE",
-                "//a[@title='Next']"
-        ));
-//
-//        companies.add(new Company("SoftServe",
-//                "https://career.softserveinc.com/en-us/vacancies",
-//                "../../../..//a[@class='unit-href']",
-//                "//h4[@class='card-courses_title']",
-//                "../..//dl[2]/dd",
-//                "..//h4[@class='card-courses_title']",
+//        companies.add(new Company("LUXOFT",
+//                "https://career.luxoft.com/job-opportunities/",
+//                "..//a[@data-offers='title']",
+//                "//a[@data-offers='title']",
+//                "../..//span[@itemprop='jobLocation']",
+//                "../..//span[@class='label label-default']",
 //                "PAGE",
-//                "//*[@id='pagination']/ul/li[last()]/a"
+//                "//a[@title='Next']"
 //        ));
-//
+
+        companies.add(new Company("SoftServe",
+                "https://career.softserveinc.com/en-us/vacancies",
+                "../../../..//a[@class='unit-href']",
+                "//h4[@class='card-courses_title']",
+                "../..//dl[2]/dd",
+                "..//h4[@class='card-courses_title']",
+                "PAGE",
+                "//ul[@class='pagination']/li[7]/a"
+        ));
+
 //        companies.add(new Company("DOU",
 //                "https://jobs.dou.ua/vacancies/?switch_lang=en",
 //                "..//a[@class='vt']",
@@ -57,7 +57,7 @@ public class CompanyList {
 //                "../..//div[@class='list-jobs__details']",
 //                "..//a",
 //                "PAGE",
-//                "//ul[@class='pager']/li[last()]/a"
+//                "/"
 //        ));
 
         return companies;

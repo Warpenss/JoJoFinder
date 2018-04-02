@@ -22,5 +22,7 @@ public interface VacancyRepository extends JpaRepository<Vacancy, String> {
 
     List<Vacancy> findByTitleIgnoreCaseContaining(String url);
 
+    List<Vacancy> findByLocation(String url);
+
 
 }

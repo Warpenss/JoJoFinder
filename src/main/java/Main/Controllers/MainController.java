@@ -17,8 +17,12 @@ import java.util.*;
 
 @Controller
 public class MainController {
+    private VacancyRepository vacancyRepository;
+
     @Autowired
-    VacancyRepository vacancyRepository;
+    public MainController(VacancyRepository vacancyRepository) {
+        this.vacancyRepository = vacancyRepository;
+    }
 
     //Catches the "/" request, adds jobs attribute and redirect to index.html
     @RequestMapping("/")
@@ -126,7 +130,7 @@ public class MainController {
 
     @RequestMapping("/test")
     public String test(Model model) {
-        ArrayList<Vacancy> vacancies = new Collector().collect();
+        ArrayList<Vacancy> vacancies = new Collector(vacancyRepository).collect();
         model.addAttribute("vacancies", vacancies);
         return "test";
     }
