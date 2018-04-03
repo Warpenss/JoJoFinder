@@ -26,20 +26,20 @@ public class CompanyList {
 //                "//a[@data-offers='title']",
 //                "../..//span[@itemprop='jobLocation']",
 //                "../..//span[@class='label label-default']",
-//                "PAGE",
+//                "LOAD",
 //                "//a[@title='Next']"
 //        ));
-
-        companies.add(new Company("SoftServe",
-                "https://career.softserveinc.com/en-us/vacancies",
-                "../../../..//a[@class='unit-href']",
-                "//h4[@class='card-courses_title']",
-                "../..//dl[2]/dd",
-                "..//h4[@class='card-courses_title']",
-                "PAGE",
-                "//ul[@class='pagination']/li[last()]/a"
-        ));
-
+//
+//        companies.add(new Company("SoftServe",
+//                "https://career.softserveinc.com/en-us/vacancies",
+//                "../../../..//a[@class='unit-href']",
+//                "//h4[@class='card-courses_title']",
+//                "../..//dl[2]/dd",
+//                "..//h4[@class='card-courses_title']",
+//                "PAGE",
+//                "//ul[@class='pagination']/li[last()]/a"
+//        ));
+//
 //        companies.add(new Company("DOU",
 //                "https://jobs.dou.ua/vacancies/?switch_lang=en",
 //                "..//a[@class='vt']",
@@ -49,16 +49,16 @@ public class CompanyList {
 //                "LOAD",
 //                "//div[@class='more-btn']/a"
 //        ));
-//
-//        companies.add(new Company("djinni",
-//                "https://djinni.co/jobs/?lang=en",
-//                "..//a",
-//                "//div[@class='list-jobs__title']/a",
-//                "../..//div[@class='list-jobs__details']",
-//                "..//a",
-//                "PAGE",
-//                "/"
-//        ));
+
+        companies.add(new Company("djinni",
+                "https://djinni.co/jobs/?lang=en",
+                "..//a",
+                "//div[@class='list-jobs__title']/a",
+                "../..//div[@class='list-jobs__details']",
+                "..//a",
+                "PAGE",
+                "/"
+        ));
 
         return companies;
     }

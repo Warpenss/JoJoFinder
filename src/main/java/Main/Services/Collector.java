@@ -43,10 +43,10 @@ public class Collector {
                 }
                 vacancies = page.getByXPath(company.getTitleSelector());
             } else if (company.getPaginationType().equals("PAGE")) {
-                // You must be logged in to see pages
+                // You must be logged in to see pages on djinni
                 if (company.getCompanyName().equals("djinni")) {
-                    vacancies.addAll(page.getByXPath(company.getTitleSelector()));
                     for (int i = 2; i < 10; i++) {
+                        vacancies.addAll(page.getByXPath(company.getTitleSelector()));
                         page = PageTool.getPage("https://djinni.co/jobs/?lang=en&page=" + i);
                     }
                 } else {
@@ -87,11 +87,10 @@ public class Collector {
                         if (!list.isEmpty()) {
                             if (company.getCompanyName().equals("djinni")) {
                                 location = StringUtils.substringAfterLast((list.get(0)).getTextContent(), "\u00a0");
-                                location = StringUtils.substringBefore(location, ",");
+                                location = StringUtils.substringBefore(location, ",").trim();
                                 if (location.contains(".")) {
                                     location = StringUtils.substringAfter(location, ".").trim();
                                 }
-
                             } else {
                                 location = StringUtils.substringBefore((list.get(0)).getTextContent(), ",");
                                 System.out.println(location);
@@ -249,7 +248,8 @@ public class Collector {
         } else if (StringUtils.containsIgnoreCase(rawType, "Unity 3D") ||
                 StringUtils.containsIgnoreCase(rawType, "Unity3D")) {
             plainType = "Unity3D";
-        } else if (StringUtils.containsIgnoreCase(rawType, "1С")) {
+        } else if (StringUtils.containsIgnoreCase(rawType, "1С") ||
+                StringUtils.containsIgnoreCase(rawType, "1 С")) {
             plainType = "1С";
         } else if (StringUtils.containsIgnoreCase(rawType, "Blockchain")) {
             plainType = "Blockchain";
@@ -280,7 +280,7 @@ public class Collector {
         } else if (StringUtils.containsIgnoreCase(rawType, "Business Intelligence")) {
             plainType = "Business Intelligence";
         } else if (StringUtils.containsIgnoreCase(rawType, "Data Warehouse") ||
-                StringUtils.containsIgnoreCase(rawType, "DWH"))  {
+                StringUtils.containsIgnoreCase(rawType, "DWH")) {
             plainType = "Data Warehouse";
         } else if (StringUtils.containsIgnoreCase(rawType, "Teacher")) {
             plainType = "Teacher";
@@ -292,10 +292,22 @@ public class Collector {
             plainType = "OPS";
         } else if (StringUtils.containsIgnoreCase(rawType, "Support")) {
             plainType = "Support";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Quality Control")) {
+        } else if (StringUtils.containsIgnoreCase(rawType, "Quality Control") ||
+                StringUtils.containsIgnoreCase(rawType, "QС")) {
             plainType = "Quality Control";
         } else if (StringUtils.containsIgnoreCase(rawType, "Procurement")) {
             plainType = "Procurement";
+        } else if (StringUtils.containsIgnoreCase(rawType, "UX")) {
+            plainType = "UX";
+        } else if (StringUtils.containsIgnoreCase(rawType, "Hadoop")) {
+            plainType = "Hadoop";
+        } else if (StringUtils.containsIgnoreCase(rawType, "Database administrator") ||
+                StringUtils.containsIgnoreCase(rawType, "DBA")) {
+            plainType = "Database administrator";
+        } else if (StringUtils.containsIgnoreCase(rawType, "Data Engineer")) {
+            plainType = "Data Engineer";
+        } else if (StringUtils.containsIgnoreCase(rawType, "Marketing")) {
+            plainType = "Marketing";
         }
 
 
