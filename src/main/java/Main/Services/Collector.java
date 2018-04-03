@@ -6,15 +6,26 @@ import Main.Repository.VacancyRepository;
 import Main.Tools.PageTool;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.geonames.*;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 
 @Service
 public class Collector {
@@ -75,9 +86,27 @@ public class Collector {
                         time = LocalDateTime.now();
                         System.out.println(time);
 
-
                         title = htmlElement.getTextContent().trim();
                         System.out.println(title);
+
+                        if (containsNonEnglish(title)) {
+                            String apiKey = "";
+                            String translateApiUrl = "https://translate.yandex.net/api/v1.5/tr.json/translate?";
+                            translateApiUrl += "&key=" + apiKey;
+                            translateApiUrl += "&lang=" + "en";
+                            translateApiUrl += "&text=" + URLEncoder.encode(title,"UTF-8");
+                            String json = IOUtils.toString(new URL(translateApiUrl), "UTF-8");
+                            JSONObject jsonObject = (JSONObject) JSONValue.parseWithException(json);
+                            System.out.println(jsonObject.get("text"));
+                        }
+
+//                        // get the title
+//                        System.out.println(jsonObject.get("title"));
+//                        // get the data
+//                        JSONArray genreArray = (JSONArray) jsonObject.get("dataset");
+//                        // get the first genre
+//                        JSONObject firstGenre = (JSONObject) genreArray.get(0);
+//                        System.out.println(firstGenre.get("genre_title"));
 
                         companyName = company.getCompanyName();
                         System.out.println(companyName);
@@ -115,12 +144,23 @@ public class Collector {
 
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
             }
             PageTool.closeClient();
         }
 
         return vacanciesReady;
+    }
+
+    private boolean containsNonEnglish(String text) {
+        return !(text.matches("[\\p{Punct}\\p{Space}\\p{IsLatin}]+$"));
+//        Pattern pattern = Pattern.compile("\\W");
+//        Matcher matcher = pattern.matcher(text);
+//        return matcher.find();
     }
 
     private HtmlPage paginationClick(HtmlPage page, String paginationSelector) {
