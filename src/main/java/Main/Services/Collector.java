@@ -87,33 +87,12 @@ public class Collector {
                         System.out.println(time);
 
                         title = htmlElement.getTextContent().trim();
-                        System.out.println(title);
-
                         if (containsNonEnglish(title)) {
                             title = title.replaceAll("[()]", "");
-//                            String[] titleSplit= title.split("[\\p{Punct}\\p{Space}\\p{Digit}\\P{IsLatin} –]+$");
-//                            for(String string : titleSplit) {
-//                                System.out.println(string);
-//                            }
-                            String apiKey = "";
-                            String translateApiUrl = "https://translate.yandex.net/api/v1.5/tr.json/translate?";
-                            translateApiUrl += "&key=" + apiKey;
-                            translateApiUrl += "&lang=" + "en";
-                            title = URLEncoder.encode(title,"UTF-8");
-                            translateApiUrl += "&text=" + title;
-                            System.out.println(title);
-                            String json = IOUtils.toString(new URL(translateApiUrl));
-                            JSONObject jsonObject = (JSONObject) JSONValue.parseWithException(json);
-                            System.out.println(((JSONArray)jsonObject.get("text")).get(0));
+                            String language = detectLanguage(title);
+                            title = translateTitle(title, language);
                         }
-
-//                        // get the title
-//                        System.out.println(jsonObject.get("title"));
-//                        // get the data
-//                        JSONArray genreArray = (JSONArray) jsonObject.get("dataset");
-//                        // get the first genre
-//                        JSONObject firstGenre = (JSONObject) genreArray.get(0);
-//                        System.out.println(firstGenre.get("genre_title"));
+                        System.out.println(title);
 
                         companyName = company.getCompanyName();
                         System.out.println(companyName);
@@ -121,24 +100,7 @@ public class Collector {
                         location = "Undefined";
                         List<HtmlElement> list = htmlElement.getByXPath(company.getCitySelector());
                         if (!list.isEmpty()) {
-                            if (company.getCompanyName().equals("djinni")) {
-                                location = StringUtils.substringAfterLast((list.get(0)).getTextContent(), "\u00a0");
-                                location = StringUtils.substringBefore(location, ",").trim();
-                                if (location.contains(".")) {
-                                    location = StringUtils.substringAfter(location, ".").trim();
-                                }
-                            } else {
-                                location = StringUtils.substringBefore((list.get(0)).getTextContent(), ",");
-                                System.out.println(location);
-                                if (location.contains(".")) {
-                                    location = StringUtils.substringAfter(location, ".").trim();
-                                }
-                                System.out.println(location);
-
-                            }
-                            if (vacancyRepository.findByLocation(location).size() == 0) {
-                                location = plainCity(location);
-                            }
+                            location = getLocation(company, list);
                         }
                         System.out.println(location);
 
@@ -151,10 +113,6 @@ public class Collector {
 
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (ParseException e) {
-                    e.printStackTrace();
                 }
             }
             PageTool.closeClient();
@@ -164,10 +122,48 @@ public class Collector {
     }
 
     private boolean containsNonEnglish(String text) {
-        return !(text.matches("[\\p{Punct}\\p{Space}\\p{Digit}\\p{IsLatin} –]+$"));
-//        Pattern pattern = Pattern.compile("\\W");
-//        Matcher matcher = pattern.matcher(text);
-//        return matcher.find();
+        return !(text.matches("[\\p{Punct}\\p{Space}\\p{Digit}a-zA-Z –]+$"));
+    }
+
+    private String apiKey = "";
+
+    private String detectLanguage(String text) {
+        try {
+            String nonEnglishPart = text.replaceAll("[\\p{Punct}\\p{Digit}a-zA-Z]", "");
+            String detectApiUrl = "https://translate.yandex.net/api/v1.5/tr.json/detect?";
+            detectApiUrl += "&key=" + apiKey;
+            nonEnglishPart = URLEncoder.encode(nonEnglishPart, "UTF-8");
+            detectApiUrl += "&text=" + nonEnglishPart;
+            String json = IOUtils.toString(new URL(detectApiUrl), "UTF-8");
+            JSONObject jsonObject = (JSONObject) JSONValue.parseWithException(json);
+            return jsonObject.get("lang").toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+            System.out.println("Can't parse");
+        }
+        return "en";
+    }
+
+    private String translateTitle(String text, String language) {
+        try {
+            String translateApiUrl = "https://translate.yandex.net/api/v1.5/tr.json/translate?";
+            translateApiUrl += "&key=" + apiKey;
+            translateApiUrl += "&lang=" + language + "-en";
+            String titleEncoded = URLEncoder.encode(text, "UTF-8");
+            translateApiUrl += "&text=" + titleEncoded;
+            String json = IOUtils.toString(new URL(translateApiUrl), "UTF-8");
+            JSONObject jsonObject = (JSONObject) JSONValue.parseWithException(json);
+            text = ((JSONArray) jsonObject.get("text")).get(0).toString();
+            return text;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+            System.out.println("Can't parse");
+        }
+        return text;
     }
 
     private HtmlPage paginationClick(HtmlPage page, String paginationSelector) {
@@ -187,8 +183,30 @@ public class Collector {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("IO exception");
         }
         return page;
+    }
+
+    private String getLocation(Company company, List<HtmlElement> list) {
+        String location;
+        if (company.getCompanyName().equals("djinni")) {
+            location = StringUtils.substringAfterLast((list.get(0)).getTextContent(), "\u00a0");
+            location = StringUtils.substringBefore(location, ",").trim();
+            if (location.contains(".")) {
+                location = StringUtils.substringAfter(location, ".").trim();
+            }
+        } else {
+            location = StringUtils.substringBefore((list.get(0)).getTextContent(), ",");
+            if (location.contains(".")) {
+                location = StringUtils.substringAfter(location, ".").trim();
+            }
+        }
+        if (vacancyRepository.findByLocation(location).size() == 0) {
+            location = plainCity(location);
+        }
+
+        return location;
     }
 
     private String plainCity(String rawCity) {
@@ -225,7 +243,7 @@ public class Collector {
             plainType = ".NET";
         } else if (StringUtils.containsIgnoreCase(rawType, "Python")) {
             plainType = "Python";
-        } else if (StringUtils.containsIgnoreCase(rawType, "UI")) {
+        } else if (StringUtils.containsIgnoreCase(rawType, "UI ")) {
             plainType = "UI";
         } else if (StringUtils.containsIgnoreCase(rawType, "iOS")) {
             plainType = "iOS";
