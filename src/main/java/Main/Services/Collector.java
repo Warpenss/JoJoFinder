@@ -90,14 +90,21 @@ public class Collector {
                         System.out.println(title);
 
                         if (containsNonEnglish(title)) {
-                            String apiKey = "";
+                            title = title.replaceAll("[()]", "");
+//                            String[] titleSplit= title.split("[\\p{Punct}\\p{Space}\\p{Digit}\\P{IsLatin} –]+$");
+//                            for(String string : titleSplit) {
+//                                System.out.println(string);
+//                            }
+                            String apiKey = "trnsl.1.1.20180403T143639Z.e294537465bbaad3.1bd415b5ff1fda330902ffa0013c5a50f52bd09e";
                             String translateApiUrl = "https://translate.yandex.net/api/v1.5/tr.json/translate?";
                             translateApiUrl += "&key=" + apiKey;
                             translateApiUrl += "&lang=" + "en";
-                            translateApiUrl += "&text=" + URLEncoder.encode(title,"UTF-8");
-                            String json = IOUtils.toString(new URL(translateApiUrl), "UTF-8");
+                            title = URLEncoder.encode(title,"UTF-8");
+                            translateApiUrl += "&text=" + title;
+                            System.out.println(title);
+                            String json = IOUtils.toString(new URL(translateApiUrl));
                             JSONObject jsonObject = (JSONObject) JSONValue.parseWithException(json);
-                            System.out.println(jsonObject.get("text"));
+                            System.out.println(((JSONArray)jsonObject.get("text")).get(0));
                         }
 
 //                        // get the title
@@ -157,7 +164,7 @@ public class Collector {
     }
 
     private boolean containsNonEnglish(String text) {
-        return !(text.matches("[\\p{Punct}\\p{Space}\\p{IsLatin}]+$"));
+        return !(text.matches("[\\p{Punct}\\p{Space}\\p{Digit}\\p{IsLatin} –]+$"));
 //        Pattern pattern = Pattern.compile("\\W");
 //        Matcher matcher = pattern.matcher(text);
 //        return matcher.find();
