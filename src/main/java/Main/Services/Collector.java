@@ -95,7 +95,7 @@ public class Collector {
 //                            for(String string : titleSplit) {
 //                                System.out.println(string);
 //                            }
-                            String apiKey = "trnsl.1.1.20180403T143639Z.e294537465bbaad3.1bd415b5ff1fda330902ffa0013c5a50f52bd09e";
+                            String apiKey = "";
                             String translateApiUrl = "https://translate.yandex.net/api/v1.5/tr.json/translate?";
                             translateApiUrl += "&key=" + apiKey;
                             translateApiUrl += "&lang=" + "en";
