@@ -20,15 +20,15 @@ class CompanyList {
 //
 //        ));
 //
-//        companies.add(new Company("LUXOFT",
-//                "https://career.luxoft.com/job-opportunities/",
-//                "..//a[@data-offers='title']",
-//                "//a[@data-offers='title']",
-//                "../..//span[@itemprop='jobLocation']",
-//                "../..//span[@class='label label-default']",
-//                "LOAD",
-//                "//a[@title='Next']"
-//        ));
+        companies.add(new Company("LUXOFT",
+                "https://career.luxoft.com/job-opportunities/",
+                "..//a[@data-offers='title']",
+                "//a[@data-offers='title']",
+                "../..//span[@itemprop='jobLocation']",
+                "../..//span[@class='label label-default']",
+                "PAGE",
+                "//a[@title='Next']"
+        ));
 //
 //        companies.add(new Company("SoftServe",
 //                "https://career.softserveinc.com/en-us/vacancies",
@@ -40,15 +40,15 @@ class CompanyList {
 //                "//ul[@class='pagination']/li[last()]/a"
 //        ));
 
-        companies.add(new Company("DOU",
-                "https://jobs.dou.ua/vacancies/?switch_lang=en",
-                "..//a[@class='vt']",
-                "//a[@class='vt']",
-                "..//span[@class='cities']",
-                "FROM_TITLE",
-                "LOAD",
-                "//div[@class='more-btn']/a"
-        ));
+//        companies.add(new Company("DOU",
+//                "https://jobs.dou.ua/vacancies/?switch_lang=en",
+//                "..//a[@class='vt']",
+//                "//a[@class='vt']",
+//                "..//span[@class='cities']",
+//                "FROM_TITLE",
+//                "LOAD",
+//                "//div[@class='more-btn']/a"
+//        ));
 
 //        companies.add(new Company("djinni",
 //                "https://djinni.co/jobs/?lang=en",
