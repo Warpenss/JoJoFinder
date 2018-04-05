@@ -12,12 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.net.MalformedURLException;
 import java.util.*;
 
 @Controller
 public class MainController {
-    private VacancyRepository vacancyRepository;
+    private final VacancyRepository vacancyRepository;
 
     @Autowired
     public MainController(VacancyRepository vacancyRepository) {

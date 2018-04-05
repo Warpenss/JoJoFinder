@@ -14,7 +14,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -23,14 +22,12 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 @Service
 public class Collector {
 
-    private VacancyRepository vacancyRepository;
+    private final VacancyRepository vacancyRepository;
 
     @Autowired
     public Collector(VacancyRepository vacancyRepository) {
@@ -82,13 +79,11 @@ public class Collector {
                     System.out.println(url);
 
                     if (vacancyRepository.findByUrl(url).size() == 0) {
-
                         time = LocalDateTime.now();
                         System.out.println(time);
 
                         title = htmlElement.getTextContent().trim();
                         if (containsNonEnglish(title)) {
-                            title = title.replaceAll("[()]", "");
                             String language = detectLanguage(title);
                             title = translateTitle(title, language);
                         }
@@ -104,7 +99,11 @@ public class Collector {
                         }
                         System.out.println(location);
 
-                        type = ((HtmlElement) htmlElement.getByXPath(company.getTypeSelector()).get(0)).getTextContent();
+                        if (company.getTypeSelector().equals("FROM_TITLE")) {
+                            type = title;
+                        } else {
+                            type = ((HtmlElement) htmlElement.getByXPath(company.getTypeSelector()).get(0)).getTextContent();
+                        }
                         type = plainType(type);
                         System.out.println(type);
 
@@ -129,28 +128,35 @@ public class Collector {
 
     private String detectLanguage(String text) {
         try {
+            text = text.replaceAll("[()]", "");
             String nonEnglishPart = text.replaceAll("[\\p{Punct}\\p{Digit}a-zA-Z]", "");
+            System.out.println(nonEnglishPart);
             String detectApiUrl = "https://translate.yandex.net/api/v1.5/tr.json/detect?";
             detectApiUrl += "&key=" + apiKey;
             nonEnglishPart = URLEncoder.encode(nonEnglishPart, "UTF-8");
             detectApiUrl += "&text=" + nonEnglishPart;
             String json = IOUtils.toString(new URL(detectApiUrl), "UTF-8");
             JSONObject jsonObject = (JSONObject) JSONValue.parseWithException(json);
-            return jsonObject.get("lang").toString();
+            String language = jsonObject.get("lang").toString();
+            if (language.isEmpty()) {
+                return "en-";
+            } else {
+                return language + "-";
+            }
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ParseException e) {
             e.printStackTrace();
             System.out.println("Can't parse");
         }
-        return "en";
+        return "";
     }
 
     private String translateTitle(String text, String language) {
         try {
             String translateApiUrl = "https://translate.yandex.net/api/v1.5/tr.json/translate?";
             translateApiUrl += "&key=" + apiKey;
-            translateApiUrl += "&lang=" + language + "-en";
+            translateApiUrl += "&lang=" + language + "en";
             String titleEncoded = URLEncoder.encode(text, "UTF-8");
             translateApiUrl += "&text=" + titleEncoded;
             String json = IOUtils.toString(new URL(translateApiUrl), "UTF-8");
@@ -233,6 +239,10 @@ public class Collector {
 
         if (StringUtils.containsIgnoreCase(rawType, "JavaScript")) {
             plainType = "JavaScript";
+        } else if (StringUtils.containsIgnoreCase(rawType, "Full Stack") ||
+                StringUtils.containsIgnoreCase(rawType, "Fullstack") ||
+                StringUtils.containsIgnoreCase(rawType, "Full-stack"))    {
+            plainType = "Full Stack";
         } else if (StringUtils.containsIgnoreCase(rawType, "Java")) {
             plainType = "Java";
         } else if (StringUtils.containsIgnoreCase(rawType, "C++")) {
