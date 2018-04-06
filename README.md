@@ -1,10 +1,8 @@
 # JoJoFinder  
 http://jojofinder.tk/  
   
-This project collects vacancies from Epam, Luxoft and Softserve.  
-I have plans to add:  
-1. Filter by:  City  Country  Language  Years of experience  
-2. New companies
-3. Other jobs aggregators
+This service collects vacancies from Epam, Luxoft and Softserve and other sites.  
+It have fitler by Location and Type.  
+I have plans to add mechanic of multiple types and locations.  
   
-Used: Java, HtmlUnit, Spring Boot(Data, MVC), PostgreSQL, AWS, Maven, Javascript, Bootstrap, Html, CSS, Git, Thymeleaf, Jsoup
+Used: Java, HtmlUnit, GeonamesAPI, YandexTranslateAPI, Spring Boot(Data, MVC), PostgreSQL, AWS, Maven, Javascript, Bootstrap, Html, CSS, Git, Thymeleaf, Jsoup
