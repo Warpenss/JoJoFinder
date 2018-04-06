@@ -125,7 +125,7 @@
                               <td>
                                  <h2>
                                     <small>
-                                       <dl class="dropdown cityFilter">
+                                       <dl class="dropdown locationFilter">
                                           <dt>
                                              <a>
                                                 <span class="hida">Location</span>
@@ -135,7 +135,7 @@
                                           <dd>
                                              <div class="mutliSelect">
                                                 <ul>
-                                                   <li th:each="location : ${cities}">
+                                                   <li th:each="location : ${locations}">
                                                       <input type="checkbox" name="location" th:value="${location}" data-th-text="${location}"/>
                                                    </li>
                                                 </ul>
@@ -148,17 +148,17 @@
                               <td>
                                  <h2>
                                     <small>
-                                       <dl class="dropdown languageFilter">
+                                       <dl class="dropdown typeFilter">
                                           <dt>
                                              <a>
-                                                <span class="hida">Language</span>
+                                                <span class="hida">Type</span>
                                                 <p class="multiSel"></p>
                                              </a>
                                           </dt>
                                           <dd>
                                              <div class="mutliSelect">
                                                 <ul >
-                                                   <li th:each="type : ${languages}">
+                                                   <li th:each="type : ${types}">
                                                       <input type="checkbox" name="type" th:value="${type}" data-th-text="${type}"/>
                                                    </li>
                                                 </ul>
@@ -178,7 +178,7 @@
                      </table>
                   </form>
                   <p>
-                     <span th:text="${#lists.size(jobs)}"></span>
+                     <span th:text="${#lists.size(vacancies)}"></span>
                      found
                   </p>
                   <div class="col-md-12 text-center">
@@ -186,32 +186,32 @@
                   </div>
                   <table class="table responsive-table">
                      <tbody id="tableBody">
-                        <tr data-th-each="job : ${jobs}">
-                           <th class="job">
-                              <a th:href="${job.url}" target="_blank">
+                        <tr data-th-each="vacancy : ${vacancies}">
+                           <th class="vacancy">
+                              <a th:href="${vacancy.url}" target="_blank">
                                  <h2>
-                                    <small data-th-text="${job.title}"></small>
+                                    <small data-th-text="${vacancy.title}"></small>
                                  </h2>
                               </a>
                            </th>
                            <td>
                               <h2>
-                                 <small data-th-text="${job.displayDate}" class="time"></small>
+                                 <small data-th-text="${vacancy.displayDate}" class="time"></small>
                               </h2>
                            </td>
                            <td>
                               <h2>
-                                 <small data-th-text="${job.company}" class="company"></small>
+                                 <small data-th-text="${vacancy.company}" class="company"></small>
                               </h2>
                            </td>
                            <td>
                               <h2>
-                                 <small data-th-text="${job.location}" class="location"></small>
+                                 <small data-th-text="${vacancy.location}" class="location"></small>
                               </h2>
                            </td>
                            <td>
                               <h2>
-                                 <small data-th-text="${job.type}" class="type"></small>
+                                 <small data-th-text="${vacancy.type}" class="type"></small>
                               </h2>
                            </td>
                         </tr>
@@ -234,12 +234,8 @@
             <div class="row">
                <div class="col-lg-12">
                   <h1>About</h1>
-                  <p>Collecting vacancies from Epam, Luxoft and Softserve.</p>
-                  <p>I have plans to add a filter by:</p>
-                  <p>City</p>
-                  <p>Country</p>
-                  <p>Language</p>
-                  <p>Years of experience</p>
+                  <p>Collecting vacancies from Epam, Luxoft, Softserve and other sites.</p>
+                  <p>It has fitler by location and type</p>
                </div>
             </div>
          </div>

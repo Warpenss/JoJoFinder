@@ -3,7 +3,6 @@ package Main.Controllers;
 import Main.Entities.Vacancy;
 
 import Main.Repository.VacancyRepository;
-import Main.Services.Collector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,18 +22,17 @@ public class MainController {
         this.vacancyRepository = vacancyRepository;
     }
 
-    //Catches the "/" request, adds jobs attribute and redirect to index.html
+    //Catches the "/" request, adds vacancies attribute and redirect to index.html
     @RequestMapping("/")
     public String index(Model model) {
         //Get all vacancies from database
-        List<Vacancy> allJobs = vacancyRepository.findAll();
+        List<Vacancy> vacancies = vacancyRepository.findAll();
 
-        allJobs.sort(Comparator.comparing(Vacancy::getTime).reversed());
-        //Access list of jobs in html with this attribute
-        model.addAttribute("jobs", allJobs);
-
+        vacancies.sort(Comparator.comparing(Vacancy::getTime).reversed());
+        //Access list of vacancies in html with this attribute
+        model.addAttribute("vacancies", vacancies);
         model.addAttribute("companies", vacancyRepository.findDistinctCompany());
-        model.addAttribute("location", vacancyRepository.findDistinctLocation());
+        model.addAttribute("locations", vacancyRepository.findDistinctLocation());
         model.addAttribute("types", vacancyRepository.findDistinctType());
 
         return "index";
@@ -43,15 +41,13 @@ public class MainController {
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public String submit(@RequestParam MultiValueMap<String, String> params, Model model) {
 
-        List<Vacancy> jobsList = vacancyRepository.findByTitleIgnoreCaseContaining(params.getFirst("title"));
+        List<Vacancy> vacancies = vacancyRepository.findByTitleIgnoreCaseContaining(params.getFirst("title"));
 
         HashSet<Vacancy> resultCompany = new HashSet<>();
-        HashSet<Vacancy> resultCity = new HashSet<>();
-        HashSet<Vacancy> resultLanguage = new HashSet<>();
+        HashSet<Vacancy> resultLocation = new HashSet<>();
+        HashSet<Vacancy> resultType = new HashSet<>();
 
         boolean resultFlag = false;
-
-
 
         System.out.println(params);
 
@@ -59,9 +55,9 @@ public class MainController {
         {
             if (entry.getKey().equals("company")) {
                 for (String parameter : entry.getValue()) {
-                    for (Vacancy job : jobsList) {
-                        if (job.getCompany().equals(parameter)) {
-                            resultCompany.add(job);
+                    for (Vacancy vacancy : vacancies) {
+                        if (vacancy.getCompany().equals(parameter)) {
+                            resultCompany.add(vacancy);
                         }
                     }
                 }
@@ -70,67 +66,67 @@ public class MainController {
                 }
             }
 
-            if (entry.getKey().equals("city")) {
+            if (entry.getKey().equals("location")) {
                 for (String parameter : entry.getValue()) {
                     if (resultCompany.isEmpty()) {
-                        resultCompany.addAll(jobsList);
+                        resultCompany.addAll(vacancies);
                     }
-                    for (Vacancy job : resultCompany) {
-                        if (job.getLocation().equals(parameter)) {
-                            resultCity.add(job);
+                    for (Vacancy vacancy : resultCompany) {
+                        if (vacancy.getLocation().equals(parameter)) {
+                            resultLocation.add(vacancy);
                         }
                     }
                 }
-                if (resultCity.isEmpty()) {
+                if (resultLocation.isEmpty()) {
                     resultFlag = true;
                 }
             }
 
 
-            if (entry.getKey().equals("language")) {
+            if (entry.getKey().equals("type")) {
                 for (String parameter : entry.getValue()) {
-                    if (resultCity.isEmpty()) {
-                        resultCity.addAll(jobsList);
+                    if (resultLocation.isEmpty()) {
+                        resultLocation.addAll(vacancies);
                     }
-                    for (Vacancy job : resultCity) {
-                        if (job.getType().equals(parameter)) {
-                            resultLanguage.add(job);
+                    for (Vacancy vacancy : resultLocation) {
+                        if (vacancy.getType().equals(parameter)) {
+                            resultType.add(vacancy);
                         }
                     }
 
                 }
-                if (resultLanguage.isEmpty()) {
+                if (resultType.isEmpty()) {
                     resultFlag = true;
                 }
             }
         }
 
-        if (resultLanguage.isEmpty() && !resultFlag) {
-            resultLanguage.addAll(resultCity);
+        if (resultType.isEmpty() && !resultFlag) {
+            resultType.addAll(resultLocation);
         }
-        if (resultLanguage.isEmpty() && !resultFlag) {
-            resultLanguage.addAll(resultCompany);
+        if (resultType.isEmpty() && !resultFlag) {
+            resultType.addAll(resultCompany);
         }
-        if (resultLanguage.isEmpty() && !resultFlag) {
-            resultLanguage.addAll(jobsList);
+        if (resultType.isEmpty() && !resultFlag) {
+            resultType.addAll(vacancies);
         }
 
-        jobsList.clear();
-        jobsList.addAll(resultLanguage);
+        vacancies.clear();
+        vacancies.addAll(resultType);
 
-        jobsList.sort(Comparator.comparing(Vacancy::getTime).reversed());
-        model.addAttribute("jobs", jobsList);
+        vacancies.sort(Comparator.comparing(Vacancy::getTime).reversed());
+        model.addAttribute("vacancies", vacancies);
         model.addAttribute("companies", vacancyRepository.findDistinctCompany());
-        model.addAttribute("cities", vacancyRepository.findDistinctLocation());
-        model.addAttribute("languages", vacancyRepository.findDistinctType());
+        model.addAttribute("locations", vacancyRepository.findDistinctLocation());
+        model.addAttribute("types", vacancyRepository.findDistinctType());
 
         return "index";
     }
 
-    @RequestMapping("/test")
-    public String test(Model model) {
-        ArrayList<Vacancy> vacancies = new Collector(vacancyRepository).collect();
-        model.addAttribute("vacancies", vacancies);
-        return "test";
-    }
+//    @RequestMapping("/test")
+//    public String test(Model model) {
+//        ArrayList<Vacancy> vacancies = new Collector(vacancyRepository).collect();
+//        model.addAttribute("vacancies", vacancies);
+//        return "test";
+//    }
 }

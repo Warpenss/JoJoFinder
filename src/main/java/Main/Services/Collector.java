@@ -34,8 +34,10 @@ public class Collector {
         this.vacancyRepository = vacancyRepository;
     }
 
-    public ArrayList<Vacancy> collect() {
-        ArrayList<Vacancy> vacanciesReady = new ArrayList<>();
+    public void collect() {
+
+//    public ArrayList<Vacancy> collect() {
+//        ArrayList<Vacancy> vacanciesReady = new ArrayList<>();
         ArrayList<Company> companies = CompanyList.getCompanies();
 
         for (Company company : companies) {
@@ -55,7 +57,7 @@ public class Collector {
                 if (company.getCompanyName().equals("djinni")) {
                     for (int i = 2; i < 10; i++) {
                         vacancies.addAll(page.getByXPath(company.getTitleSelector()));
-                        page = PageTool.getPage("https://djinni.co/jobs/?lang=en&page=" + i);
+                        page = PageTool.getPage("https://djinni.co/vacancies/?lang=en&page=" + i);
                     }
                 } else {
                     for (int i = 0; i < 10; i++) {
@@ -108,7 +110,9 @@ public class Collector {
                         type = plainType(type);
                         System.out.println(type);
 
-                        vacanciesReady.add(new Vacancy(time, title, url, companyName, location, type));
+//                        vacanciesReady.add(new Vacancy(time, title, url, companyName, location, type));
+
+                        vacancyRepository.save(new Vacancy(time, title, url, companyName, location, type));
                     }
 
                 } catch (MalformedURLException e) {
@@ -118,19 +122,19 @@ public class Collector {
             PageTool.closeClient();
         }
 
-        return vacanciesReady;
+//        return vacanciesReady;
     }
 
     private boolean containsNonEnglish(String text) {
         return !(text.matches("[\\p{Punct}\\p{Space}\\p{Digit}a-zA-Z –]+$"));
     }
 
-    private String apiKey = "";
+    private final String apiKey = "";
 
     private String detectLanguage(String text) {
         try {
             text = text.replaceAll("[()]", "");
-            text = text.replaceAll("[\u00A0\u2007\u202F]"," ");
+            text = text.replaceAll("[\u00A0\u2007\u202F]", " ");
             String nonEnglishPart = text.replaceAll("[\\p{Punct}\\p{Digit}a-zA-Z]", "");
             System.out.println(nonEnglishPart);
             String detectApiUrl = "https://translate.yandex.net/api/v1.5/tr.json/detect?";
@@ -241,7 +245,7 @@ public class Collector {
         String plainType = "Other";
 
         if (StringUtils.containsIgnoreCase(rawType, "JavaScript") ||
-                StringUtils.containsIgnoreCase(rawType, "JS "))  {
+                StringUtils.containsIgnoreCase(rawType, "JS ")) {
             plainType = "JavaScript";
         } else if (StringUtils.containsIgnoreCase(rawType, "Full Stack") ||
                 StringUtils.containsIgnoreCase(rawType, "Fullstack") ||
@@ -286,7 +290,7 @@ public class Collector {
         } else if (StringUtils.containsIgnoreCase(rawType, "Designer")) {
             plainType = "Designer";
         } else if (StringUtils.containsIgnoreCase(rawType, "DevOps") ||
-                StringUtils.containsIgnoreCase(rawType, "Development Operations"))  {
+                StringUtils.containsIgnoreCase(rawType, "Development Operations")) {
             plainType = "DevOps";
         } else if (StringUtils.containsIgnoreCase(rawType, "Front-end") ||
                 StringUtils.containsIgnoreCase(rawType, "Front end") ||
@@ -376,7 +380,7 @@ public class Collector {
         } else if (StringUtils.containsIgnoreCase(rawType, "OPS")) {
             plainType = "OPS";
         } else if (StringUtils.containsIgnoreCase(rawType, "Support") ||
-                StringUtils.containsIgnoreCase(rawType, "SLS"))  {
+                StringUtils.containsIgnoreCase(rawType, "SLS")) {
             plainType = "Support";
         } else if (StringUtils.containsIgnoreCase(rawType, "Quality Control") ||
                 StringUtils.containsIgnoreCase(rawType, "QС")) {
@@ -405,7 +409,7 @@ public class Collector {
         } else if (StringUtils.containsIgnoreCase(rawType, "Magento")) {
             plainType = "Magento";
         } else if (StringUtils.containsIgnoreCase(rawType, "Copywriter") ||
-                StringUtils.containsIgnoreCase(rawType, "Writer"))  {
+                StringUtils.containsIgnoreCase(rawType, "Writer")) {
             plainType = "Writer";
         } else if (StringUtils.containsIgnoreCase(rawType, "Drupal")) {
             plainType = "Drupal";

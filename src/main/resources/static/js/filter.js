@@ -18,15 +18,15 @@ $(document).bind('click', function(e) {
 
 $('.companyFilter .mutliSelect input[type="checkbox"]').on('click', function() {
 
-    var city = $(this).closest('.companyFilter .mutliSelect').find('.companyFilter input[type="checkbox"]').val(),
-        city = $(this).val() + ",";
+    var company = $(this).closest('.companyFilter .mutliSelect').find('.companyFilter input[type="checkbox"]').val(),
+        company = $(this).val() + ",";
 
     if ($(this).is(':checked')) {
-        var html = '<span city="' + city + '">' + city + '</span>';
+        var html = '<span company="' + company + '">' + company + '</span>';
         $('.companyFilter .multiSel').append(html);
         $(".companyFilter .hida").hide();
     } else {
-        $('span[city="' + city + '"]').remove();
+        $('span[company="' + company + '"]').remove();
         var ret = $(".companyFilter .hida");
         $('.companyFilter .dropdown dt a').append(ret);
         if ($('.companyFilter .multiSel').has('span').length == 0) {
@@ -37,76 +37,76 @@ $('.companyFilter .mutliSelect input[type="checkbox"]').on('click', function() {
 
 ///////////////////////////////////////////////////////////
 
-$(".dropdown.cityFilter dt a").on('click', function() {
-    $(".dropdown.cityFilter dd ul").slideToggle('fast');
+$(".dropdown.locationFilter dt a").on('click', function() {
+    $(".dropdown.locationFilter dd ul").slideToggle('fast');
 });
 
-$(".dropdown.cityFilter dd ul li a").on('click', function() {
-    $(".dropdown.cityFilter dd ul").hide();
+$(".dropdown.locationFilter dd ul li a").on('click', function() {
+    $(".dropdown.locationFilter dd ul").hide();
 });
 
 function getSelectedValue(id) {
-    return $("#" + id).find(".cityFilter dt a span.value").html();
+    return $("#" + id).find(".locationFilter dt a span.value").html();
 }
 
 $(document).bind('click', function(e) {
     var $clicked = $(e.target);
-    if (!$clicked.parents().hasClass("cityFilter")) $(".dropdown.cityFilter dd ul").hide();
+    if (!$clicked.parents().hasClass("locationFilter")) $(".dropdown.locationFilter dd ul").hide();
 });
 
-$('.cityFilter .mutliSelect input[type="checkbox"]').on('click', function() {
+$('.locationFilter .mutliSelect input[type="checkbox"]').on('click', function() {
 
-    var city = $(this).closest('.cityFilter .mutliSelect').find('.cityFilter input[type="checkbox"]').val(),
-        city = $(this).val() + ",";
+    var location = $(this).closest('.locationFilter .mutliSelect').find('.locationFilter input[type="checkbox"]').val(),
+        location = $(this).val() + ",";
 
     if ($(this).is(':checked')) {
-        var html = '<span city="' + city + '">' + city + '</span>';
-        $('.cityFilter .multiSel').append(html);
-        $(".cityFilter .hida").hide();
+        var html = '<span locationy="' + location + '">' + location + '</span>';
+        $('.locationyFilter .multiSel').append(html);
+        $(".locationyFilter .hida").hide();
     } else {
-        $('span[city="' + city + '"]').remove();
-        var ret = $(".cityFilter .hida");
-        $('.cityFilter .dropdown dt a').append(ret);
-        if ($('.cityFilter .multiSel').has('span').length == 0) {
-            $(".cityFilter .hida").show();
+        $('span[location="' + location + '"]').remove();
+        var ret = $(".locationyFilter .hida");
+        $('.locationyFilter .dropdown dt a').append(ret);
+        if ($('.locationyFilter .multiSel').has('span').length == 0) {
+            $(".locationyFilter .hida").show();
         }
     }
 });
 
 ///////////////////////////////////////////////////////////
 
-$(".dropdown.languageFilter dt a").on('click', function() {
-    $(".dropdown.languageFilter dd ul").slideToggle('fast');
+$(".dropdown.typeFilter dt a").on('click', function() {
+    $(".dropdown.typeFilter dd ul").slideToggle('fast');
 });
 
-$(".dropdown.languageFilter dd ul li a").on('click', function() {
-    $(".dropdown.languageFilter dd ul").hide();
+$(".dropdown.typeFilter dd ul li a").on('click', function() {
+    $(".dropdown.typeFilter dd ul").hide();
 });
 
 function getSelectedValue(id) {
-    return $("#" + id).find(".languageFilter dt a span.value").html();
+    return $("#" + id).find(".typeFilter dt a span.value").html();
 }
 
 $(document).bind('click', function(e) {
     var $clicked = $(e.target);
-    if (!$clicked.parents().hasClass("languageFilter")) $(".dropdown.languageFilter dd ul").hide();
+    if (!$clicked.parents().hasClass("typeFilter")) $(".dropdown.typeFilter dd ul").hide();
 });
 
-$('.languageFilter .mutliSelect input[type="checkbox"]').on('click', function() {
+$('.typeFilter .mutliSelect input[type="checkbox"]').on('click', function() {
 
-    var language = $(this).closest('.languageFilter .mutliSelect').find('.languageFilter input[type="checkbox"]').val(),
-        language = $(this).val() + ",";
+    var type = $(this).closest('.typeFilter .mutliSelect').find('.typeFilter input[type="checkbox"]').val(),
+        type = $(this).val() + ",";
 
     if ($(this).is(':checked')) {
-        var html = '<span language="' + language + '">' + language + '</span>';
-        $('.languageFilter .multiSel').append(html);
-        $(".languageFilter .hida").hide();
+        var html = '<span type="' + type + '">' + type + '</span>';
+        $('.typeFilter .multiSel').append(html);
+        $(".typeFilter .hida").hide();
     } else {
-        $('span[language="' + language + '"]').remove();
-        var ret = $(".languageFilter .hida");
-        $('.languageFilter .dropdown dt a').append(ret);
-        if ($('.languageFilter .multiSel').has('span').length == 0) {
-            $(".languageFilter .hida").show();
+        $('span[type="' + type + '"]').remove();
+        var ret = $(".typeFilter .hida");
+        $('.typeFilter .dropdown dt a').append(ret);
+        if ($('.typeFilter .multiSel').has('span').length == 0) {
+            $(".typeFilter .hida").show();
         }
     }
 });
