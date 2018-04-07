@@ -383,8 +383,6 @@ public class Collector {
             plainType = "Splunk";
         } else if (StringUtils.containsIgnoreCase(rawType, "Tableau")) {
             plainType = "Tableau";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Business Intelligence")) {
-            plainType = "Business Intelligence";
         } else if (StringUtils.containsIgnoreCase(rawType, "Data Warehouse") ||
                 StringUtils.containsIgnoreCase(rawType, "DWH")) {
             plainType = "Data Warehouse";

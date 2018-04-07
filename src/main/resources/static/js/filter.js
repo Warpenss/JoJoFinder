@@ -16,15 +16,16 @@ $(document).bind('click', function(e) {
     if (!$clicked.parents().hasClass("companyFilter")) $(".dropdown.companyFilter dd ul").hide();
 });
 
-$('.companyFilter .mutliSelect input[type="checkbox"]').on('click', function() {
+$('.companyFilter .multiSelect input[type="checkbox"]').on('click', function() {
 
-    var company = $(this).closest('.companyFilter .mutliSelect').find('.companyFilter input[type="checkbox"]').val(),
+    var company = $(this).closest('.companyFilter .multiSelect').find('.companyFilter input[type="checkbox"]').val(),
         company = $(this).val() + ",";
 
     if ($(this).is(':checked')) {
         var html = '<span company="' + company + '">' + company + '</span>';
         $('.companyFilter .multiSel').append(html);
         $(".companyFilter .hida").hide();
+        $(this).parent().css("background","#31414a");
     } else {
         $('span[company="' + company + '"]').remove();
         var ret = $(".companyFilter .hida");
@@ -32,6 +33,7 @@ $('.companyFilter .mutliSelect input[type="checkbox"]').on('click', function() {
         if ($('.companyFilter .multiSel').has('span').length == 0) {
             $(".companyFilter .hida").show();
         }
+        $(this).parent().css("background","");
     }
 });
 
@@ -54,15 +56,16 @@ $(document).bind('click', function(e) {
     if (!$clicked.parents().hasClass("locationFilter")) $(".dropdown.locationFilter dd ul").hide();
 });
 
-$('.locationFilter .mutliSelect input[type="checkbox"]').on('click', function() {
+$('.locationFilter .multiSelect input[type="checkbox"]').on('click', function() {
 
-    var location = $(this).closest('.locationFilter .mutliSelect').find('.locationFilter input[type="checkbox"]').val(),
+    var location = $(this).closest('.locationFilter .multiSelect').find('.locationFilter input[type="checkbox"]').val(),
         location = $(this).val() + ",";
 
     if ($(this).is(':checked')) {
         var html = '<span location="' + location + '">' + location + '</span>';
         $('.locationFilter .multiSel').append(html);
         $(".locationFilter .hida").hide();
+        $(this).parent().css("background","#31414a");
     } else {
         $('span[location="' + location + '"]').remove();
         var ret = $(".locationFilter .hida");
@@ -70,6 +73,7 @@ $('.locationFilter .mutliSelect input[type="checkbox"]').on('click', function() 
         if ($('.locationFilter .multiSel').has('span').length == 0) {
             $(".locationFilter .hida").show();
         }
+        $(this).parent().css("background","");
     }
 });
 
@@ -92,15 +96,16 @@ $(document).bind('click', function(e) {
     if (!$clicked.parents().hasClass("typeFilter")) $(".dropdown.typeFilter dd ul").hide();
 });
 
-$('.typeFilter .mutliSelect input[type="checkbox"]').on('click', function() {
+$('.typeFilter .multiSelect input[type="checkbox"]').on('click', function() {
 
-    var type = $(this).closest('.typeFilter .mutliSelect').find('.typeFilter input[type="checkbox"]').val(),
+    var type = $(this).closest('.typeFilter .multiSelect').find('.typeFilter input[type="checkbox"]').val(),
         type = $(this).val() + ",";
 
     if ($(this).is(':checked')) {
         var html = '<span type="' + type + '">' + type + '</span>';
         $('.typeFilter .multiSel').append(html);
         $(".typeFilter .hida").hide();
+        $(this).parent().css("background","#31414a");
     } else {
         $('span[type="' + type + '"]').remove();
         var ret = $(".typeFilter .hida");
@@ -108,5 +113,31 @@ $('.typeFilter .mutliSelect input[type="checkbox"]').on('click', function() {
         if ($('.typeFilter .multiSel').has('span').length == 0) {
             $(".typeFilter .hida").show();
         }
+        $(this).parent().css("background","");
     }
+});
+
+
+
+
+function multiSearch(input) {
+    // Declare variables
+    var filter, ul, li, i;
+    filter = input.value.toUpperCase();
+    ul = input.parentNode;
+    li = ul.getElementsByTagName('li');
+
+    // Loop through all list items, and hide those who don't match the search query
+    for (i = 0; i < li.length; i++) {
+        var index = li[i].textContent.toUpperCase().indexOf(filter);
+        if (index === 0) {
+            li[i].style.display = "";
+        } else {
+            li[i].style.display = "none";
+        }
+    }
+}
+
+$("div .multiSelect ul li").on('click', function() {
+    $(this).children('input')[0].click();
 });

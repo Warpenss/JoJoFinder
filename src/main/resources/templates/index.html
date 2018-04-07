@@ -110,11 +110,10 @@
                                              </a>
                                           </dt>
                                           <dd>
-                                             <div class="mutliSelect">
+                                             <div class="multiSelect">
                                                 <ul>
-                                                   <li th:each="company : ${companies}">
-                                                      <input type="checkbox" name="company" th:value="${company}" data-th-text="${company}" />
-                                                   </li>
+                                                    <input type="text" onkeyup="multiSearch(this)" placeholder="Search">
+                                                   <li th:each="company : ${companies}"><input type="checkbox" name="company" th:value="${company}" data-th-text="${company}" /></li>
                                                 </ul>
                                              </div>
                                           </dd>
@@ -133,11 +132,10 @@
                                              </a>
                                           </dt>
                                           <dd>
-                                             <div class="mutliSelect">
+                                             <div class="multiSelect">
                                                 <ul>
-                                                   <li th:each="location : ${locations}">
-                                                      <input type="checkbox" name="location" th:value="${location}" data-th-text="${location}"/>
-                                                   </li>
+                                                    <input type="text" onkeyup="multiSearch(this)" placeholder="Search">
+                                                   <li th:each="location : ${locations}"><input type="checkbox" name="location" th:value="${location}" data-th-text="${location}"/></li>
                                                 </ul>
                                              </div>
                                           </dd>
@@ -156,11 +154,10 @@
                                              </a>
                                           </dt>
                                           <dd>
-                                             <div class="mutliSelect">
+                                             <div class="multiSelect">
                                                 <ul >
-                                                   <li th:each="type : ${types}">
-                                                      <input type="checkbox" name="type" th:value="${type}" data-th-text="${type}"/>
-                                                   </li>
+                                                    <input type="text" onkeyup="multiSearch(this)" placeholder="Search">
+                                                    <li th:each="type : ${types}"><input type="checkbox" name="type" th:value="${type}" data-th-text="${type}"/></li>
                                                 </ul>
                                              </div>
                                           </dd>

@@ -27,13 +27,19 @@ public class MainController {
     public String index(Model model) {
         //Get all vacancies from database
         List<Vacancy> vacancies = vacancyRepository.findAll();
+        List<String> companies = vacancyRepository.findDistinctCompany();
+        List<String> locations = vacancyRepository.findDistinctLocation();
+        List<String> types = vacancyRepository.findDistinctType();
 
         vacancies.sort(Comparator.comparing(Vacancy::getTime).reversed());
-        //Access list of vacancies in html with this attribute
+        Collections.sort(companies);
+        Collections.sort(locations);
+        Collections.sort(types);
+
         model.addAttribute("vacancies", vacancies);
-        model.addAttribute("companies", vacancyRepository.findDistinctCompany());
-        model.addAttribute("locations", vacancyRepository.findDistinctLocation());
-        model.addAttribute("types", vacancyRepository.findDistinctType());
+        model.addAttribute("companies", companies);
+        model.addAttribute("locations", locations);
+        model.addAttribute("types", types);
 
         return "index";
     }
@@ -113,12 +119,19 @@ public class MainController {
 
         vacancies.clear();
         vacancies.addAll(resultType);
+        List<String> companies = vacancyRepository.findDistinctCompany();
+        List<String> locations = vacancyRepository.findDistinctLocation();
+        List<String> types = vacancyRepository.findDistinctType();
 
         vacancies.sort(Comparator.comparing(Vacancy::getTime).reversed());
+        Collections.sort(companies);
+        Collections.sort(locations);
+        Collections.sort(types);
+
         model.addAttribute("vacancies", vacancies);
-        model.addAttribute("companies", vacancyRepository.findDistinctCompany());
-        model.addAttribute("locations", vacancyRepository.findDistinctLocation());
-        model.addAttribute("types", vacancyRepository.findDistinctType());
+        model.addAttribute("companies", companies);
+        model.addAttribute("locations", locations);
+        model.addAttribute("types", types);
 
         return "index";
     }
