@@ -143,7 +143,7 @@ public class Collector {
 
     private String detectLanguage(String text) {
         try {
-            text = text.replaceAll("[()]", "");
+
             text = text.replaceAll("[\u00A0\u2007\u202F]", " ");
             String nonEnglishPart = text.replaceAll("[\\p{Punct}\\p{Digit}a-zA-Z]", "");
             System.out.println("Non english symbols: " + nonEnglishPart);
@@ -170,6 +170,7 @@ public class Collector {
 
     private String translateTitle(String text, String language) {
         try {
+            text = text.replaceAll("[()]", "");
             text = text.replaceAll("—", "-");
             String translateApiUrl = "https://translate.yandex.net/api/v1.5/tr.json/translate?";
             translateApiUrl += "&key=" + apiKey;
