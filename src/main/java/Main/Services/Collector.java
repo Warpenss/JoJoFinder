@@ -41,34 +41,35 @@ public class Collector {
         ArrayList<Company> companies = CompanyList.getCompanies();
 
         for (Company company : companies) {
-            PageTool.initiateClient();
+            try {
+                PageTool.initiateClient();
 
-            System.out.println(company.getCompanyName());
-            List<HtmlElement> vacancies = new ArrayList<>();
-            HtmlPage page = PageTool.getPage(company.getSearchUrl());
+                System.out.println(company.getCompanyName());
+                List<HtmlElement> vacancies = new ArrayList<>();
+                HtmlPage page = PageTool.getPage(company.getSearchUrl());
 
-            if (company.getPaginationType().equals("LOAD")) {
-                for (int i = 0; i < 50; i++) {
-                    page = paginationClick(page, company.getPaginationSelector());
-                }
-                vacancies = page.getByXPath(company.getTitleSelector());
-            } else if (company.getPaginationType().equals("PAGE")) {
-                // You must be logged in to see pages on djinni
-                if (company.getCompanyName().equals("djinni")) {
-                    for (int i = 2; i < 10; i++) {
-                        vacancies.addAll(page.getByXPath(company.getTitleSelector()));
-                        page = PageTool.getPage("https://djinni.co/vacancies/?lang=en&page=" + i);
-                    }
-                } else {
-                    for (int i = 0; i < 10; i++) {
-                        vacancies.addAll(page.getByXPath(company.getTitleSelector()));
+                if (company.getPaginationType().equals("LOAD")) {
+                    for (int i = 0; i < 50; i++) {
                         page = paginationClick(page, company.getPaginationSelector());
                     }
+                    vacancies = page.getByXPath(company.getTitleSelector());
+                } else if (company.getPaginationType().equals("PAGE")) {
+                    // You must be logged in to see pages on djinni
+                    if (company.getCompanyName().equals("djinni")) {
+                        for (int i = 2; i < 10; i++) {
+                            vacancies.addAll(page.getByXPath(company.getTitleSelector()));
+                            page = PageTool.getPage("https://djinni.co/jobs/?lang=en&page=" + i);
+                        }
+                    } else {
+                        for (int i = 0; i < 10; i++) {
+                            vacancies.addAll(page.getByXPath(company.getTitleSelector()));
+                            page = paginationClick(page, company.getPaginationSelector());
+                        }
+                    }
                 }
-            }
 
-            for (HtmlElement htmlElement : vacancies) {
-                try {
+                for (HtmlElement htmlElement : vacancies) {
+
                     LocalDateTime time;
                     String title;
                     String url;
@@ -79,6 +80,7 @@ public class Collector {
                     url = page.getFullyQualifiedUrl(((HtmlElement) htmlElement.getByXPath(company.getUrlSelector())
                             .get(0)).getAttribute("href")).toString();
                     System.out.println(url);
+
 
                     if (vacancyRepository.findByUrl(url).size() == 0) {
                         time = LocalDateTime.now();
@@ -110,16 +112,24 @@ public class Collector {
                         type = plainType(type);
                         System.out.println(type);
 
-//                        vacanciesReady.add(new Vacancy(time, title, url, companyName, location, type));
+                        //                        vacanciesReady.add(new Vacancy(time, title, url, companyName, location, type));
 
                         vacancyRepository.save(new Vacancy(time, title, url, companyName, location, type));
+                    } else {
+                        System.out.println("Vacancy is already saved: " + url);
                     }
 
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
                 }
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+                System.out.println("Cant form an URL");
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("Something went wrong");
+            } finally {
+                PageTool.closeClient();
             }
-            PageTool.closeClient();
+
         }
 
 //        return vacanciesReady;
@@ -136,7 +146,7 @@ public class Collector {
             text = text.replaceAll("[()]", "");
             text = text.replaceAll("[\u00A0\u2007\u202F]", " ");
             String nonEnglishPart = text.replaceAll("[\\p{Punct}\\p{Digit}a-zA-Z]", "");
-            System.out.println(nonEnglishPart);
+            System.out.println("Non english symbols: " + nonEnglishPart);
             String detectApiUrl = "https://translate.yandex.net/api/v1.5/tr.json/detect?";
             detectApiUrl += "&key=" + apiKey;
             nonEnglishPart = URLEncoder.encode(nonEnglishPart, "UTF-8");
@@ -197,6 +207,9 @@ public class Collector {
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("IO exception");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Can't click");
         }
         return page;
     }
@@ -209,13 +222,16 @@ public class Collector {
             if (location.contains(".")) {
                 location = StringUtils.substringAfter(location, ".").trim();
             }
+            location = StringUtils.substringBefore(location, "\\p{Space}");
         } else {
-            location = StringUtils.substringBefore((list.get(0)).getTextContent(), ",");
+            location = StringUtils.substringBefore((list.get(0)).getTextContent(), ",").trim();
             if (location.contains(".")) {
                 location = StringUtils.substringAfter(location, ".").trim();
             }
+            location = StringUtils.substringBefore(location, "\\p{Space}");
         }
         if (vacancyRepository.findByLocation(location).size() == 0) {
+            System.out.println("Raw location = " + location);
             location = plainCity(location);
         }
 
@@ -320,7 +336,7 @@ public class Collector {
                 StringUtils.containsIgnoreCase(rawType, "NodeJS") ||
                 StringUtils.containsIgnoreCase(rawType, "Node. JS")) {
             plainType = "Node.js";
-        } else if (StringUtils.containsIgnoreCase(rawType, "C ")) {
+        } else if (StringUtils.containsIgnoreCase(rawType, " C ")) {
             plainType = "C";
         } else if (StringUtils.containsIgnoreCase(rawType, "Scala")) {
             plainType = "Scala";

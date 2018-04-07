@@ -41,7 +41,7 @@ class CompanyList {
         ));
 
         companies.add(new Company("DOU",
-                "https://vacancies.dou.ua/vacancies/?switch_lang=en",
+                "https://jobs.dou.ua/vacancies/?switch_lang=en",
                 "..//a[@class='vt']",
                 "//a[@class='vt']",
                 "..//span[@class='cities']",
@@ -51,7 +51,7 @@ class CompanyList {
         ));
 
         companies.add(new Company("djinni",
-                "https://djinni.co/vacancies/?lang=en",
+                "https://djinni.co/jobs/?lang=en",
                 "..//a",
                 "//div[@class='list-jobs__title']/a",
                 "../..//div[@class='list-jobs__details']",

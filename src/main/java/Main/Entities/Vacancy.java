@@ -1,5 +1,7 @@
 package Main.Entities;
 
+import Main.Tools.LocalDateTimeConverter;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Locale;
@@ -23,6 +25,8 @@ public class Vacancy {
 
     private String type;
 
+    @Column(columnDefinition="TIMESTAMP")
+    @Convert(converter = LocalDateTimeConverter.class)
     private LocalDateTime time;
 
     @Transient

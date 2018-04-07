@@ -60,15 +60,15 @@ $('.locationFilter .mutliSelect input[type="checkbox"]').on('click', function() 
         location = $(this).val() + ",";
 
     if ($(this).is(':checked')) {
-        var html = '<span locationy="' + location + '">' + location + '</span>';
-        $('.locationyFilter .multiSel').append(html);
-        $(".locationyFilter .hida").hide();
+        var html = '<span location="' + location + '">' + location + '</span>';
+        $('.locationFilter .multiSel').append(html);
+        $(".locationFilter .hida").hide();
     } else {
         $('span[location="' + location + '"]').remove();
-        var ret = $(".locationyFilter .hida");
-        $('.locationyFilter .dropdown dt a').append(ret);
-        if ($('.locationyFilter .multiSel').has('span').length == 0) {
-            $(".locationyFilter .hida").show();
+        var ret = $(".locationFilter .hida");
+        $('.locationFilter .dropdown dt a').append(ret);
+        if ($('.locationFilter .multiSel').has('span').length == 0) {
+            $(".locationFilter .hida").show();
         }
     }
 });

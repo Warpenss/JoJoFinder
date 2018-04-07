@@ -51,6 +51,9 @@ public class PageTool {
         } catch (InterruptedException e) {
             System.out.println("InterruptedException while thread sleep");
             e.printStackTrace();
+        } catch (Exception e) {
+            System.out.println("Exception while loading the page");
+            e.printStackTrace();
         }
         if (page == null) {
             System.out.println("Trouble with page loading");
