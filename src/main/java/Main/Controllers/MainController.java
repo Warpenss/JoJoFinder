@@ -46,8 +46,12 @@ public class MainController {
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public String submit(@RequestParam MultiValueMap<String, String> params, Model model) {
-
-        List<Vacancy> vacancies = vacancyRepository.findByTitleIgnoreCaseContaining(params.getFirst("title"));
+        List<Vacancy> vacancies;
+        if (params.getFirst("title") == null){
+            vacancies = vacancyRepository.findAll();
+        } else {
+            vacancies = vacancyRepository.findByTitleIgnoreCaseContaining(params.getFirst("title"));
+        }
 
         HashSet<Vacancy> resultCompany = new HashSet<>();
         HashSet<Vacancy> resultLocation = new HashSet<>();

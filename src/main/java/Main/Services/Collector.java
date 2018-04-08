@@ -143,7 +143,6 @@ public class Collector {
 
     private String detectLanguage(String text) {
         try {
-
             text = text.replaceAll("[\u00A0\u2007\u202F]", " ");
             String nonEnglishPart = text.replaceAll("[\\p{Punct}\\p{Digit}a-zA-Z]", "");
             System.out.println("Non english symbols: " + nonEnglishPart);
