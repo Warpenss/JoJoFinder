@@ -34,11 +34,10 @@ public class Collector {
         this.vacancyRepository = vacancyRepository;
     }
 
-    public void collect() {
+    public void collect(ArrayList<Company> companies) {
 
 //    public ArrayList<Vacancy> collect() {
 //        ArrayList<Vacancy> vacanciesReady = new ArrayList<>();
-        ArrayList<Company> companies = CompanyList.getCompanies();
 
         for (Company company : companies) {
             try {
@@ -69,60 +68,60 @@ public class Collector {
                 }
 
                 for (HtmlElement htmlElement : vacancies) {
+                    try {
+                        LocalDateTime time;
+                        String title;
+                        String url;
+                        String companyName;
+                        String location;
+                        String type;
 
-                    LocalDateTime time;
-                    String title;
-                    String url;
-                    String companyName;
-                    String location;
-                    String type;
-
-                    url = page.getFullyQualifiedUrl(((HtmlElement) htmlElement.getByXPath(company.getUrlSelector())
-                            .get(0)).getAttribute("href")).toString();
-                    System.out.println(url);
+                        url = page.getFullyQualifiedUrl(((HtmlElement) htmlElement.getByXPath(company.getUrlSelector())
+                                .get(0)).getAttribute("href")).toString();
+                        System.out.println(url);
 
 
-                    if (vacancyRepository.findByUrl(url).size() == 0) {
-                        time = LocalDateTime.now();
-                        System.out.println(time);
+                        if (vacancyRepository.findByUrl(url).size() == 0) {
+                            time = LocalDateTime.now();
+                            System.out.println(time);
 
-                        title = htmlElement.getTextContent().trim();
-                        if (containsNonEnglish(title)) {
-                            String language = detectLanguage(title);
-                            title = translateTitle(title, language);
-                        }
+                            title = htmlElement.getTextContent().trim();
+                            if (containsNonEnglish(title)) {
+                                String language = detectLanguage(title);
+                                title = translateTitle(title, language);
+                            }
 
-                        System.out.println(title);
+                            System.out.println(title);
 
-                        companyName = company.getCompanyName();
-                        System.out.println(companyName);
+                            companyName = company.getCompanyName();
+                            System.out.println(companyName);
 
-                        location = "Undefined";
-                        List<HtmlElement> list = htmlElement.getByXPath(company.getCitySelector());
-                        if (!list.isEmpty()) {
-                            location = getLocation(company, list);
-                        }
-                        System.out.println(location);
+                            location = "Undefined";
+                            List<HtmlElement> list = htmlElement.getByXPath(company.getCitySelector());
+                            if (!list.isEmpty()) {
+                                location = getLocation(company, list);
+                            }
+                            System.out.println(location);
 
-                        if (company.getTypeSelector().equals("FROM_TITLE")) {
-                            type = title;
+                            if (company.getTypeSelector().equals("FROM_TITLE")) {
+                                type = title;
+                            } else {
+                                type = ((HtmlElement) htmlElement.getByXPath(company.getTypeSelector()).get(0)).getTextContent();
+                            }
+                            type = plainType(type);
+                            System.out.println(type);
+
+                            //                        vacanciesReady.add(new Vacancy(time, title, url, companyName, location, type));
+
+                            vacancyRepository.save(new Vacancy(time, title, url, companyName, location, type));
                         } else {
-                            type = ((HtmlElement) htmlElement.getByXPath(company.getTypeSelector()).get(0)).getTextContent();
+                            System.out.println("Vacancy is already saved: " + url);
                         }
-                        type = plainType(type);
-                        System.out.println(type);
-
-                        //                        vacanciesReady.add(new Vacancy(time, title, url, companyName, location, type));
-
-                        vacancyRepository.save(new Vacancy(time, title, url, companyName, location, type));
-                    } else {
-                        System.out.println("Vacancy is already saved: " + url);
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
                     }
 
                 }
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-                System.out.println("Cant form an URL");
             } catch (Exception e) {
                 e.printStackTrace();
                 System.out.println("Something went wrong");

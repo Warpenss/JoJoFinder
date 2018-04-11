@@ -3,8 +3,8 @@ package Main.Services;
 import Main.Entities.Company;
 import java.util.ArrayList;
 
-class CompanyList {
-    static ArrayList<Company> getCompanies() {
+public class CompanyList {
+    public static ArrayList<Company> getCompanies() {
         ArrayList<Company> companies = new ArrayList<>();
 
         //IDEAs parameter hints are really useful here
