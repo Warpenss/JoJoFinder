@@ -195,12 +195,12 @@
                     found
                 </p>
                 <div th:if="${vacancies.getTotalPages() > 1}" class="text-center">
-                    <ul class="pagination">
+                    <ul class="pagination pages" id="pages">
                         <li>
                             <!--Spring data pagination starts with 0 page.-->
                             <!--If current page is not first - add first page button -->
                             <a th:if="not ${vacancies.getNumber() == 0}" class="pageLink"
-                               th:href="@{/(page=1)}">&laquo;</a>
+                               th:href="@{/(page=1)}">&#60;</a>
                         </li>
                         <!--If current page is displayed - remove pointer -->
                         <!--Add page buttons -->
@@ -211,7 +211,7 @@
                         <li>
                             <!--Last page-->
                             <a th:if="not ${vacancies.getNumber() + 1 == vacancies.getTotalPages()}" class="pageLink"
-                               th:href="@{/(page=${vacancies.getTotalPages()})}">&raquo;</a>
+                               th:href="@{/(page=${vacancies.getTotalPages()})}">&#62;</a>
                         </li>
                     </ul>
                 </div>

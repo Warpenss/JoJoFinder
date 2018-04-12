@@ -38,7 +38,7 @@ public class MainController {
         Pageable pageable = new PageRequest(currentPageNumber, PAGE_SIZE, Sort.Direction.DESC, "time");
 
         Page<Vacancy> vacancies = vacancyRepository.findAll(pageable);
-        PageCounter pageCounter = new PageCounter(vacancies.getTotalPages(), vacancies.getNumber());
+        PageCounter pageCounter = new PageCounter(vacancies.getTotalPages(), vacancies.getNumber() + 1);
         List<String> companies = vacancyRepository.findDistinctCompany();
         List<String> locations = vacancyRepository.findDistinctLocation();
         List<String> types = vacancyRepository.findDistinctType();
