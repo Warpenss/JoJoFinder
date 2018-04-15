@@ -1,9 +1,8 @@
 package Main.Tools;
 
-import Main.Entities.Company;
+import Main.Entities.Source;
 import Main.Repository.VacancyRepository;
 import Main.Services.Collector;
-import Main.Services.CompanyList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -19,9 +18,9 @@ public class Scheduler {
         this.vacancyRepository = vacancyRepository;
     }
 
-    @Scheduled (cron = "0 0/30 * * * *")
-    public void schedule() {
-        ArrayList<Company> companies = CompanyList.getCompanies();
-        new Collector(vacancyRepository).collect(companies);
-    }
+//    @Scheduled (cron = "0 0/30 * * * *")
+//    public void schedule() {
+//        ArrayList<Source> companies = Sources.getSources();
+//        new Collector(vacancyRepository).collect(companies);
+//    }
 }

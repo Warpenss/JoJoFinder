@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.List;
 
 //This tool handle the WebClient and returns page
-public class PageTool {
+public class Browser {
     //WebClient simulates Chrome browser that can handle Javascript on sites
     static private WebClient webClient;
     static public void initiateClient() {

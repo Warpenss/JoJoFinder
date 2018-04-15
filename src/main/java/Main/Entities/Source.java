@@ -1,33 +1,43 @@
 package Main.Entities;
 
-public class Company {
-    public Company(String companyName, String searchUrl, String urlSelector, String titleSelector, String citySelector,
-                   String typeSelector, String paginationType, String paginationSelector) {
-        this.companyName = companyName;
+public class Source {
+    public Source(String sourceName, String companyNameSelector, String searchUrl, String urlSelector, String titleSelector, String locationSelector,
+                  String typeSelector, String paginationType, String paginationSelector) {
+        this.sourceName = sourceName;
+        this.companyNameSelector = companyNameSelector;
         this.searchUrl = searchUrl;
         this.urlSelector = urlSelector;
         this.titleSelector = titleSelector;
-        this.citySelector = citySelector;
+        this.locationSelector = locationSelector;
         this.typeSelector = typeSelector;
         this.paginationType = paginationType;
         this.paginationSelector = paginationSelector;
     }
 
-    private String companyName;
+    private String sourceName;
+    private String companyNameSelector;
     private String searchUrl;
     private String urlSelector;
     private String titleSelector;
-    private String citySelector;
+    private String locationSelector;
     private String typeSelector;
     private String paginationType;
     private String paginationSelector;
 
-    public String getCompanyName() {
-        return companyName;
+    public String getSourceName() {
+        return sourceName;
     }
 
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
+    public void setSourceName(String sourceName) {
+        this.sourceName = sourceName;
+    }
+
+    public String getCompanyNameSelector() {
+        return companyNameSelector;
+    }
+
+    public void setCompanyNameSelector(String companyNameSelector) {
+        this.companyNameSelector = companyNameSelector;
     }
 
     public String getSearchUrl() {
@@ -54,12 +64,12 @@ public class Company {
         this.titleSelector = titleSelector;
     }
 
-    public String getCitySelector() {
-        return citySelector;
+    public String getLocationSelector() {
+        return locationSelector;
     }
 
-    public void setCitySelector(String citySelector) {
-        this.citySelector = citySelector;
+    public void setLocationSelector(String locationSelector) {
+        this.locationSelector = locationSelector;
     }
 
     public String getTypeSelector() {

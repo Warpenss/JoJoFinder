@@ -1,9 +1,9 @@
 package Main.Services;
 
-import Main.Entities.Company;
+import Main.Entities.Source;
 import Main.Entities.Vacancy;
 import Main.Repository.VacancyRepository;
-import Main.Tools.PageTool;
+import Main.Tools.Browser;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.apache.commons.io.IOUtils;
@@ -34,35 +34,35 @@ public class Collector {
         this.vacancyRepository = vacancyRepository;
     }
 
-    public void collect(ArrayList<Company> companies) {
+//    public void collect(ArrayList<Source> sources) {
 
-//    public ArrayList<Vacancy> collect() {
-//        ArrayList<Vacancy> vacanciesReady = new ArrayList<>();
+    public ArrayList<Vacancy> collect(ArrayList<Source> sources) {
+        ArrayList<Vacancy> vacanciesReady = new ArrayList<>();
 
-        for (Company company : companies) {
+        for (Source source : sources) {
             try {
-                PageTool.initiateClient();
+                Browser.initiateClient();
 
-                System.out.println(company.getCompanyName());
+                System.out.println(source.getSourceName());
                 List<HtmlElement> vacancies = new ArrayList<>();
-                HtmlPage page = PageTool.getPage(company.getSearchUrl());
+                HtmlPage page = Browser.getPage(source.getSearchUrl());
 
-                if (company.getPaginationType().equals("LOAD")) {
+                if (source.getPaginationType().equals("LOAD")) {
                     for (int i = 0; i < 50; i++) {
-                        page = paginationClick(page, company.getPaginationSelector());
+                        page = paginationClick(page, source.getPaginationSelector());
                     }
-                    vacancies = page.getByXPath(company.getTitleSelector());
-                } else if (company.getPaginationType().equals("PAGE")) {
+                    vacancies = page.getByXPath(source.getTitleSelector());
+                } else if (source.getPaginationType().equals("PAGE")) {
                     // You must be logged in to see pages on djinni
-                    if (company.getCompanyName().equals("djinni")) {
+                    if (source.getSourceName().equals("djinni")) {
                         for (int i = 2; i < 10; i++) {
-                            vacancies.addAll(page.getByXPath(company.getTitleSelector()));
-                            page = PageTool.getPage("https://djinni.co/jobs/?lang=en&page=" + i);
+                            vacancies.addAll(page.getByXPath(source.getTitleSelector()));
+                            page = Browser.getPage("https://djinni.co/jobs/?lang=en&page=" + i);
                         }
                     } else {
                         for (int i = 0; i < 10; i++) {
-                            vacancies.addAll(page.getByXPath(company.getTitleSelector()));
-                            page = paginationClick(page, company.getPaginationSelector());
+                            vacancies.addAll(page.getByXPath(source.getTitleSelector()));
+                            page = paginationClick(page, source.getPaginationSelector());
                         }
                     }
                 }
@@ -76,7 +76,7 @@ public class Collector {
                         String location;
                         String type;
 
-                        url = page.getFullyQualifiedUrl(((HtmlElement) htmlElement.getByXPath(company.getUrlSelector())
+                        url = page.getFullyQualifiedUrl(((HtmlElement) htmlElement.getByXPath(source.getUrlSelector())
                                 .get(0)).getAttribute("href")).toString();
                         System.out.println(url);
 
@@ -93,27 +93,39 @@ public class Collector {
 
                             System.out.println(title);
 
-                            companyName = company.getCompanyName();
+                            if (source.getCompanyNameSelector().equals("FROM_SOURCE_NAME")) {
+                                companyName = source.getSourceName();
+                            } else {
+                                companyName = ((HtmlElement) htmlElement.getByXPath(source.getCompanyNameSelector()).get(0)).getTextContent();
+                                if (source.getSourceName().equals("djinni")) {
+                                    companyName = StringUtils.substringAfterLast(companyName, " at ");
+                                    companyName = StringUtils.substringBefore(companyName, "\u00a0");
+                                    if (companyName.isEmpty()) {
+                                        companyName = source.getSourceName();
+                                    }
+                                }
+                            }
+                            companyName = companyName.replaceAll("[\u00A0\u2007\u202F]", " ").trim();
                             System.out.println(companyName);
 
                             location = "Undefined";
-                            List<HtmlElement> list = htmlElement.getByXPath(company.getCitySelector());
+                            List<HtmlElement> list = htmlElement.getByXPath(source.getLocationSelector());
                             if (!list.isEmpty()) {
-                                location = getLocation(company, list);
+                                location = getLocation(source, list);
                             }
                             System.out.println(location);
 
-                            if (company.getTypeSelector().equals("FROM_TITLE")) {
+                            if (source.getTypeSelector().equals("FROM_TITLE")) {
                                 type = title;
                             } else {
-                                type = ((HtmlElement) htmlElement.getByXPath(company.getTypeSelector()).get(0)).getTextContent();
+                                type = ((HtmlElement) htmlElement.getByXPath(source.getTypeSelector()).get(0)).getTextContent();
                             }
                             type = plainType(type);
                             System.out.println(type);
 
-                            //                        vacanciesReady.add(new Vacancy(time, title, url, companyName, location, type));
-
-                            vacancyRepository.save(new Vacancy(time, title, url, companyName, location, type));
+                            vacanciesReady.add(new Vacancy(time, title, url, companyName, location, type));
+//
+//                            vacancyRepository.save(new Vacancy(time, title, url, companyName, location, type));
                         } else {
                             System.out.println("Vacancy is already saved: " + url);
                         }
@@ -126,12 +138,12 @@ public class Collector {
                 e.printStackTrace();
                 System.out.println("Something went wrong");
             } finally {
-                PageTool.closeClient();
+                Browser.closeClient();
             }
 
         }
 
-//        return vacanciesReady;
+        return vacanciesReady;
     }
 
     private boolean containsNonEnglish(String text) {
@@ -213,9 +225,9 @@ public class Collector {
         return page;
     }
 
-    private String getLocation(Company company, List<HtmlElement> list) {
+    private String getLocation(Source source, List<HtmlElement> list) {
         String location;
-        if (company.getCompanyName().equals("djinni")) {
+        if (source.getSourceName().equals("djinni")) {
             location = StringUtils.substringAfterLast((list.get(0)).getTextContent(), "\u00a0");
             location = StringUtils.substringBefore(location, ",").trim();
             if (location.contains(".")) {
