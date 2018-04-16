@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Test</title>
@@ -8,12 +10,12 @@
 <ul>
     <span th:text="${#lists.size(vacancies)}"></span>
     <li th:each="vacancy : ${vacancies}">
-            <p data-th-text="${vacancy.time}">...</p>
-            <p data-th-text="${vacancy.title}">...</p>
-            <p data-th-text="${vacancy.url}">...</p>
-            <p data-th-text="${vacancy.company}">...</p>
-            <p data-th-text="${vacancy.location}">...</p>
-            <p data-th-text="${vacancy.type}">...</p>
+        <p>time <span data-th-text="${vacancy.time}"></span></p>
+        <p>title <span data-th-text="${vacancy.title}"></span></p>
+        <p>url <span data-th-text="${vacancy.url}"></span></p>
+        <p>company <span data-th-text="${vacancy.company}"></span></p>
+        <p>location <span data-th-text="${vacancy.location}"></span></p>
+        <p>type <span data-th-text="${vacancy.type}"></span></p>
     </li>
 </ul>
 </body>

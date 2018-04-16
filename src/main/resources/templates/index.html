@@ -195,23 +195,25 @@
                     found
                 </p>
                 <div th:if="${vacancies.getTotalPages() > 1}" class="text-center">
-                    <ul class="pagination pages" id="pages">
+                    <ul class="pagination pages" id="pages"
+                        th:with="urlBuilder=${T(org.springframework.web.servlet.support.ServletUriComponentsBuilder).fromCurrentRequest()}">
                         <li>
+
                             <!--Spring data pagination starts with 0 page.-->
                             <!--If current page is not first - add first page button -->
                             <a th:if="not ${vacancies.getNumber() == 0}" class="pageLink"
-                               th:href="@{/(page=1)}">&#60;</a>
+                               th:href="@{${urlBuilder.replaceQueryParam('page', '1').toUriString()}}">&#60;</a>
                         </li>
                         <!--If current page is displayed - remove pointer -->
                         <!--Add page buttons -->
                         <li th:class="${vacancies.getNumber() == (number - 1)} ? 'active pointer-disabled'"
                             th:each="number : ${#numbers.sequence(pageCounter.getFirstPage(), pageCounter.getLastPage())}">
-                            <a class="pageLink" th:href="@{/(page=${number})}" th:text="${number}"></a>
+                            <a class="pageLink" th:href="@{${urlBuilder.replaceQueryParam('page', number).toUriString()}}" th:text="${number}"></a>
                         </li>
                         <li>
                             <!--Last page-->
                             <a th:if="not ${vacancies.getNumber() + 1 == vacancies.getTotalPages()}" class="pageLink"
-                               th:href="@{/(page=${vacancies.getTotalPages()})}">&#62;</a>
+                               th:href="@{${urlBuilder.replaceQueryParam('page', vacancies.getTotalPages()).toUriString()}}">&#62;</a>
                         </li>
                     </ul>
                 </div>

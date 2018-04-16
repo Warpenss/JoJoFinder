@@ -18,9 +18,9 @@ public class Scheduler {
         this.vacancyRepository = vacancyRepository;
     }
 
-//    @Scheduled (cron = "0 0/30 * * * *")
-//    public void schedule() {
-//        ArrayList<Source> companies = Sources.getSources();
-//        new Collector(vacancyRepository).collect(companies);
-//    }
+    @Scheduled (cron = "0 0/30 * * * *")
+    public void schedule() {
+        ArrayList<Source> companies = Sources.getSources();
+        new Collector(vacancyRepository).collect(companies);
+    }
 }

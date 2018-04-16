@@ -2,7 +2,6 @@ package Main.Repository;
 
 
 import Main.Entities.Vacancy;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -21,7 +20,7 @@ public interface VacancyRepository extends JpaRepository<Vacancy, String> {
 
     List<Vacancy> findByUrl(String url);
 
-    List<Vacancy> findByTitleIgnoreCaseContaining(String url, Pageable pageable);
+    List<Vacancy> findByTitleIgnoreCaseContaining(String url);
 
     List<Vacancy> findByLocation(String url);
 

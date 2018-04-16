@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.time.LocalDateTime;
@@ -34,116 +33,125 @@ public class Collector {
         this.vacancyRepository = vacancyRepository;
     }
 
-//    public void collect(ArrayList<Source> sources) {
+    public void collect(ArrayList<Source> sources) {
 
-    public ArrayList<Vacancy> collect(ArrayList<Source> sources) {
-        ArrayList<Vacancy> vacanciesReady = new ArrayList<>();
+//    public ArrayList<Vacancy> collect(ArrayList<Source> sources) {
+//        ArrayList<Vacancy> vacanciesReady = new ArrayList<>();
 
         for (Source source : sources) {
-            try {
-                Browser.initiateClient();
+            Browser.initiateClient();
 
-                System.out.println(source.getSourceName());
-                List<HtmlElement> vacancies = new ArrayList<>();
-                HtmlPage page = Browser.getPage(source.getSearchUrl());
+            System.out.println(source.getSourceName());
+            List<HtmlElement> vacancies = new ArrayList<>();
+            HtmlPage page = Browser.getPage(source.getSearchUrl());
 
-                if (source.getPaginationType().equals("LOAD")) {
-                    for (int i = 0; i < 50; i++) {
-                        page = paginationClick(page, source.getPaginationSelector());
-                    }
-                    vacancies = page.getByXPath(source.getTitleSelector());
-                } else if (source.getPaginationType().equals("PAGE")) {
-                    // You must be logged in to see pages on djinni
-                    if (source.getSourceName().equals("djinni")) {
-                        for (int i = 2; i < 10; i++) {
-                            vacancies.addAll(page.getByXPath(source.getTitleSelector()));
-                            page = Browser.getPage("https://djinni.co/jobs/?lang=en&page=" + i);
-                        }
-                    } else {
-                        for (int i = 0; i < 10; i++) {
-                            vacancies.addAll(page.getByXPath(source.getTitleSelector()));
-                            page = paginationClick(page, source.getPaginationSelector());
-                        }
-                    }
-                }
-
-                for (HtmlElement htmlElement : vacancies) {
+            if (source.getPaginationType().equals("LOAD")) {
+                for (int i = 0; i < 50; i++) {
                     try {
-                        LocalDateTime time;
-                        String title;
-                        String url;
-                        String companyName;
-                        String location;
-                        String type;
-
-                        url = page.getFullyQualifiedUrl(((HtmlElement) htmlElement.getByXPath(source.getUrlSelector())
-                                .get(0)).getAttribute("href")).toString();
-                        System.out.println(url);
-
-
-                        if (vacancyRepository.findByUrl(url).size() == 0) {
-                            time = LocalDateTime.now();
-                            System.out.println(time);
-
-                            title = htmlElement.getTextContent().trim();
-                            if (containsNonEnglish(title)) {
-                                String language = detectLanguage(title);
-                                title = translateTitle(title, language);
-                            }
-
-                            System.out.println(title);
-
-                            if (source.getCompanyNameSelector().equals("FROM_SOURCE_NAME")) {
-                                companyName = source.getSourceName();
-                            } else {
-                                companyName = ((HtmlElement) htmlElement.getByXPath(source.getCompanyNameSelector()).get(0)).getTextContent();
-                                if (source.getSourceName().equals("djinni")) {
-                                    companyName = StringUtils.substringAfterLast(companyName, " at ");
-                                    companyName = StringUtils.substringBefore(companyName, "\u00a0");
-                                    if (companyName.isEmpty()) {
-                                        companyName = source.getSourceName();
-                                    }
-                                }
-                            }
-                            companyName = companyName.replaceAll("[\u00A0\u2007\u202F]", " ").trim();
-                            System.out.println(companyName);
-
-                            location = "Undefined";
-                            List<HtmlElement> list = htmlElement.getByXPath(source.getLocationSelector());
-                            if (!list.isEmpty()) {
-                                location = getLocation(source, list);
-                            }
-                            System.out.println(location);
-
-                            if (source.getTypeSelector().equals("FROM_TITLE")) {
-                                type = title;
-                            } else {
-                                type = ((HtmlElement) htmlElement.getByXPath(source.getTypeSelector()).get(0)).getTextContent();
-                            }
-                            type = plainType(type);
-                            System.out.println(type);
-
-                            vacanciesReady.add(new Vacancy(time, title, url, companyName, location, type));
-//
-//                            vacancyRepository.save(new Vacancy(time, title, url, companyName, location, type));
-                        } else {
-                            System.out.println("Vacancy is already saved: " + url);
-                        }
-                    } catch (MalformedURLException e) {
+                        page = paginationClick(page, source.getPaginationSelector());
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        System.out.println("While LOAD click");
                         e.printStackTrace();
                     }
-
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-                System.out.println("Something went wrong");
-            } finally {
-                Browser.closeClient();
+                vacancies = page.getByXPath(source.getTitleSelector());
+            } else if (source.getPaginationType().equals("PAGE")) {
+                // You must be logged in to see pages on djinni
+                if (source.getSourceName().equals("djinni")) {
+                    for (int i = 2; i < 10; i++) {
+                        vacancies.addAll(page.getByXPath(source.getTitleSelector()));
+                        page = Browser.getPage("https://djinni.co/jobs/?lang=en&page=" + i);
+                    }
+                } else {
+                    for (int i = 0; i < 10; i++) {
+                        vacancies.addAll(page.getByXPath(source.getTitleSelector()));
+                        try {
+                            page = paginationClick(page, source.getPaginationSelector());
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            System.out.println("While PAGE click");
+                            e.printStackTrace();
+                        }
+                    }
+                }
             }
 
-        }
+            for (HtmlElement htmlElement : vacancies) {
+                try {
+                    LocalDateTime time;
+                    String title;
+                    String url;
+                    String companyName;
+                    String location;
+                    String type;
 
-        return vacanciesReady;
+                    url = page.getFullyQualifiedUrl(((HtmlElement) htmlElement.getByXPath(source.getUrlSelector())
+                            .get(0)).getAttribute("href")).toString();
+                    System.out.println(url);
+
+
+                    if (vacancyRepository.findByUrl(url).size() == 0) {
+                        time = LocalDateTime.now();
+                        System.out.println(time);
+
+                        title = htmlElement.getTextContent().trim();
+                        if (containsNonEnglish(title)) {
+                            String language = detectLanguage(title);
+                            title = translateTitle(title, language);
+                        }
+
+                        System.out.println(title);
+
+                        if (source.getCompanyNameSelector().equals("FROM_SOURCE_NAME")) {
+                            companyName = source.getSourceName();
+                        } else {
+                            companyName = ((HtmlElement) htmlElement.getByXPath(source.getCompanyNameSelector()).get(0)).getTextContent();
+                            if (source.getSourceName().equals("djinni")) {
+                                if (companyName.contains(" at ")) {
+                                    companyName = StringUtils.substringAfterLast(companyName, " at ");
+                                    companyName = StringUtils.substringBefore(companyName, "\u00a0");
+                                } else if (companyName.contains(" в ")) {
+                                    companyName = StringUtils.substringAfterLast(companyName, " в ");
+                                    companyName = StringUtils.substringBefore(companyName, "\u00a0");
+                                } else {
+                                    companyName = source.getSourceName();
+                                }
+                            }
+                        }
+                        companyName = companyName.replaceAll("[\u00A0\u2007\u202F]", " ").trim();
+                        System.out.println(companyName);
+
+                        location = "Undefined";
+                        List<HtmlElement> list = htmlElement.getByXPath(source.getLocationSelector());
+                        if (!list.isEmpty()) {
+                            location = getLocation(source, list);
+                        }
+                        System.out.println(location);
+
+                        if (source.getTypeSelector().equals("FROM_TITLE")) {
+                            type = title;
+                        } else {
+                            type = ((HtmlElement) htmlElement.getByXPath(source.getTypeSelector()).get(0)).getTextContent();
+                        }
+                        type = plainType(type);
+                        System.out.println(type);
+
+    //                            vacanciesReady.add(new Vacancy(time, title, url, companyName, location, type));
+    //
+                        vacancyRepository.save(new Vacancy(time, title, url, companyName, location, type));
+                    } else {
+                        System.out.println("Vacancy is already saved: " + url);
+                    }
+                } catch (Exception e) {
+                    System.out.println("ERROR! NOT SAVED");
+                    e.printStackTrace();
+                }
+            }
+        }
+//        return vacanciesReady;
     }
 
     private boolean containsNonEnglish(String text) {
@@ -152,80 +160,53 @@ public class Collector {
 
     private final String apiKey = "";
 
-    private String detectLanguage(String text) {
-        try {
-            text = text.replaceAll("[\u00A0\u2007\u202F]", " ");
-            String nonEnglishPart = text.replaceAll("[\\p{Punct}\\p{Digit}a-zA-Z]", "");
-            System.out.println("Non english symbols: " + nonEnglishPart);
-            String detectApiUrl = "https://translate.yandex.net/api/v1.5/tr.json/detect?";
-            detectApiUrl += "&key=" + apiKey;
-            nonEnglishPart = URLEncoder.encode(nonEnglishPart, "UTF-8");
-            detectApiUrl += "&text=" + nonEnglishPart;
-            String json = IOUtils.toString(new URL(detectApiUrl), "UTF-8");
-            JSONObject jsonObject = (JSONObject) JSONValue.parseWithException(json);
-            String language = jsonObject.get("lang").toString();
-            if (language.isEmpty()) {
-                return "en-";
-            } else {
-                return language + "-";
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
-            System.out.println("Can't parse");
+    private String detectLanguage(String text) throws ParseException, IOException {
+        text = text.replaceAll("[\u00A0\u2007\u202F]", " ");
+        String nonEnglishPart = text.replaceAll("[\\p{Punct}\\p{Digit}a-zA-Z]", "");
+        System.out.println("Non english symbols: " + nonEnglishPart);
+        String detectApiUrl = "https://translate.yandex.net/api/v1.5/tr.json/detect?";
+        detectApiUrl += "&key=" + apiKey;
+        nonEnglishPart = URLEncoder.encode(nonEnglishPart, "UTF-8");
+        detectApiUrl += "&text=" + nonEnglishPart;
+        String json = IOUtils.toString(new URL(detectApiUrl), "UTF-8");
+        JSONObject jsonObject = (JSONObject) JSONValue.parseWithException(json);
+        String language = jsonObject.get("lang").toString();
+        if (language.isEmpty()) {
+            return "en-";
+        } else {
+            return language + "-";
         }
-        return "";
     }
 
-    private String translateTitle(String text, String language) {
-        try {
-            text = text.replaceAll("[()]", "");
-            text = text.replaceAll("—", "-");
-            String translateApiUrl = "https://translate.yandex.net/api/v1.5/tr.json/translate?";
-            translateApiUrl += "&key=" + apiKey;
-            translateApiUrl += "&lang=" + language + "en";
-            String titleEncoded = URLEncoder.encode(text, "UTF-8");
-            translateApiUrl += "&text=" + titleEncoded;
-            String json = IOUtils.toString(new URL(translateApiUrl), "UTF-8");
-            JSONObject jsonObject = (JSONObject) JSONValue.parseWithException(json);
-            text = ((JSONArray) jsonObject.get("text")).get(0).toString();
-            return text;
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
-            System.out.println("Can't parse");
-        }
+    private String translateTitle(String text, String language) throws IOException, ParseException {
+        text = text.replaceAll("[()]", "");
+        text = text.replaceAll("—", "-");
+        String translateApiUrl = "https://translate.yandex.net/api/v1.5/tr.json/translate?";
+        translateApiUrl += "&key=" + apiKey;
+        translateApiUrl += "&lang=" + language + "en";
+        String titleEncoded = URLEncoder.encode(text, "UTF-8");
+        translateApiUrl += "&text=" + titleEncoded;
+        String json = IOUtils.toString(new URL(translateApiUrl), "UTF-8");
+        JSONObject jsonObject = (JSONObject) JSONValue.parseWithException(json);
+        text = ((JSONArray) jsonObject.get("text")).get(0).toString();
         return text;
     }
 
-    private HtmlPage paginationClick(HtmlPage page, String paginationSelector) {
-        try {
-            List<HtmlElement> list = page.getByXPath(paginationSelector);
+    private HtmlPage paginationClick(HtmlPage page, String paginationSelector) throws InterruptedException, IOException {
+        List<HtmlElement> list = page.getByXPath(paginationSelector);
 
-            if (!list.isEmpty()) {
-                System.out.println("Before click");
-                page = list.get(0).click();
-                System.out.println("After click");
-            } else {
-                System.out.println("Empty");
-            }
-
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("IO exception");
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Can't click");
+        if (!list.isEmpty()) {
+            System.out.println("Before click");
+            page = list.get(0).click();
+            System.out.println("After click");
+        } else {
+            System.out.println("Empty");
         }
+        Thread.sleep(1000);
         return page;
     }
 
-    private String getLocation(Source source, List<HtmlElement> list) {
+    private String getLocation(Source source, List<HtmlElement> list) throws Exception {
         String location;
         if (source.getSourceName().equals("djinni")) {
             location = StringUtils.substringAfterLast((list.get(0)).getTextContent(), "\u00a0");
@@ -249,22 +230,16 @@ public class Collector {
         return location;
     }
 
-    private String plainCity(String rawCity) {
+    private String plainCity(String rawCity) throws Exception {
         String plainCity = rawCity;
-
-        try {
-            WebService.setUserName("warpenss"); // add your username here
-            ToponymSearchCriteria searchCriteria = new ToponymSearchCriteria();
-            searchCriteria.setName(rawCity);
-            ToponymSearchResult searchResult = WebService.search(searchCriteria);
-            List<Toponym> searchResultToponyms = searchResult.getToponyms();
-            if (!searchResultToponyms.isEmpty()) {
-                plainCity = searchResultToponyms.get(0).getName();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        WebService.setUserName("warpenss"); // add your username here
+        ToponymSearchCriteria searchCriteria = new ToponymSearchCriteria();
+        searchCriteria.setName(rawCity);
+        ToponymSearchResult searchResult = WebService.search(searchCriteria);
+        List<Toponym> searchResultToponyms = searchResult.getToponyms();
+        if (!searchResultToponyms.isEmpty()) {
+            plainCity = searchResultToponyms.get(0).getName();
         }
-
         return plainCity;
     }
 
