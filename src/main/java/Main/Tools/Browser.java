@@ -14,7 +14,7 @@ public class Browser {
     //WebClient simulates Chrome browser that can handle Javascript on sites
     static private WebClient webClient;
     static public void initiateClient() {
-        webClient = new WebClient(BrowserVersion.CHROME);
+        webClient = new WebClient(BrowserVersion.BEST_SUPPORTED);
         webClient.getOptions().setUseInsecureSSL(true);
         webClient.getOptions().setCssEnabled(false);
         webClient.getOptions().setThrowExceptionOnScriptError(false);

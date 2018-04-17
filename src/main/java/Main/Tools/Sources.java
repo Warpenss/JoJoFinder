@@ -55,7 +55,7 @@ class Sources {
                 "//div[@class='more-btn']/a"
         ));
 
-        sources.add(new Source("djinni.co",
+        sources.add(new Source("djinni",
                 "../..//div[@class='list-jobs__details']",
                 "https://djinni.co/jobs/?lang=en",
                 "..//a",

@@ -82,7 +82,7 @@ public class MainController {
             if (entry.getKey().equals("company")) {
                 for (String parameter : entry.getValue()) {
                     for (Vacancy vacancy : vacancyList) {
-                        if (vacancy.getCompany().equals(parameter)) {
+                        if (vacancy.getCompany().equalsIgnoreCase(parameter)) {
                             resultCompany.add(vacancy);
                         }
                     }
@@ -98,7 +98,7 @@ public class MainController {
                         resultCompany.addAll(vacancyList);
                     }
                     for (Vacancy vacancy : resultCompany) {
-                        if (vacancy.getLocation().equals(parameter)) {
+                        if (vacancy.getLocation().equalsIgnoreCase(parameter)) {
                             resultLocation.add(vacancy);
                         }
                     }
@@ -115,7 +115,7 @@ public class MainController {
                         resultLocation.addAll(vacancyList);
                     }
                     for (Vacancy vacancy : resultLocation) {
-                        if (vacancy.getType().equals(parameter)) {
+                        if (vacancy.getType().equalsIgnoreCase(parameter)) {
                             resultType.add(vacancy);
                         }
                     }
