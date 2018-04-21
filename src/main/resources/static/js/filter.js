@@ -118,8 +118,6 @@ $('.typeFilter .multiSelect input[type="checkbox"]').on('click', function() {
 });
 
 
-
-
 function multiSearch(input) {
     // Declare variables
     var filter, ul, li, i;

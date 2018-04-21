@@ -1,12 +1,16 @@
 package Main.Controllers;
 
+import Main.Entities.Source;
 import Main.Entities.Vacancy;
 import Main.Repository.VacancyRepository;
+import Main.Services.Collector;
 import Main.Tools.PageCounter;
 
+import Main.Tools.Sources;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -165,9 +169,8 @@ public class MainController {
 
 //    @RequestMapping("/test")
 //    public String test(Model model) {
-//        ArrayList<Source> sourses = Sources.getSources();
-//        ArrayList<Vacancy> vacancies = new Collector(vacancyRepository).collect(sourses);
-//        model.addAttribute("vacancies", vacancies);
-//        return "test";
+//        ArrayList<Source> companies = Sources.getSources();
+//        new Collector(vacancyRepository).collect(companies);
+//        return "index";
 //    }
 }

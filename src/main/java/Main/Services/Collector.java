@@ -25,19 +25,15 @@ import java.util.*;
 
 @Service
 public class Collector {
-
     private final VacancyRepository vacancyRepository;
-
     @Autowired
     public Collector(VacancyRepository vacancyRepository) {
         this.vacancyRepository = vacancyRepository;
     }
 
     public void collect(ArrayList<Source> sources) {
-
 //    public ArrayList<Vacancy> collect(ArrayList<Source> sources) {
 //        ArrayList<Vacancy> vacanciesReady = new ArrayList<>();
-
         for (Source source : sources) {
             Browser.initiateClient();
 
@@ -97,7 +93,11 @@ public class Collector {
                         time = LocalDateTime.now();
                         System.out.println(time);
 
-                        title = htmlElement.getTextContent().trim();
+                        if (source.getSourceName().equalsIgnoreCase("LUXOFT")){
+                            title = htmlElement.getTextContent().replaceAll("Hot", "").trim();
+                        } else {
+                            title = htmlElement.getTextContent().trim();
+                        }
                         if (containsNonEnglish(title)) {
                             String language = detectLanguage(title);
                             title = translateTitle(title, language);
@@ -121,7 +121,8 @@ public class Collector {
                                 }
                             }
                         }
-                        companyName = companyName.replaceAll("[\u00A0\u2007\u202F]", " ").trim();
+                        companyName = companyName.replaceAll("[\u00A0\u2007\u202F\u200B]", " ").trim();
+                        companyName = companyName.replaceAll("\"", "").trim();
                         System.out.println(companyName);
 
                         location = "Undefined";
@@ -150,6 +151,7 @@ public class Collector {
                     e.printStackTrace();
                 }
             }
+            Browser.closeClient();
         }
 //        return vacanciesReady;
     }
@@ -161,7 +163,7 @@ public class Collector {
     private final String apiKey = "";
 
     private String detectLanguage(String text) throws ParseException, IOException {
-        text = text.replaceAll("[\u00A0\u2007\u202F]", " ");
+        text = text.replaceAll("[\u00A0\u2007\u202F\u200B]", " ");
         String nonEnglishPart = text.replaceAll("[\\p{Punct}\\p{Digit}a-zA-Z]", "");
         System.out.println("Non english symbols: " + nonEnglishPart);
         String detectApiUrl = "https://translate.yandex.net/api/v1.5/tr.json/detect?";
@@ -387,6 +389,8 @@ public class Collector {
             plainType = "Quality Control";
         } else if (StringUtils.containsIgnoreCase(rawType, "Procurement")) {
             plainType = "Procurement";
+        } else if (StringUtils.containsIgnoreCase(rawType, "Linux")) {
+            plainType = "Linux";
         } else if (StringUtils.containsIgnoreCase(rawType, "UX")) {
             plainType = "UX";
         } else if (StringUtils.containsIgnoreCase(rawType, "Hadoop")) {

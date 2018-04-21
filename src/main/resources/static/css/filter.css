@@ -1,3 +1,6 @@
+.multiSelect ul {
+    width: 100%;
+}
 form table.table.responsive-table {
     table-layout: fixed;
 }
@@ -72,9 +75,32 @@ form table.table.responsive-table {
     z-index: auto;
 }
 
-.multiSelect ul::-webkit-scrollbar {
-    display: none;
+.multiSelect ul::-webkit-scrollbar {}
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
 }
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #46161600;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #0000004d;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #00000073;
+}
+/* Handle on hover */
+::-webkit-scrollbar-track:hover {
+    background: #ffffff1a;
+}
+
 
 #filterBody .titleInput {
     width: 100%;

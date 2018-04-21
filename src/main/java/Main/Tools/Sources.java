@@ -4,8 +4,8 @@ import Main.Entities.Source;
 
 import java.util.ArrayList;
 
-class Sources {
-    static ArrayList<Source> getSources() {
+public class Sources {
+    public static ArrayList<Source> getSources() {
         ArrayList<Source> sources = new ArrayList<>();
 
         //IDEAs parameter hints are really useful here
@@ -19,7 +19,6 @@ class Sources {
                 "FROM_TITLE",
                 "LOAD",
                 "//a[@class='search-result__view-more']"
-
         ));
 
         sources.add(new Source("LUXOFT",
