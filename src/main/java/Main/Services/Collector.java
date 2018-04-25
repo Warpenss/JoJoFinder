@@ -217,6 +217,8 @@ public class Collector {
                 location = StringUtils.substringAfter(location, ".").trim();
             }
             location = StringUtils.substringBefore(location, "\\p{Space}");
+        } else if (source.getSourceName().equals("WORK.ua")) {
+            location = StringUtils.substringBefore(list.get(0).getTextContent(), "\u00B7").trim();
         } else {
             location = StringUtils.substringBefore((list.get(0)).getTextContent(), ",").trim();
             if (location.contains(".")) {
@@ -233,16 +235,21 @@ public class Collector {
     }
 
     private String plainCity(String rawCity) throws Exception {
-        String plainCity = rawCity;
-        WebService.setUserName("warpenss"); // add your username here
-        ToponymSearchCriteria searchCriteria = new ToponymSearchCriteria();
-        searchCriteria.setName(rawCity);
-        ToponymSearchResult searchResult = WebService.search(searchCriteria);
-        List<Toponym> searchResultToponyms = searchResult.getToponyms();
-        if (!searchResultToponyms.isEmpty()) {
-            plainCity = searchResultToponyms.get(0).getName();
+        rawCity = rawCity.replaceAll("[\u00A0\u2007\u202F\u200B]", " ").trim();
+        if (rawCity.isEmpty()) {
+            return "Undefined";
+        } else {
+            String plainCity = rawCity;
+            WebService.setUserName("warpenss"); // add your username here
+            ToponymSearchCriteria searchCriteria = new ToponymSearchCriteria();
+            searchCriteria.setName(rawCity);
+            ToponymSearchResult searchResult = WebService.search(searchCriteria);
+            List<Toponym> searchResultToponyms = searchResult.getToponyms();
+            if (!searchResultToponyms.isEmpty()) {
+                plainCity = searchResultToponyms.get(0).getName();
+            }
+            return plainCity;
         }
-        return plainCity;
     }
 
     private String plainType(String rawType) {

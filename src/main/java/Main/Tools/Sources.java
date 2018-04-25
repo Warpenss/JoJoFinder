@@ -65,6 +65,28 @@ public class Sources {
                 "/"
         ));
 
+        sources.add(new Source("WORK.ua",
+                "../../span[1]",
+                "https://www.work.ua/jobs-it/",
+                "..//a",
+                "//h2[@class='add-bottom-sm']/a",
+                "../../span[@class='text-muted ']/following-sibling::span[1]",
+                "FROM_TITLE",
+                "PAGE",
+                "//ul[@class='pagination hidden-xs']/li[last()]/a"
+        ));
+
+        sources.add(new Source("rabota.ua",
+                "../../p[@class='f-vacancylist-companyname fd-merchant f-text-dark-bluegray']/a",
+                "https://rabota.ua/вакансии/в_интернете/украина",
+                "..//a",
+                "//h3[@class='fd-beefy-gunso f-vacancylist-vacancytitle']/a",
+                "../../div/p[@class='fd-merchant']",
+                "FROM_TITLE",
+                "PAGE",
+                "//dd[@class='nextbtn']/a"
+        ));
+
         return sources;
     }
 }
