@@ -19,6 +19,7 @@ public class Browser {
         webClient.getOptions().setCssEnabled(false);
         webClient.getOptions().setThrowExceptionOnScriptError(false);
         webClient.getOptions().setPopupBlockerEnabled(true);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         System.out.println("New webClient is created");
     }
 

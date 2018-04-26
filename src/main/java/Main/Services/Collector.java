@@ -4,6 +4,7 @@ import Main.Entities.Source;
 import Main.Entities.Vacancy;
 import Main.Repository.VacancyRepository;
 import Main.Tools.Browser;
+import com.gargoylesoftware.htmlunit.html.HtmlAnchor;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.apache.commons.io.IOUtils;
@@ -84,8 +85,10 @@ public class Collector {
                     String location;
                     String type;
 
-                    url = page.getFullyQualifiedUrl(((HtmlElement) htmlElement.getByXPath(source.getUrlSelector())
-                            .get(0)).getAttribute("href")).toString();
+                    url = page.getFullyQualifiedUrl(((HtmlAnchor) htmlElement.getByXPath(source.getUrlSelector())
+                            .get(0)).getHrefAttribute()).toString();
+                    System.out.println(page.getBaseURL());
+                    System.out.println(page.getUrl());
                     System.out.println(url);
 
 

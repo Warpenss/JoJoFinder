@@ -70,7 +70,7 @@ public class Sources {
                 "https://www.work.ua/jobs-it/",
                 "..//a",
                 "//h2[@class='add-bottom-sm']/a",
-                "../../span[@class='text-muted ']/following-sibling::span[1]",
+                "../../span[contains(text(),'· ')]/following-sibling::span[1]",
                 "FROM_TITLE",
                 "PAGE",
                 "//ul[@class='pagination hidden-xs']/li[last()]/a"
