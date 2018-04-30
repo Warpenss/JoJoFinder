@@ -85,6 +85,7 @@ public class Collector {
                     String location;
                     String type;
 
+                    page = Browser.getPage(source.getSearchUrl());
                     url = page.getFullyQualifiedUrl(((HtmlAnchor) htmlElement.getByXPath(source.getUrlSelector())
                             .get(0)).getHrefAttribute()).toString();
                     System.out.println(page.getBaseURL());
