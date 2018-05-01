@@ -43,7 +43,7 @@ public class Collector {
             HtmlPage page = Browser.getPage(source.getSearchUrl());
 
             if (source.getPaginationType().equals("LOAD")) {
-                for (int i = 0; i < 50; i++) {
+                for (int i = 0; i < 10; i++) {
                     try {
                         page = paginationClick(page, source.getPaginationSelector());
                     } catch (InterruptedException e) {
@@ -85,12 +85,13 @@ public class Collector {
                     String location;
                     String type;
 
-                    page = Browser.getPage(source.getSearchUrl());
                     url = page.getFullyQualifiedUrl(((HtmlAnchor) htmlElement.getByXPath(source.getUrlSelector())
                             .get(0)).getHrefAttribute()).toString();
-                    System.out.println(page.getBaseURL());
-                    System.out.println(page.getUrl());
                     System.out.println(url);
+                    if (url.contains("connect.facebook.net")) {
+                        System.out.println("Facebook url bug, pls fix");
+                        throw new Exception();
+                    }
 
 
                     if (vacancyRepository.findByUrl(url).size() == 0) {
