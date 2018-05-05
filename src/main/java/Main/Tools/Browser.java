@@ -13,13 +13,23 @@ import java.util.List;
 public class Browser {
     //WebClient simulates Chrome browser that can handle Javascript on sites
     static private WebClient webClient;
-    static public void initiateClient() {
+    static public void initiateClientWithJS() {
         webClient = new WebClient(BrowserVersion.BEST_SUPPORTED);
         webClient.getOptions().setUseInsecureSSL(true);
         webClient.getOptions().setCssEnabled(false);
         webClient.getOptions().setThrowExceptionOnScriptError(false);
         webClient.getOptions().setPopupBlockerEnabled(true);
         webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
+        System.out.println("New webClient is created");
+    }
+    static public void initiateClientWithoutJS() {
+        webClient = new WebClient(BrowserVersion.BEST_SUPPORTED);
+        webClient.getOptions().setUseInsecureSSL(true);
+        webClient.getOptions().setCssEnabled(false);
+        webClient.getOptions().setThrowExceptionOnScriptError(false);
+        webClient.getOptions().setPopupBlockerEnabled(true);
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
+        webClient.getOptions().setJavaScriptEnabled(false);
         System.out.println("New webClient is created");
     }
 

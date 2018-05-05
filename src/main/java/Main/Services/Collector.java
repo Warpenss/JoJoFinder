@@ -27,6 +27,7 @@ import java.util.*;
 @Service
 public class Collector {
     private final VacancyRepository vacancyRepository;
+
     @Autowired
     public Collector(VacancyRepository vacancyRepository) {
         this.vacancyRepository = vacancyRepository;
@@ -36,7 +37,11 @@ public class Collector {
 //    public ArrayList<Vacancy> collect(ArrayList<Source> sources) {
 //        ArrayList<Vacancy> vacanciesReady = new ArrayList<>();
         for (Source source : sources) {
-            Browser.initiateClient();
+            if (source.getSourceName().equals("EPAM")) {
+                Browser.initiateClientWithJS();
+            } else {
+                Browser.initiateClientWithoutJS();
+            }
 
             System.out.println(source.getSourceName());
             List<HtmlElement> vacancies = new ArrayList<>();
@@ -88,8 +93,8 @@ public class Collector {
                     url = page.getFullyQualifiedUrl(((HtmlAnchor) htmlElement.getByXPath(source.getUrlSelector())
                             .get(0)).getHrefAttribute()).toString();
                     System.out.println(url);
-                    if (url.contains("connect.facebook.net")) {
-                        System.out.println("Facebook url bug, pls fix");
+                    if (url.contains("connect.facebook.net") || (url.contains("googleads"))) {
+                        System.out.println("url bug, pls fix");
                         throw new Exception();
                     }
 
@@ -98,7 +103,7 @@ public class Collector {
                         time = LocalDateTime.now();
                         System.out.println(time);
 
-                        if (source.getSourceName().equalsIgnoreCase("LUXOFT")){
+                        if (source.getSourceName().equalsIgnoreCase("LUXOFT")) {
                             title = htmlElement.getTextContent().replaceAll("Hot", "").trim();
                         } else {
                             title = htmlElement.getTextContent().trim();
@@ -145,8 +150,8 @@ public class Collector {
                         type = plainType(type);
                         System.out.println(type);
 
-    //                            vacanciesReady.add(new Vacancy(time, title, url, companyName, location, type));
-    //
+                        //                            vacanciesReady.add(new Vacancy(time, title, url, companyName, location, type));
+                        //
                         vacancyRepository.save(new Vacancy(time, title, url, companyName, location, type));
                     } else {
                         System.out.println("Vacancy is already saved: " + url);
