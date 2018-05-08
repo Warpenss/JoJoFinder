@@ -123,6 +123,9 @@ public class Collector {
                                 if (companyName.contains(" at ")) {
                                     companyName = StringUtils.substringAfterLast(companyName, " at ");
                                     companyName = StringUtils.substringBefore(companyName, "\u00a0");
+                                } else if (companyName.contains("компании")) {
+                                    companyName = StringUtils.substringAfterLast(companyName, "компании");
+                                    companyName = StringUtils.substringBefore(companyName, "\u00a0");
                                 } else if (companyName.contains(" в ")) {
                                     companyName = StringUtils.substringAfterLast(companyName, " в ");
                                     companyName = StringUtils.substringBefore(companyName, "\u00a0");
@@ -133,6 +136,18 @@ public class Collector {
                         }
                         companyName = companyName.replaceAll("[\u00A0\u2007\u202F\u200B]", " ").trim();
                         companyName = companyName.replaceAll("\"", "").trim();
+                        if (companyName.contains(",")) {
+                            companyName = StringUtils.substringBefore(companyName, ",").trim();
+                        }
+                        if (companyName.contains("/")) {
+                            companyName = StringUtils.substringBefore(companyName, "/").trim();
+                        }
+                        if (companyName.contains("|")) {
+                            companyName = StringUtils.substringBefore(companyName, "|").trim();
+                        }
+                        if (companyName.contains("(")) {
+                            companyName = StringUtils.substringBefore(companyName, "|").trim();
+                        }
                         System.out.println(companyName);
 
                         location = "Undefined";
@@ -229,10 +244,16 @@ public class Collector {
             location = StringUtils.substringBefore(location, "\\p{Space}");
         } else if (source.getSourceName().equals("WORK.ua")) {
             location = StringUtils.substringBefore(list.get(0).getTextContent(), "\u00B7").trim();
+            if (location.contains("ищем в")) {
+                location = StringUtils.substringAfter(location, "ищем в");
+            }
         } else {
             location = StringUtils.substringBefore((list.get(0)).getTextContent(), ",").trim();
             if (location.contains(".")) {
                 location = StringUtils.substringAfter(location, ".").trim();
+            }
+            if (location.contains("(")) {
+                location = StringUtils.substringBefore(location, "(").trim();
             }
             location = StringUtils.substringBefore(location, "\\p{Space}");
         }
@@ -517,6 +538,8 @@ public class Collector {
             plainType = "PR";
         } else if (StringUtils.containsIgnoreCase(rawType, "IndySoft")) {
             plainType = "IndySoft";
+        } else if (StringUtils.containsIgnoreCase(rawType, "Unreal")) {
+            plainType = "Unreal Engine";
         }
 
         return plainType;
