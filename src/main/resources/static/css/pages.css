@@ -193,7 +193,7 @@
 
 @media (max-width: 767px) {
     .responsive-table tbody th,
-    .responsive-table tbody th h2 small {
+    .responsive-table tbody th h4 {
         background-color: #1d96b2;
         color: white;
     }
