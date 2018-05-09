@@ -167,10 +167,10 @@ public class MainController {
         return modelAndView;
     }
 
-    @RequestMapping("/test")
-    public String test(Model model) {
-        ArrayList<Source> sources = Sources.getSources();
-        new Collector(vacancyRepository).collect(sources);
-        return "index";
-    }
+//    @RequestMapping("/test")
+//    public String test(Model model) {
+//        ArrayList<Source> sources = Sources.getSources();
+//        new Collector(vacancyRepository).collect(sources);
+//        return "index";
+//    }
 }
