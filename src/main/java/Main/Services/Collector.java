@@ -92,6 +92,20 @@ public class Collector {
 
                     url = page.getFullyQualifiedUrl(((HtmlAnchor) htmlElement.getByXPath(source.getUrlSelector())
                             .get(0)).getHrefAttribute()).toString();
+                    if (source.getSourceName().equals("glassdoor")) {
+                        String rawUrl = url;
+                        String ao = StringUtils.substringAfter(rawUrl, "ao=");
+                        ao = StringUtils.substringBefore(ao, "&");
+                        String jobListingId = StringUtils.substringAfter(rawUrl, "jobListingId=");
+                        jobListingId = StringUtils.substringBefore(jobListingId, "&");
+
+                        url = "https://www.glassdoor.com/partner/jobListing.htm?";
+                        url += "ao=" + ao;
+                        url += "&jobListingId=" + jobListingId;
+
+//                        url = "https://www.glassdoor.com/job-listing/-JV.htm?";
+//                        url += "jl=" + jobListingId;
+                    }
                     System.out.println(url);
                     if (url.contains("connect.facebook.net") || (url.contains("googleads"))) {
                         System.out.println("url bug, pls fix");
@@ -132,6 +146,8 @@ public class Collector {
                                 } else {
                                     companyName = source.getSourceName();
                                 }
+                            } else if (source.getSourceName().equals("glassdoor")){
+                                companyName = StringUtils.substringBefore(companyName, " – ");
                             }
                         }
                         companyName = companyName.replaceAll("[\u00A0\u2007\u202F\u200B]", " ").trim();
@@ -546,4 +562,3 @@ public class Collector {
 
     }
 }
-
