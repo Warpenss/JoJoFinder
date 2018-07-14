@@ -4,6 +4,8 @@ import Main.Tools.LocalDateTimeConverter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import static java.time.format.DateTimeFormatter.ofPattern;
@@ -23,7 +25,12 @@ public class Vacancy {
 
     private String location;
 
-    private String type;
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "types", joinColumns = @JoinColumn(name = "id"))
+    @Column(name = "type")
+    private List<String> type;
+
+    private String source;
 
     @Column(columnDefinition="TIMESTAMP")
     @Convert(converter = LocalDateTimeConverter.class)
@@ -32,16 +39,20 @@ public class Vacancy {
     @Transient
     private String displayDate;
 
+    @Transient
+    private String displayType;
+
     public Vacancy() {
     }
 
-    public Vacancy(LocalDateTime time, String title, String url, String company, String location, String type) {
+    public Vacancy(LocalDateTime time, String title, String url, String company, String location, List<String> type, String source) {
         this.time = time;
         this.title = title;
         this.url = url;
         this.company = company;
         this.location = location;
         this.type = type;
+        this.source = source;
     }
 
     public int getId() {
@@ -92,16 +103,32 @@ public class Vacancy {
         this.location = location;
     }
 
-    public String getType() {
+    public List<String> getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(List<String> type) {
         this.type = type;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 
     public String getDisplayDate() {
         return time.format(ofPattern("d MMM y HH:mm", new Locale("en", "EN")));
+    }
+
+    public String getDisplayType() {
+        return type.toString().replaceAll("[\\[\\]]","");
+    }
+
+    public void setDisplayType(String displayType) {
+        this.displayType = displayType;
     }
 
     @Override

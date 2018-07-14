@@ -262,3 +262,10 @@ h2 small{
 li.active a {
     font-weight: 900;
 }
+
+.source {
+    font-weight: 100;
+    margin: -0.2em 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    font-size: 1em;
+}

@@ -56,101 +56,56 @@ public class MainController {
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public ModelAndView index(@RequestParam MultiValueMap<String, String> params) {
-
-        final int PAGE_SIZE = 40;
         ModelAndView modelAndView = new ModelAndView("index");
 
-        Integer page = null;
-        if (params.getFirst("page") != null) {
+        final int PAGE_SIZE = 40;
+        int page = 0;
+        try {
             page = Integer.parseInt(params.getFirst("page"));
+        } catch (NumberFormatException e) {
+            //
         }
-        int currentPageNumber = ( page == null || page < 1) ? 0 : page - 1;
+        int currentPageNumber = page < 1 ? 0 : page - 1;
 
-        List<Vacancy> vacancyList;
-        if (params.getFirst("title") == null){
-            vacancyList = vacancyRepository.findAll();
-        } else {
-            vacancyList = vacancyRepository.findByTitleIgnoreCaseContaining(params.getFirst("title"));
+        String title = params.getFirst("title");
+        List<String> companies = params.get("company");
+        List<String> locations = params.get("location");
+        List<String> types = params.get("type");
+
+        List<Vacancy> vacancyList = new ArrayList<>();
+        if (companies == null && locations == null && types == null) {
+            vacancyList = vacancyRepository.findByTitleIgnoreCaseContaining(title);
         }
-
-        HashSet<Vacancy> resultCompany = new HashSet<>();
-        HashSet<Vacancy> resultLocation = new HashSet<>();
-        HashSet<Vacancy> resultType = new HashSet<>();
-
-        boolean resultFlag = false;
-
-        System.out.println(params);
-
-        for (Map.Entry<String, List<String>> entry : params.entrySet())
-        {
-            if (entry.getKey().equals("company")) {
-                for (String parameter : entry.getValue()) {
-                    for (Vacancy vacancy : vacancyList) {
-                        if (vacancy.getCompany().equalsIgnoreCase(parameter)) {
-                            resultCompany.add(vacancy);
-                        }
-                    }
-                }
-                if (resultCompany.isEmpty()) {
-                    resultFlag = true;
-                }
-            }
-
-            if (entry.getKey().equals("location")) {
-                for (String parameter : entry.getValue()) {
-                    if (resultCompany.isEmpty()) {
-                        resultCompany.addAll(vacancyList);
-                    }
-                    for (Vacancy vacancy : resultCompany) {
-                        if (vacancy.getLocation().equalsIgnoreCase(parameter)) {
-                            resultLocation.add(vacancy);
-                        }
-                    }
-                }
-                if (resultLocation.isEmpty()) {
-                    resultFlag = true;
-                }
-            }
-
-
-            if (entry.getKey().equals("type")) {
-                for (String parameter : entry.getValue()) {
-                    if (resultLocation.isEmpty()) {
-                        resultLocation.addAll(vacancyList);
-                    }
-                    for (Vacancy vacancy : resultLocation) {
-                        if (vacancy.getType().equalsIgnoreCase(parameter)) {
-                            resultType.add(vacancy);
-                        }
-                    }
-
-                }
-                if (resultType.isEmpty()) {
-                    resultFlag = true;
-                }
-            }
+        if (companies != null && locations == null && types == null) {
+            vacancyList = vacancyRepository.findByTitleIgnoreCaseContainingAndCompanyIn(title, companies);
+        }
+        if (companies == null && locations != null && types == null) {
+            vacancyList = vacancyRepository.findByTitleIgnoreCaseContainingAndLocationIn(title, locations);
+        }
+        if (companies == null && locations == null && types != null) {
+            vacancyList = vacancyRepository.findByTitleIgnoreCaseContainingAndTypeIn(title, types);
+        }
+        if (companies != null && locations != null && types == null) {
+            vacancyList = vacancyRepository.findByTitleIgnoreCaseContainingAndCompanyInAndLocationIn(title, companies, locations);
+        }
+        if (companies != null && locations == null && types != null) {
+            vacancyList = vacancyRepository.findByTitleIgnoreCaseContainingAndCompanyInAndTypeIn(title, companies, types);
+        }
+        if (companies == null && locations != null && types != null) {
+            vacancyList = vacancyRepository.findByTitleIgnoreCaseContainingAndLocationInAndTypeIn(title, locations, types);
+        }
+        if (companies != null && locations != null && types != null) {
+            vacancyList = vacancyRepository.findByTitleIgnoreCaseContainingAndCompanyInAndLocationInAndTypeIn(title, companies, locations, types);
         }
 
-        if (resultType.isEmpty() && !resultFlag) {
-            resultType.addAll(resultLocation);
-        }
-        if (resultType.isEmpty() && !resultFlag) {
-            resultType.addAll(resultCompany);
-        }
-        if (resultType.isEmpty() && !resultFlag) {
-            resultType.addAll(vacancyList);
-        }
-
-        vacancyList.clear();
-        vacancyList.addAll(resultType);
-        List<String> companies = vacancyRepository.findDistinctCompany();
-        List<String> locations = vacancyRepository.findDistinctLocation();
-        List<String> types = vacancyRepository.findDistinctType();
+        List<String> allCompanies = vacancyRepository.findDistinctCompany();
+        List<String> allLocations = vacancyRepository.findDistinctLocation();
+        List<String> allTypes = vacancyRepository.findDistinctType();
 
         vacancyList.sort(Comparator.comparing(Vacancy::getTime).reversed());
-        Collections.sort(companies);
-        Collections.sort(locations);
-        Collections.sort(types);
+        Collections.sort(allCompanies);
+        Collections.sort(allLocations);
+        Collections.sort(allTypes);
 
         int minimum = currentPageNumber * PAGE_SIZE;
         int maximum = (minimum + PAGE_SIZE) > vacancyList.size() ? vacancyList.size() : minimum + PAGE_SIZE;
@@ -159,18 +114,61 @@ public class MainController {
         PageCounter pageCounter = new PageCounter(vacancies.getTotalPages(), vacancies.getNumber() + 1);
 
         modelAndView.addObject("vacancies", vacancies);
-        modelAndView.addObject("companies", companies);
-        modelAndView.addObject("locations", locations);
-        modelAndView.addObject("types", types);
+        modelAndView.addObject("companies", allCompanies);
+        modelAndView.addObject("locations", allLocations);
+        modelAndView.addObject("types", allTypes);
         modelAndView.addObject("pageCounter", pageCounter);
 
         return modelAndView;
     }
 
-//    @RequestMapping("/test")
-//    public String test(Model model) {
-//        ArrayList<Source> sources = Sources.getSources();
-//        new Collector(vacancyRepository).collect(sources);
-//        return "index";
-//    }
+    @RequestMapping("/test")
+    public String test(Model model) {
+//
+//        for (int i = 1; i < 1000; i++) {
+//            try {
+//                WebClient webClient = new WebClient();
+//
+//                webClient = new WebClient(BrowserVersion.BEST_SUPPORTED);
+//                webClient.getOptions().setUseInsecureSSL(true);
+//                webClient.getOptions().setCssEnabled(false);
+//                webClient.getOptions().setThrowExceptionOnScriptError(false);
+//                webClient.getOptions().setPopupBlockerEnabled(true);
+//                webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
+//                webClient.getOptions().setJavaScriptEnabled(false);
+//                System.out.println("New webClient is created");
+//
+//                HtmlPage page = webClient.getPage("https://www.glassdoor.com/Job/poland-jobs-SRCH_IL.0,6_IN193.htm");
+//                List<HtmlElement> vacancies = page.getByXPath("//li[@class='jl']/div/div[@class='flexbox']/div/a[@class='jobLink']");
+//                System.out.println(i);
+//
+//                if (vacancies.isEmpty()) {
+//                    System.out.println(page.asXml());
+//                    System.out.println(i);
+//                    break;
+//                }
+//
+//                final List<WebWindow> windows = webClient.getWebWindows();
+//                for (final WebWindow wd : windows) {
+//                    wd.getJobManager().removeAllJobs();
+//                }
+//
+//                for (TopLevelWindow topLevelWindow : webClient.getTopLevelWindows()) {
+//                    topLevelWindow.close();
+//                    System.out.println(topLevelWindow.toString() + " - window is closed");
+//                }
+//                webClient.close();
+//                System.gc();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+
+
+        ArrayList<Source> sources = Sources.getSources();
+        new Collector(vacancyRepository).collect(sources);
+
+
+        return "index";
+    }
 }

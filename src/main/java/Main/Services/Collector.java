@@ -9,7 +9,6 @@ import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.geonames.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -34,8 +33,6 @@ public class Collector {
     }
 
     public void collect(ArrayList<Source> sources) {
-//    public ArrayList<Vacancy> collect(ArrayList<Source> sources) {
-//        ArrayList<Vacancy> vacanciesReady = new ArrayList<>();
         for (Source source : sources) {
             if (source.getSourceName().equals("EPAM")) {
                 Browser.initiateClientWithJS();
@@ -88,7 +85,8 @@ public class Collector {
                     String url;
                     String companyName;
                     String location;
-                    String type;
+                    List<String> type;
+                    String vacancySource;
 
                     url = page.getFullyQualifiedUrl(((HtmlAnchor) htmlElement.getByXPath(source.getUrlSelector())
                             .get(0)).getHrefAttribute()).toString();
@@ -146,7 +144,7 @@ public class Collector {
                                 } else {
                                     companyName = source.getSourceName();
                                 }
-                            } else if (source.getSourceName().equals("glassdoor")){
+                            } else if (source.getSourceName().equals("glassdoor")) {
                                 companyName = StringUtils.substringBefore(companyName, " – ");
                             }
                         }
@@ -169,21 +167,22 @@ public class Collector {
                         location = "Undefined";
                         List<HtmlElement> list = htmlElement.getByXPath(source.getLocationSelector());
                         if (!list.isEmpty()) {
-                            location = getLocation(source, list);
+                            location = getLocation(source, list).trim();
                         }
                         System.out.println(location);
 
+                        String rawType;
                         if (source.getTypeSelector().equals("FROM_TITLE")) {
-                            type = title;
+                            rawType = title;
                         } else {
-                            type = ((HtmlElement) htmlElement.getByXPath(source.getTypeSelector()).get(0)).getTextContent();
+                            rawType = ((HtmlElement) htmlElement.getByXPath(source.getTypeSelector()).get(0)).getTextContent();
                         }
-                        type = plainType(type);
+                        type = processType(rawType);
                         System.out.println(type);
 
-                        //                            vacanciesReady.add(new Vacancy(time, title, url, companyName, location, type));
-                        //
-                        vacancyRepository.save(new Vacancy(time, title, url, companyName, location, type));
+                        vacancySource = source.getSourceName();
+
+                        vacancyRepository.save(new Vacancy(time, title, url, companyName, location, type, vacancySource));
                     } else {
                         System.out.println("Vacancy is already saved: " + url);
                     }
@@ -194,7 +193,6 @@ public class Collector {
             }
             Browser.closeClient();
         }
-//        return vacanciesReady;
     }
 
     private boolean containsNonEnglish(String text) {
@@ -275,290 +273,413 @@ public class Collector {
         }
         if (vacancyRepository.findByLocation(location).size() == 0) {
             System.out.println("Raw location = " + location);
-            location = plainCity(location);
+            String language = detectLanguage(location);
+            location = translateTitle(location, language);
+            if (location.equals("Lions")) {
+                location = "Lviv";
+            }
+
+//            location = plainCity(location);
         }
 
         return location;
     }
 
-    private String plainCity(String rawCity) throws Exception {
-        rawCity = rawCity.replaceAll("[\u00A0\u2007\u202F\u200B]", " ").trim();
-        if (rawCity.isEmpty()) {
-            return "Undefined";
-        } else {
-            String plainCity = rawCity;
-            WebService.setUserName("warpenss"); // add your username here
-            ToponymSearchCriteria searchCriteria = new ToponymSearchCriteria();
-            searchCriteria.setName(rawCity);
-            ToponymSearchResult searchResult = WebService.search(searchCriteria);
-            List<Toponym> searchResultToponyms = searchResult.getToponyms();
-            if (!searchResultToponyms.isEmpty()) {
-                plainCity = searchResultToponyms.get(0).getName();
-            }
-            return plainCity;
-        }
-    }
+//    private String plainCity(String rawCity) throws Exception {
+//        rawCity = rawCity.replaceAll("[\u00A0\u2007\u202F\u200B]", " ").trim();
+//        if (rawCity.isEmpty()) {
+//            return "Undefined";
+//        } else {
+//            String plainCity = rawCity;
+//            WebService.setUserName("warpenss"); // add your username here
+//            ToponymSearchCriteria searchCriteria = new ToponymSearchCriteria();
+//            searchCriteria.setName(rawCity);
+//            ToponymSearchResult searchResult = WebService.search(searchCriteria);
+//            List<Toponym> searchResultToponyms = searchResult.getToponyms();
+//            if (!searchResultToponyms.isEmpty()) {
+//                plainCity = searchResultToponyms.get(0).getName();
+//            }
+//            return plainCity;
+//        }
+//    }
 
-    private String plainType(String rawType) {
-        String plainType = "Other";
+    private List<String> processType(String rawType) {
+        List<String> type = new ArrayList<>();
 
         if (StringUtils.containsIgnoreCase(rawType, "JavaScript") ||
                 StringUtils.containsIgnoreCase(rawType, "JS ")) {
-            plainType = "JavaScript";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Full Stack") ||
+            type.add("JavaScript");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Full Stack") ||
                 StringUtils.containsIgnoreCase(rawType, "Fullstack") ||
                 StringUtils.containsIgnoreCase(rawType, "Full-stack")) {
-            plainType = "Full Stack";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Java") ||
-                StringUtils.containsIgnoreCase(rawType, "J2EE")) {
-            plainType = "Java";
-        } else if (StringUtils.containsIgnoreCase(rawType, "C++")) {
-            plainType = "C++";
-        } else if (StringUtils.containsIgnoreCase(rawType, "C#")) {
-            plainType = "C#";
-        } else if (StringUtils.containsIgnoreCase(rawType, ".NET")) {
-            plainType = ".NET";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Python")) {
-            plainType = "Python";
-        } else if (StringUtils.containsIgnoreCase(rawType, "UI ")) {
-            plainType = "UI";
-        } else if (StringUtils.containsIgnoreCase(rawType, "iOS")) {
-            plainType = "iOS";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Manager") ||
+            type.add("Full Stack");
+        }
+        if ((StringUtils.containsIgnoreCase(rawType, "Java") ||
+                StringUtils.containsIgnoreCase(rawType, "J2EE")) &&
+                (!StringUtils.containsIgnoreCase(rawType, "script"))) {
+            type.add("Java");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "C++")) {
+            type.add("C++");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "C#")) {
+            type.add("C#");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, ".NET")) {
+            type.add(".NET");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Python")) {
+            type.add("Python");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "UI ")) {
+            type.add("UI");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "iOS")) {
+            type.add("iOS");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Manager") ||
                 StringUtils.containsIgnoreCase(rawType, "PM ")) {
-            plainType = "Manager";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Test")) {
-            plainType = "Testing";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Consultant")) {
-            plainType = "Consultant";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Assistant")) {
-            plainType = "Assistant";
-        } else if (StringUtils.containsIgnoreCase(rawType, "SQL")) {
-            plainType = "SQL ";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Analyst")) {
-            plainType = "Analyst ";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Big Data")) {
-            plainType = "Big Data";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Recruit")) {
-            plainType = "Recruiter";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Solution")) {
-            plainType = "Solution Engineer";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Director")) {
-            plainType = "Director";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Designer")) {
-            plainType = "Designer";
-        } else if (StringUtils.containsIgnoreCase(rawType, "DevOps") ||
+            type.add("Manager");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Test")) {
+            type.add("Testing");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Consultant")) {
+            type.add("Consultant");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Assistant")) {
+            type.add("Assistant");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "SQL")) {
+            type.add("SQL ");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Analyst")) {
+            type.add("Analyst ");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Big Data")) {
+            type.add("Big Data");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Recruit")) {
+            type.add("Recruiter");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Solution")) {
+            type.add("Solution Engineer");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Director")) {
+            type.add("Director");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Designer")) {
+            type.add("Designer");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "DevOps") ||
                 StringUtils.containsIgnoreCase(rawType, "Development Operations")) {
-            plainType = "DevOps";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Front-end") ||
+            type.add("DevOps");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Front-end") ||
                 StringUtils.containsIgnoreCase(rawType, "Front end") ||
                 StringUtils.containsIgnoreCase(rawType, "Frontend")) {
-            plainType = "Front-end";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Automation")) {
-            plainType = "Automation";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Accountant")) {
-            plainType = "Accountant";
-        } else if (StringUtils.containsIgnoreCase(rawType, "HR") ||
+            type.add("Front-end");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Automation")) {
+            type.add("Automation");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Accountant")) {
+            type.add("Accountant");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "HR") ||
                 StringUtils.containsIgnoreCase(rawType, "Human Resources")) {
-            plainType = "HR";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Security")) {
-            plainType = "Security";
-        } else if (StringUtils.containsIgnoreCase(rawType, "QA") ||
+            type.add("HR");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Security")) {
+            type.add("Security");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "QA") ||
                 StringUtils.containsIgnoreCase(rawType, "Quality Assurance")) {
-            plainType = "QA";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Android")) {
-            plainType = "Android";
-        } else if (StringUtils.containsIgnoreCase(rawType, "PHP")) {
-            plainType = "PHP";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Sales")) {
-            plainType = "Sales";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Angular")) {
-            plainType = "Angular";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Node.js") ||
+            type.add("QA");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Android")) {
+            type.add("Android");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "PHP")) {
+            type.add("PHP");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Sales")) {
+            type.add("Sales");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Angular")) {
+            type.add("Angular");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Node.js") ||
                 StringUtils.containsIgnoreCase(rawType, "NodeJS") ||
                 StringUtils.containsIgnoreCase(rawType, "Node. JS")) {
-            plainType = "Node.js";
-        } else if (StringUtils.containsIgnoreCase(rawType, " C ")) {
-            plainType = "C";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Scala")) {
-            plainType = "Scala";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Ruby") ||
+            type.add("Node.js");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, " C ")) {
+            type.add("C");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Scala")) {
+            type.add("Scala");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Ruby") ||
                 StringUtils.containsIgnoreCase(rawType, "RoR")) {
-            plainType = "Ruby";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Data Scientist")) {
-            plainType = "Data Scientist";
-        } else if (StringUtils.containsIgnoreCase(rawType, "TypeScript")) {
-            plainType = "TypeScript";
-        } else if (StringUtils.containsIgnoreCase(rawType, "React")) {
-            plainType = "React";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Unity")) {
-            plainType = "Unity3D";
-        } else if (StringUtils.containsIgnoreCase(rawType, "1С") ||
+            type.add("Ruby");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Data Scientist")) {
+            type.add("Data Scientist");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "TypeScript")) {
+            type.add("TypeScript");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "React")) {
+            type.add("React");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Unity")) {
+            type.add("Unity3D");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "1С") ||
                 StringUtils.containsIgnoreCase(rawType, "1C") ||
                 StringUtils.containsIgnoreCase(rawType, "1 С") ||
                 StringUtils.containsIgnoreCase(rawType, "1S")) {
-            plainType = "1C";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Blockchain")) {
-            plainType = "Blockchain";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Back-end") ||
+            type.add("1C");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Blockchain")) {
+            type.add("Blockchain");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Back-end") ||
                 StringUtils.containsIgnoreCase(rawType, "Back end") ||
                 StringUtils.containsIgnoreCase(rawType, "Backend")) {
-            plainType = "Back-end";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Service Desk") ||
+            type.add("Back-end");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Service Desk") ||
                 StringUtils.containsIgnoreCase(rawType, "HelpDesk")) {
-            plainType = "HelpDesk";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Go ") ||
+            type.add("HelpDesk");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Go ") ||
                 StringUtils.containsIgnoreCase(rawType, "Golang")) {
-            plainType = "Go";
-        } else if (StringUtils.containsIgnoreCase(rawType, "R&D")) {
-            plainType = "R&D";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Administrator")) {
-            plainType = "Administrator";
-        } else if (StringUtils.containsIgnoreCase(rawType, "ELT")) {
-            plainType = "ELT";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Coordinator")) {
-            plainType = "Coordinator";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Delphi")) {
-            plainType = "Delphi";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Splunk")) {
-            plainType = "Splunk";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Tableau")) {
-            plainType = "Tableau";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Data Warehouse") ||
+            type.add("Go");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "R&D")) {
+            type.add("R&D");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Administrator")) {
+            type.add("Administrator");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "ELT")) {
+            type.add("ELT");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Coordinator")) {
+            type.add("Coordinator");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Delphi")) {
+            type.add("Delphi");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Splunk")) {
+            type.add("Splunk");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Tableau")) {
+            type.add("Tableau");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Data Warehouse") ||
                 StringUtils.containsIgnoreCase(rawType, "DWH")) {
-            plainType = "Data Warehouse";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Teacher")) {
-            plainType = "Teacher";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Training and Development")) {
-            plainType = "Training and Development";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Experience Design")) {
-            plainType = "Experience Design";
-        } else if (StringUtils.containsIgnoreCase(rawType, "OPS")) {
-            plainType = "OPS";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Support") ||
+            type.add("Data Warehouse");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Teacher")) {
+            type.add("Teacher");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Training and Development")) {
+            type.add("Training and Development");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Experience Design")) {
+            type.add("Experience Design");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "OPS")) {
+            type.add("OPS");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Support") ||
                 StringUtils.containsIgnoreCase(rawType, "SLS")) {
-            plainType = "Support";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Quality Control") ||
+            type.add("Support");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Quality Control") ||
                 StringUtils.containsIgnoreCase(rawType, "QС")) {
-            plainType = "Quality Control";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Procurement")) {
-            plainType = "Procurement";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Linux")) {
-            plainType = "Linux";
-        } else if (StringUtils.containsIgnoreCase(rawType, "UX")) {
-            plainType = "UX";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Hadoop")) {
-            plainType = "Hadoop";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Database administrator") ||
+            type.add("Quality Control");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Procurement")) {
+            type.add("Procurement");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Linux")) {
+            type.add("Linux");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "UX")) {
+            type.add("UX");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Hadoop")) {
+            type.add("Hadoop");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Database administrator") ||
                 StringUtils.containsIgnoreCase(rawType, "DBA")) {
-            plainType = "Database administrator";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Data Engineer")) {
-            plainType = "Data Engineer";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Market")) {
-            plainType = "Marketing";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Research") ||
+            type.add("Database administrator");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Data Engineer")) {
+            type.add("Data Engineer");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Market")) {
+            type.add("Marketing");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Research") ||
                 StringUtils.containsIgnoreCase(rawType, "RnD")) {
-            plainType = "Research";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Embedded")) {
-            plainType = "Embedded";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Vice President") ||
+            type.add("Research");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Embedded")) {
+            type.add("Embedded");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Vice President") ||
                 StringUtils.containsIgnoreCase(rawType, "VP ")) {
-            plainType = "Vice President";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Magento")) {
-            plainType = "Magento";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Copywriter") ||
+            type.add("Vice President");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Magento")) {
+            type.add("Magento");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Copywriter") ||
                 StringUtils.containsIgnoreCase(rawType, "Writer")) {
-            plainType = "Writer";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Drupal")) {
-            plainType = "Drupal";
-        } else if (StringUtils.containsIgnoreCase(rawType, "WordPress")) {
-            plainType = "Wordpress";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Affiliate")) {
-            plainType = "Affiliate";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Scrum")) {
-            plainType = "Scrum";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Art")) {
-            plainType = "Artist";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Google Cloud")) {
-            plainType = "Google Cloud";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Electrical Engineer")) {
-            plainType = "Electrical Engineer";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Electric")) {
-            plainType = "Electrical Engineer";
-        } else if (StringUtils.containsIgnoreCase(rawType, "SEO")) {
-            plainType = "SEO";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Media")) {
-            plainType = "Media";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Radio")) {
-            plainType = "Radio";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Linkbuilder")) {
-            plainType = "Linkbuilder";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Erlang")) {
-            plainType = "Erlang";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Product Owner")) {
-            plainType = "Product Owner";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Content")) {
-            plainType = "Content";
-        } else if (StringUtils.containsIgnoreCase(rawType, "SMM")) {
-            plainType = "SMM";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Machine Learning")) {
-            plainType = "Machine Learning";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Yii")) {
-            plainType = "Yii";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Xamarin")) {
-            plainType = "Xamarin";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Laravel")) {
-            plainType = "Laravel";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Flash")) {
-            plainType = "Flash";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Data Science")) {
-            plainType = "Data Science";
-        } else if (StringUtils.containsIgnoreCase(rawType, "ETL")) {
-            plainType = "ETL";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Business intelligence") ||
+            type.add("Writer");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Drupal")) {
+            type.add("Drupal");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "WordPress")) {
+            type.add("Wordpress");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Affiliate")) {
+            type.add("Affiliate");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Scrum")) {
+            type.add("Scrum");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Art")) {
+            type.add("Artist");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Google Cloud")) {
+            type.add("Google Cloud");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Electrical Engineer")) {
+            type.add("Electrical Engineer");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Electric")) {
+            type.add("Electrical Engineer");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "SEO")) {
+            type.add("SEO");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Media")) {
+            type.add("Media");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Radio")) {
+            type.add("Radio");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Linkbuilder")) {
+            type.add("Linkbuilder");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Erlang")) {
+            type.add("Erlang");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Product Owner")) {
+            type.add("Product Owner");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Content")) {
+            type.add("Content");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "SMM")) {
+            type.add("SMM");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Machine Learning")) {
+            type.add("Machine Learning");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Yii")) {
+            type.add("Yii");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Xamarin")) {
+            type.add("Xamarin");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Laravel")) {
+            type.add("Laravel");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Flash")) {
+            type.add("Flash");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Data Science")) {
+            type.add("Data Science");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "ETL")) {
+            type.add("ETL");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Business intelligence") ||
                 StringUtils.containsIgnoreCase(rawType, "BI ")) {
-            plainType = "Business intelligence";
-        } else if (StringUtils.containsIgnoreCase(rawType, "MS Dynamics")) {
-            plainType = "MS Dynamics";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Moderator")) {
-            plainType = "Moderator";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Wireframe")) {
-            plainType = "Wireframe";
-        } else if (StringUtils.containsIgnoreCase(rawType, "VOIP")) {
-            plainType = "VOIP";
-        } else if (StringUtils.containsIgnoreCase(rawType, "HTML5")) {
-            plainType = "HTML5";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Graphic")) {
-            plainType = "Graphic";
-        } else if (StringUtils.containsIgnoreCase(rawType, "HTML/CSS")) {
-            plainType = "HTML/CSS";
-        } else if (StringUtils.containsIgnoreCase(rawType, "HTML")) {
-            plainType = "HTML";
-        } else if (StringUtils.containsIgnoreCase(rawType, "CSS")) {
-            plainType = "CSS";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Animator")) {
-            plainType = "Animator";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Oracle")) {
-            plainType = "Oracle";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Azure")) {
-            plainType = "Azure";
-        } else if (StringUtils.containsIgnoreCase(rawType, "DB Developer")) {
-            plainType = "DB Developer";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Talent Acquisition")) {
-            plainType = "Talent Acquisition";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Network")) {
-            plainType = "Network Engineer";
-        } else if (StringUtils.containsIgnoreCase(rawType, "FPGA")) {
-            plainType = "FPGA";
-        } else if (StringUtils.containsIgnoreCase(rawType, "PR ")) {
-            plainType = "PR";
-        } else if (StringUtils.containsIgnoreCase(rawType, "IndySoft")) {
-            plainType = "IndySoft";
-        } else if (StringUtils.containsIgnoreCase(rawType, "Unreal")) {
-            plainType = "Unreal Engine";
+            type.add("Business intelligence");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "MS Dynamics")) {
+            type.add("MS Dynamics");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Moderator")) {
+            type.add("Moderator");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Wireframe")) {
+            type.add("Wireframe");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "VOIP")) {
+            type.add("VOIP");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "HTML5")) {
+            type.add("HTML5");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Graphic")) {
+            type.add("Graphic");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "HTML/CSS")) {
+            type.add("HTML/CSS");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "HTML")) {
+            type.add("HTML");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "CSS")) {
+            type.add("CSS");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Animator")) {
+            type.add("Animator");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Oracle")) {
+            type.add("Oracle");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Azure")) {
+            type.add("Azure");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "DB Developer")) {
+            type.add("DB Developer");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Talent Acquisition")) {
+            type.add("Talent Acquisition");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Network")) {
+            type.add("Network Engineer");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "FPGA")) {
+            type.add("FPGA");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "PR ")) {
+            type.add("PR");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "IndySoft")) {
+            type.add("IndySoft");
+        }
+        if (StringUtils.containsIgnoreCase(rawType, "Unreal")) {
+            type.add("Unreal Engine");
         }
 
-        return plainType;
+        if (type.isEmpty()) {
+            type.add("Other");
+        }
+
+        return type;
 
     }
 }
