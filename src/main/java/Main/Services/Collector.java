@@ -160,7 +160,7 @@ public class Collector {
                             companyName = StringUtils.substringBefore(companyName, "|").trim();
                         }
                         if (companyName.contains("(")) {
-                            companyName = StringUtils.substringBefore(companyName, "|").trim();
+                            companyName = StringUtils.substringBefore(companyName, "(").trim();
                         }
                         System.out.println(companyName);
 
@@ -273,10 +273,14 @@ public class Collector {
         }
         if (vacancyRepository.findByLocation(location).size() == 0) {
             System.out.println("Raw location = " + location);
-            String language = detectLanguage(location);
-            location = translateTitle(location, language);
+            if (containsNonEnglish(location)) {
+                String language = detectLanguage(location);
+                location = translateTitle(location, language);
+            }
             if (location.equals("Lions")) {
                 location = "Lviv";
+            } else if (location.equals("System")) {
+                location = "Lodz";
             }
 
 //            location = plainCity(location);

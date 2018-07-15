@@ -139,6 +139,75 @@ public class Sources {
                 "PAGE",
                 "//div[@class='pagingControls cell middle']/ul/li[@class='next']/a"
         ));
+        sources.add(new Source("praca.pl",
+                "../a[@class='company']",
+                "https://www.praca.pl/k-14,15.html",
+                "..//a",
+                "//a[@class='title job-id']",
+                "..//div[@class='announcement-area']/span",
+                "FROM_TITLE",
+                "PAGE",
+                "//li[@class='pagination-next']/a"
+        ));
+
+        sources.add(new Source("pracuj.pl",
+                "../..//h3[@itemprop='hiringOrganization']/span",
+                "https://www.pracuj.pl/praca/it%20-%20rozwój%20oprogramowania;cc,5016",
+                "..//a",
+                "//h2[@data-test='offerTitleCnt']/a",
+                "../..//span[@itemprop='addressRegion']/strong",
+                "FROM_TITLE",
+                "PAGE",
+                "(//a[@class='desktopPagin_item_link'])[last()]"
+        ));
+
+        sources.add(new Source("jobs.pl",
+                "../..//p[@class='employer']",
+                "https://www.jobs.pl/praca/it-rozwoj-oprogramowania",
+                "..//a",
+                "//p[@class='title']/a",
+                "../..//p[@class='localization']/span/a",
+                "FROM_TITLE",
+                "PAGE",
+                "//a[@class='next']"
+        ));
+
+        sources.add(new Source("pl.indeed.com",
+                "../..//span[@class='company']",
+                "https://pl.indeed.com/praca?as_and=Praca+IT&l=Polska&limit=50",
+                "..//a",
+                "//h2[@class='jobtitle']/a",
+                "../..//span[@class='location']",
+                "FROM_TITLE",
+                "PAGE",
+                "//div[@class='pagination']/a[last()]"
+        ));
+
+        sources.add(new Source("infoPraca.pl",
+                "../..//h3[@class='p-name company']",
+                "https://www.infopraca.pl/praca?dy=60&rw=40" +
+                        "&ct=it-bazy-danych&ct=it-hardware-information-systems" +
+                        "&ct=it-kontrola-jakosci" +
+                        "&ct=it-programowanie-analizy" +
+                        "&ct=it-project-management",
+                "..//a",
+                "//h2[@class='p-job-title']/a",
+                "../..//span[@class='p-locality']",
+                "FROM_TITLE",
+                "PAGE",
+                "//ul[@class='pagination']/li[last()]/a"
+        ));
+
+//        sources.add(new Source("no fluff {jobs}",
+//                "..//span[@class='posting-company ng-binding']",
+//                "https://nofluffjobs.com/jobs/backend",
+//                "../../..//a",
+//                "//span[@max-length='titleMaxLengths[size]']",
+//                "../..//span[@class='place ng-binding']",
+//                "FROM_TITLE",
+//                "NO_LOAD",
+//                "/"
+//        ));
 
         return sources;
     }

@@ -1,9 +1,6 @@
 package Main.Tools;
 
-import com.gargoylesoftware.htmlunit.BrowserVersion;
-import com.gargoylesoftware.htmlunit.TopLevelWindow;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.WebWindow;
+import com.gargoylesoftware.htmlunit.*;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
 import java.io.IOException;
@@ -12,15 +9,17 @@ import java.util.List;
 //This tool handle the WebClient and returns page
 public class Browser {
     //WebClient simulates Chrome browser that can handle Javascript on sites
-    static private WebClient webClient;
+    static public WebClient webClient;
     static public void initiateClientWithJS() {
-        webClient = new WebClient(BrowserVersion.BEST_SUPPORTED);
+        webClient = new WebClient(BrowserVersion.FIREFOX_52);
         webClient.getOptions().setUseInsecureSSL(true);
         webClient.getOptions().setCssEnabled(false);
         webClient.getOptions().setThrowExceptionOnScriptError(false);
         webClient.getOptions().setPopupBlockerEnabled(true);
         webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
-        System.out.println("New webClient is created");
+        webClient.getOptions().setJavaScriptEnabled(true);
+        webClient.setAjaxController(new NicelyResynchronizingAjaxController());
+        System.out.println("New JSwebClient is created");
     }
     static public void initiateClientWithoutJS() {
         webClient = new WebClient(BrowserVersion.BEST_SUPPORTED);
